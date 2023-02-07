@@ -97,9 +97,9 @@ class BF42_command:
         self.className = ""; self.method = ""; self.arguments = []
         cmd_split1 = cmd_str.split(' ',1)
         cmd_split2 = cmd_split1[0].split('.',1)
-        self.className = cmd_split2[0].lower()
+        self.className = cmd_split2[0].lower() #ToDo, try to avoid lower this early in the chain
         if len(cmd_split2) == 2:
-            self.method = cmd_split2[1].lower()
+            self.method = cmd_split2[1].lower() #ToDo, try to avoid lower this early in the chain
         if len(cmd_split1) == 2:
             arguments_str = cmd_split1[1].replace("\\", "/").replace("'", "'\\'")
             try:
@@ -227,8 +227,8 @@ class BF42_Game:
 
 class BF42_ObjectTemplate:
     def __init__(self, type, name):
-        self.type = type.lower()
-        self.name = name.lower()
+        self.type = type.lower() #ToDo, try to avoid lower this early in the chain
+        self.name = name.lower() #ToDo, try to avoid lower this early in the chain
         self.geometry = "" #string will be replaced by a reference after linking
         self.triggerRadius = 0
         self.linePoints = []
@@ -242,7 +242,7 @@ class BF42_ObjectTemplate:
         if len(arguments) == 1: #all used commands thus far require 1 argument
             value = arguments[0]
             if method == 'geometry':
-                self.geometry = value.lower()
+                self.geometry = value.lower() #ToDo, try to avoid lower this early in the chain
             elif method == 'triggerradius':
                 if value.isdigit():
                     self.triggerRadius = int(value)
@@ -273,14 +273,14 @@ class BF42_ObjectTemplate:
                     
 class BF42_ObjectTemplateChild:
     def __init__(self, template):
-        self.template = template.lower() #string will be replaced by a reference after linking
+        self.template = template.lower() #string will be replaced by a reference after linking. ToDo, try to avoid lower this early in the chain
         self.setPosition = BF42_vec3((0,0,0))
         self.setRotation = BF42_vec3((0,0,0))
         
 class BF42_GeometryTemplate:
     def __init__(self, type, name):
-        self.type = type.lower()
-        self.name = name.lower()
+        self.type = type.lower() #ToDo, try to avoid lower this early in the chain
+        self.name = name.lower() #ToDo, try to avoid lower this early in the chain
         self.scale = BF42_vec3((1,1,1))
         self.file = None
         self.materialSize = 256
@@ -314,7 +314,7 @@ class BF42_GeometryTemplate:
         
 class BF42_Object:
     def __init__(self, template):
-        self.template = template.lower() #string will be replaced by a reference after linking
+        self.template = template.lower() #string will be replaced by a reference after linking, ToDo, try to avoid lower this early in the chain
         self.absolutePosition = BF42_vec3((0,0,0))
         self.rotation = BF42_vec3((0,0,0))
         self.geometry_scale = BF42_vec3((1,1,1))
