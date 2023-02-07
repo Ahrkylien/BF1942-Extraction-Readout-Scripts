@@ -119,7 +119,13 @@ class RefractorFileArchive:
         for file in self.fileList:
             if file[0].lower() == relativePath.lower():
                 self.fileList.remove(file)
-        self.fileListExternal.append([relativePath, filePath])
+        self.fileListExternal.append([relativePath, False, filePath])
+        
+    def addFileAsSring(self, relativePath, contents):
+        for file in self.fileList:
+            if file[0].lower() == relativePath.lower():
+                self.fileList.remove(file)
+        self.fileListExternal.append([relativePath, True, contents])
     
     def addDirectory(self, directory, base_directory = None):
         if base_directory == None: base_directory = directory
@@ -128,7 +134,8 @@ class RefractorFileArchive:
             self.addFile(file, base_directory)
     
     def write(self, destPath = None, compressed = True):
-        if destPath == None: destPath = self.path
+        overWriteSelf = destPath == None
+        if destPath == None: destPath = self.path+"tmp"
         
         def file_key(file):
             return(str.casefold(file[0]))
@@ -156,13 +163,16 @@ class RefractorFileArchive:
             file_infos = []
             # write file_blocks
             for file in fileListTotal:
-                if isinstance(file[1], str): #external file
-                    try:
-                        with open(file[1], "rb") as f_source:
-                            fileBytes = f_source.read()
-                    except:
-                        print("cant open: "+file[1])
-                        break
+                if len(file) == 3: #external file
+                    if file[1]: #content as string
+                        fileBytes = bytes(file[2], "UTF-8")
+                    else:
+                        try:
+                            with open(file[1], "rb") as f_source:
+                                fileBytes = f_source.read()
+                        except:
+                            print("cant open: "+file[1])
+                            break
                 else: #internal RFA file
                     fileBytes = self.extractBlock(file, asBytes = True)
                     if fileBytes == False:
@@ -207,6 +217,9 @@ class RefractorFileArchive:
             #rewrite offset
             f.seek(0)
             write_i(f, startFileList)
+        
+        if overWriteSelf:
+            os.replace(destPath, self.path)
             
 class RefractorFileArchiveGroup:
     def __init__(self, rfas = None):
