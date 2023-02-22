@@ -7,8 +7,13 @@ With one RFA:
 ```py
 # lets get the contents of 'bf1942/levels/Berlin/init.con':
 rfa = RefractorFileArchive("path/to/file.rfa")
-path = rfa.getCorrectFilePath("bf1942/levels/Berlin/init.con") # this makes sure that the case of the characters is correct
+path = rfa.getCorrectFilePath("bf1942/levels/BeRliN/iNit.con") # this makes sure that the case of the characters is correct
 init_con = rfa.extractFile(path, asString = True)
+
+# print the file list:
+fileList = rfa.getFileList()
+for filePath in fileList:
+  print(filePath)
 ```
 
 With multiple RFA's:
