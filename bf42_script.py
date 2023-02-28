@@ -366,19 +366,27 @@ class BF42_script:
                         else:
                             self.IFs.append(0)
                     elif command.className == "elseif":
-                        if self.IFs[-1] == 0:
-                            if True:
-                                self.IFs[-1] = 1
-                        elif self.IFs[-1] == 1:
-                            self.IFs[-1] = 2
+                        if len(self.IFs) > 0:
+                            if self.IFs[-1] == 0:
+                                if True:
+                                    self.IFs[-1] = 1
+                            elif self.IFs[-1] == 1:
+                                self.IFs[-1] = 2
+                        else:
+                            pass #elseif without if
                     elif command.className == "else":
-                        if self.IFs[-1] == 0:
-                            self.IFs[-1] = 1
-                        elif self.IFs[-1] == 1:
-                            self.IFs[-1] = 2
+                        if len(self.IFs) > 0:
+                            if self.IFs[-1] == 0:
+                                self.IFs[-1] = 1
+                            elif self.IFs[-1] == 1:
+                                self.IFs[-1] = 2
+                        else:
+                            pass #else without if
                     elif command.className == "endif":
                         if len(self.IFs) > 0:
                             self.IFs.pop()
+                        else:
+                            pass #endif without if
                     elif not [0,2] in self.IFs:
                         if command.className == "objecttemplate":
                             if command.method == "create":
