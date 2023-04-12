@@ -8,8 +8,8 @@ def read_i(f, n = 1, forceList = False):
         return(res[0])
     return(res)
 
-def read_s(f):
-    return(f.read(read_i(f)).decode("utf-8", errors="ignore"))
+def read_s(f, length = None):
+    return(f.read(read_i(f) if length == None else length).decode("utf-8", errors="ignore"))
 
 def write_i(f, values):
     if not isinstance(values, (list, tuple)): values = [values]
@@ -38,12 +38,19 @@ class RefractorFileArchive:
         self.success = False
         self.fileList = []
         self.fileListExternal = []
+        self.fileSize = None
         if read:
             self.read()
     
     def read(self):
         try:
             with open(self.path, 'rb') as f:
+                f.seek(0,2)
+                self.fileSize = f.tell()
+                f.seek(0)
+                if self.fileSize >= 28:
+                    if not read_s(f, 28) in ["Refractor2 FlatArchive 1.1  "]: # v 1.1 has an additional string of 28 bytes at the start
+                        f.seek(0)
                 offset = read_i(f)
                 self.compressed = read_i(f) == 1
                 f.seek(offset)
