@@ -6,7 +6,7 @@ Several scripts for extracting and reading the Battlefield 1942 structure
 With one RFA:
 ```py
 # lets get the contents of 'bf1942/levels/Berlin/init.con':
-rfa = RefractorFileArchive("path/to/file.rfa")
+rfa = RefractorFlatArchive("path/to/file.rfa")
 path = rfa.getCorrectFilePath("bf1942/levels/BeRliN/iNit.con") # this makes sure that the case of the characters is correct
 init_con = rfa.extractFile(path, asString = True)
 
@@ -20,7 +20,7 @@ With multiple RFA's:
 ```py
 # set up the rfa_group object:
 rfaPaths = ["path/to/file_002.rfa", "path/to/file_001.rfa", "path/to/file.rfa"] # most important rfa first!
-rfa_group = RefractorFileArchiveGroup(rfaPaths)
+rfa_group = RefractorFlatArchiveGroup(rfaPaths)
 
 # check if conquest.con exists:
 gpm_cq = rfa_group.fileExists("bf1942/levels/Berlin/gametypes/conquest.con")

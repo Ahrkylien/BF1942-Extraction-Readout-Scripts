@@ -22,7 +22,7 @@ def write_s(f, value):
 def write_bytes(f, value):
     return(f.write(bytearray(value)))
 
-class RefractorFileArchive_Info:
+class RefractorFlatArchive_Info:
     def __init__(self, f = None, csize = None, ucsize = None, doffset = None):
         self.csize = read_i(f) if f != None else csize
         self.ucsize = read_i(f) if f != None else ucsize
@@ -31,7 +31,7 @@ class RefractorFileArchive_Info:
     def write(self, f):
         write_i(f, [self.csize, self.ucsize, self.doffset])
         
-class RefractorFileArchive:
+class RefractorFlatArchive:
     def __init__(self, path, read = True):
         self.path = path
         self.compressed = False
@@ -57,7 +57,7 @@ class RefractorFileArchive:
                 rfaEntries = read_i(f)
                 for i in range(rfaEntries):
                     entryPath = read_s(f)
-                    file_info = RefractorFileArchive_Info(f)
+                    file_info = RefractorFlatArchive_Info(f)
                     unknowns = read_i(f,3)
                     self.fileList.append((entryPath, file_info))
                     self.success = True
@@ -85,7 +85,7 @@ class RefractorFileArchive:
                     segment_num = read_i(f)
                     for i in range(segment_num):
                         f.seek(fileInfo[1].doffset+4+3*4*i)
-                        segment_info = RefractorFileArchive_Info(f)
+                        segment_info = RefractorFlatArchive_Info(f)
                         if segment_info.csize == 0:
                             data.append(b'')
                         else:
@@ -199,7 +199,7 @@ class RefractorFileArchive:
                     csize = len(fileBytesBlocks)*3*4+4
                     for fileBytesBlock in fileBytesBlocks:
                         fileBytesCompressed = lzo.compress(fileBytesBlock, 9, False) #compression level = 9, Include metadata header = False
-                        segmentInfos.append(RefractorFileArchive_Info(None, len(fileBytesCompressed), len(fileBytesBlock), f.tell()-startDataBlocks))
+                        segmentInfos.append(RefractorFlatArchive_Info(None, len(fileBytesCompressed), len(fileBytesBlock), f.tell()-startDataBlocks))
                         f.write(fileBytesCompressed)
                         csize += len(fileBytesCompressed)
                     endDataBlocks = f.tell()
@@ -207,7 +207,7 @@ class RefractorFileArchive:
                     for segmentInfo in segmentInfos:
                         segmentInfo.write(f)
                     f.seek(endDataBlocks)
-                file_infos.append((file[0], RefractorFileArchive_Info(None, csize, len(fileBytes), dataOffset)))
+                file_infos.append((file[0], RefractorFlatArchive_Info(None, csize, len(fileBytes), dataOffset)))
             
             startFileList = f.tell()
             
@@ -228,9 +228,9 @@ class RefractorFileArchive:
         if overWriteSelf:
             os.replace(destPath, self.path)
             
-class RefractorFileArchiveGroup:
+class RefractorFlatArchiveGroup:
     def __init__(self, rfas = None):
-        self.rfas = [] if rfas == None else [RefractorFileArchive(path) for path in rfas]
+        self.rfas = [] if rfas == None else [RefractorFlatArchive(path) for path in rfas]
         
     def extractFile(self, path, destinationDir = None, asString = False):
         for rfa in self.rfas:
