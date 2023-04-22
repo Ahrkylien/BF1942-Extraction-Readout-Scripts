@@ -86,7 +86,7 @@ class RefractorFlatArchive:
                     for i in range(segment_num):
                         f.seek(fileInfo[1].doffset+4+3*4*i)
                         segment_info = RefractorFlatArchive_Info(f)
-                        if segment_info.csize == 0:
+                        if segment_info.csize == 0 or segment_info.ucsize == 0:
                             data.append(b'')
                         else:
                             f.seek(fileInfo[1].doffset+4+3*4*segment_num + segment_info.doffset)
