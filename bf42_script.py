@@ -91,7 +91,7 @@ def bf42_vec3_Add(v1,v2):
 
 class BF42_command:
     def __init__(self, cmd_str):
-        self.className = None; self.method = None; self.arguments = []
+        self.className = None; self.method = None; self.arguments = []; self.targetVariable = None
         # regex = "^([\t\f ]*)([^\t^\f^ ^\.^\n]*)(?:(\.)([^\t^\f^ ^\n]*)){0,1}([\t\f ]*)([^\n]*)" # this is the regex to parse a whole file
         regex = "^[\t\f ]*([^\t^\f^ ^\.]*)(?:\.([^\t^\f^ ^\n]*)){0,1}[\t\f ]*(.*)"
         regexResult = re.findall(regex, cmd_str, flags = re.ASCII|re.IGNORECASE|re.MULTILINE)
@@ -103,6 +103,9 @@ class BF42_command:
                 arguments_str = splitted[2]
                 regex = r'(?:"(?:(?:.*?")|(?:.*)))|(?:[^\t^\f^ ]+)'
                 self.arguments = [argument.replace('"', '') for argument in re.findall(regex, arguments_str, flags = re.ASCII)]
+                if len(self.arguments) > 1 and self.arguments[-2] == "->" and self.arguments[-1].lower().startswith("v_"):
+                    self.targetVariable = self.arguments[-1]
+                    self.arguments = self.arguments[:-2]
     
     def __eq__(self, commandString): #commandString has className.method as format where either part can be empty
         parts = commandString.split('.', 1)
@@ -132,8 +135,8 @@ class BF42_data:
         self.textureManager_alternativePaths = []
         self.console_worldSize = None
         self.game = BF42_Game()
-        self.variables = []
-        self.constants = []
+        self.variables = {}
+        self.constants = {}
     
     def getObject(self, name):
         for object in self.objects:
@@ -246,7 +249,9 @@ class BF42_Game:
     def execMethod(self, methodName, arguments):
         def mapId(value): self.mapId = value
         def activeCombatArea(a,b,c,d): self.activeCombatArea = (int(a), int(b), int(c), int(d))
-        def customGameName(value): self.customGameName = value
+        def customGameName(value = None):
+            if value != None: self.customGameName = value
+            return(self.customGameName)
         def customGameVersion(value): self.customGameVersion = value
         def addModPath(value): self.modPaths.append(value)
         def setMultiplayerBriefingObjectives(value): self.multiplayerBriefingObjectives = value
@@ -256,9 +261,10 @@ class BF42_Game:
         methods = {name: methods[name] for name in methods if not name in ['methodName', 'arguments']}
         for method in methods:
             if isMethod(methodName, method):
-                try: methods[method](*arguments)
+                try: return(methods[method](*arguments))
                 except: pass
                 break
+        return(False)
 
 class BF42_ObjectTemplate:
     def __init__(self, type, name):
@@ -378,6 +384,11 @@ class BF42_Object:
             elif isMethod(name, "team"): self.team = value
             elif isMethod(name, "name"): self.name = value
 
+def bf42_evaluate(value1, operator, value2):
+    if operator == "==":
+        return(value1.lower() == value2.lower())
+    return(False)
+
 class BF42_script:
     def __init__(self, data = None, rfaGroup = None):
         if data == None: data = BF42_data()
@@ -386,11 +397,14 @@ class BF42_script:
         self.rfaGroup = rfaGroup
         self.data = data
         
-    def read(self, path, staticObjects = False):
+    def read(self, path, staticObjects = False, forceExternalPath = False, v_args = None):
         data = self.data
+        if v_args != None:
+            for i, v_arg in enumerate(v_args):
+                data.variables["v_arg"+str(i+1)] = v_arg
         directory = os.path.dirname(path)
         try:
-            if self.rfaGroup == None:
+            if self.rfaGroup == None or forceExternalPath:
                 fp = open(path, 'r', errors='replace')
                 lines = fp.readlines()
             else:
@@ -405,26 +419,32 @@ class BF42_script:
                 command = BF42_command(line)
                 if command.className != None:
                     numArgs = len(command.arguments)
+                    if command not in ["var", "const"]:
+                        for i in range(numArgs):
+                            if command.arguments[i].lower().startswith('v_'):
+                                command.arguments[i] = data.variables[command.arguments[i]] if command.arguments[i] in data.variables else command.arguments[i]
+                            elif command.arguments[i].lower().startswith('c_'):
+                                command.arguments[i] = data.constants[command.arguments[i]] if command.arguments[i] in data.constants else command.arguments[i]
                     if command == "beginrem":
                         self.REM = True
                     elif command == "endrem":
                         self.REM = False
                     elif not command == "rem" and not self.REM:
-                        if command == "if":
-                            if True:
+                        if command == "if" and numArgs == 3:
+                            if bf42_evaluate(*command.arguments):
                                 self.IFs.append(1)
                             else:
                                 self.IFs.append(0)
-                        elif command == "elseif":
+                        elif command == "elseif" and numArgs == 3:
                             if len(self.IFs) > 0:
                                 if self.IFs[-1] == 0:
-                                    if True:
+                                    if bf42_evaluate(*command.arguments):
                                         self.IFs[-1] = 1
                                 elif self.IFs[-1] == 1:
                                     self.IFs[-1] = 2
                             else:
                                 pass # elseif without if
-                        elif command == "else":
+                        elif command == "else" and numArgs == 0:
                             if len(self.IFs) > 0:
                                 if self.IFs[-1] == 0:
                                     self.IFs[-1] = 1
@@ -432,12 +452,12 @@ class BF42_script:
                                     self.IFs[-1] = 2
                             else:
                                 pass # else without if
-                        elif command == "endif":
+                        elif command == "endif" and numArgs == 0:
                             if len(self.IFs) > 0:
                                 self.IFs.pop()
                             else:
                                 pass # endif without if
-                        elif not [0,2] in self.IFs:
+                        elif not any(x in self.IFs for x in [0, 2]):
                             if command.method != None:
                                 if command == "objecttemplate":
                                     if command == ".create":
@@ -491,7 +511,9 @@ class BF42_script:
                                             data.textureManager_alternativePaths.append(command.arguments[0])
                                 
                                 elif command == "game":
-                                    data.game.execMethod(command.method, command.arguments)
+                                    returnValue = data.game.execMethod(command.method, command.arguments)
+                                    if command.targetVariable != None and returnValue != False and command.targetVariable in data.variables:
+                                        data.variables[command.targetVariable] = returnValue
                                 
                                 elif command == "console":
                                     if command == ".worldsize":
@@ -512,14 +534,24 @@ class BF42_script:
                                         BF42_script(data = data, rfaGroup = self.rfaGroup).read(path_run) # need to add v_args
                                 elif command == "var":
                                     if numArgs == 3:
-                                        data.variables.append("v_test = 12")
+                                        data.variables[command.arguments[0]] = command.arguments[2]
                                     elif numArgs == 1:
-                                        data.variables.append("v_test")
+                                        if command.arguments[0] not in data.variables:
+                                            data.variables[command.arguments[0]] = "" # or should it be set to None?
                                 elif command == "const":
                                     if numArgs == 3:
-                                        data.constants.append("c_test = 12")
+                                        data.constants[command.arguments[0]] = command.arguments[2]
                                     elif numArgs == 1:
-                                        data.constants.append("c_test")
+                                        if command.arguments[0] not in data.constants:
+                                            data.constants[command.arguments[0]] = "" # or should it be set to None?
+                                elif command.className.lower().startswith('v_'):
+                                    if numArgs == 2:
+                                        if command.className in data.variables:
+                                            data.variables[command.className] = command.arguments[1]
+                                elif command.className.lower().startswith('c_'):
+                                    if numArgs == 2:
+                                        if command.className in data.constants:
+                                            data.constants[command.className] = command.arguments[1]
         except EnvironmentError:
             print("Could not find file: "+path)
         return(self.data)
