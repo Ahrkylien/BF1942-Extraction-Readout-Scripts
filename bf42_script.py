@@ -290,12 +290,14 @@ class BF42_ObjectTemplate:
         self.name = name
         self.geometry = "" # string will be replaced by a reference after linking
         self.maxHitPoints = None
+        self.minRotation = BF42_vec3((0,0,0))
+        self.maxRotation = BF42_vec3((0,0,0))
         self.maxSpeed = None
         self.magSize = None
         self.numOfMag = None
         self.numberOfGears = None
-        self.gearUp = None
-        self.gearDown = None
+        self.gearUp = 0.7
+        self.gearDown = 0.3
         self.triggerRadius = 0
         self.linePoints = []
         self.controlPointName = ""
@@ -320,6 +322,12 @@ class BF42_ObjectTemplate:
         def maxHitPoints(value = None):
             if value != None: self.maxHitPoints = float(value)
             return(self.maxHitPoints)
+        def minRotation(value = None):
+            if value != None: self.minRotation = BF42_vec3(value)
+            return(self.minRotation)
+        def maxRotation(value = None):
+            if value != None: self.maxRotation = BF42_vec3(value)
+            return(self.maxRotation)
         def maxSpeed(value = None):
             if value != None: self.maxSpeed = BF42_vec3(value)
             return(self.maxSpeed)
