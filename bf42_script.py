@@ -267,7 +267,7 @@ class BF42_Game:
         def customGameName(value = None):
             if value != None: self.customGameName = value
             return(self.customGameName)
-        def customGameVersion(value):
+        def customGameVersion(value = None):
             if value != None: self.customGameVersion = value
             return(self.customGameVersion)
         def addModPath(value): self.modPaths.append(value)
@@ -289,6 +289,13 @@ class BF42_ObjectTemplate:
         self.type = type
         self.name = name
         self.geometry = "" # string will be replaced by a reference after linking
+        self.maxHitPoints = None
+        self.maxSpeed = None
+        self.magSize = None
+        self.numOfMag = None
+        self.numberOfGears = None
+        self.gearUp = None
+        self.gearDown = None
         self.triggerRadius = 0
         self.linePoints = []
         self.controlPointName = ""
@@ -310,6 +317,27 @@ class BF42_ObjectTemplate:
     
     def execMethod(self, methodName, arguments):
         def geometry(value): self.geometry = value
+        def maxHitPoints(value = None):
+            if value != None: self.maxHitPoints = float(value)
+            return(self.maxHitPoints)
+        def maxSpeed(value = None):
+            if value != None: self.maxSpeed = BF42_vec3(value)
+            return(self.maxSpeed)
+        def magSize(value = None):
+            if value != None: self.magSize = int(value)
+            return(self.magSize)
+        def numOfMag(value = None):
+            if value != None: self.numOfMag = int(value)
+            return(self.numOfMag)
+        def numberOfGears(value = None):
+            if value != None: self.numberOfGears  = int(value)
+            return(self.numberOfGears)
+        def gearUp(value = None):
+            if value != None: self.gearUp  = float(value)
+            return(self.gearUp )
+        def gearDown(value = None):
+            if value != None: self.gearDown  = float(value)
+            return(self.gearDown)
         def triggerRadius(value): self.triggerRadius = int(value)
         def addLinePoint(value): self.linePoints.append(BF42_vec3(value))
         def controlPointName(value): self.controlPointName = value
@@ -346,9 +374,10 @@ class BF42_ObjectTemplate:
         methods = {name: methods[name] for name in methods if not name in ['methodName', 'arguments']}
         for method in methods:
             if isMethod(methodName, method):
-                try: methods[method](*arguments)
+                try: return(methods[method](*arguments))
                 except: pass
                 break
+        return(False)
 
 class BF42_ObjectTemplateChild:
     def __init__(self, template):
@@ -496,9 +525,9 @@ class BF42_script:
                                 if command == "geometrytemplate":
                                     if command == ".create":
                                         if numArgs == 2:
-                                            # ToDo: create fails if BF42_GeometryTemplate name already exists...
-                                            data.active_GeometryTemplate = BF42_GeometryTemplate(command.arguments[0], command.arguments[1])
-                                            data.geometryTemplates.append(data.active_GeometryTemplate)
+                                            if data.getGeometryTemplate(command.arguments[1]) == None:
+                                                data.active_GeometryTemplate = BF42_GeometryTemplate(command.arguments[0], command.arguments[1])
+                                                data.geometryTemplates.append(data.active_GeometryTemplate)
                                     elif command == ".active":
                                         if numArgs == 1:
                                             refered_GeometryTemplate = data.getGeometryTemplate(command.arguments[0])
