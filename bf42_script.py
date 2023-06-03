@@ -137,6 +137,21 @@ class BF42_data:
         self.game = BF42_Game()
         self.variables = {}
         self.constants = {}
+        self.lastObjectTemplateID = -1
+        self.lastObjectID = -1
+        
+        with open('constants.txt') as file:
+            for line in file:
+                parts = line.strip().split()
+                self.constants[parts[0]] = parts[1]
+    
+    def getNextObjectTemplateID(self):
+        self.lastObjectTemplateID += 1
+        return(self.lastObjectTemplateID)
+    
+    def getNextObjectID(self):
+        self.lastObjectID += 1
+        return(self.lastObjectID)
     
     def getObject(self, name):
         for object in self.objects:
@@ -247,12 +262,14 @@ class BF42_Game:
         self.modPaths = []
     
     def execMethod(self, methodName, arguments):
-        def mapId(value): self.mapId = value
-        def activeCombatArea(a,b,c,d): self.activeCombatArea = (int(a), int(b), int(c), int(d))
+        def setMapId(value): self.mapId = value
+        def setActiveCombatArea(a,b,c,d): self.activeCombatArea = (int(a), int(b), int(c), int(d))
         def customGameName(value = None):
             if value != None: self.customGameName = value
             return(self.customGameName)
-        def customGameVersion(value): self.customGameVersion = value
+        def customGameVersion(value):
+            if value != None: self.customGameVersion = value
+            return(self.customGameVersion)
         def addModPath(value): self.modPaths.append(value)
         def setMultiplayerBriefingObjectives(value): self.multiplayerBriefingObjectives = value
         def setObjectiveBriefing(value): self.objectiveBriefing = value
@@ -267,7 +284,8 @@ class BF42_Game:
         return(False)
 
 class BF42_ObjectTemplate:
-    def __init__(self, type, name):
+    def __init__(self, type, name, ID):
+        self.ID = ID
         self.type = type
         self.name = name
         self.geometry = "" # string will be replaced by a reference after linking
@@ -365,7 +383,8 @@ class BF42_GeometryTemplate:
                 break
         
 class BF42_Object:
-    def __init__(self, template):
+    def __init__(self, template, ID):
+        self.ID = ID
         self.template = template
         self.name = "" # toDo: find out the object ID/name logic/generation
         self.absolutePosition = BF42_vec3((0,0,0))
@@ -462,9 +481,9 @@ class BF42_script:
                                 if command == "objecttemplate":
                                     if command == ".create":
                                         if numArgs == 2:
-                                            # ToDo: create fails if BF42_ObjectTemplate name already exists...
-                                            data.active_ObjectTemplate = BF42_ObjectTemplate(command.arguments[0], command.arguments[1])
-                                            data.objectTemplates.append(data.active_ObjectTemplate)
+                                            if data.getObjectTemplate(command.arguments[1]) == None:
+                                                data.active_ObjectTemplate = BF42_ObjectTemplate(command.arguments[0], command.arguments[1], data.getNextObjectTemplateID())
+                                                data.objectTemplates.append(data.active_ObjectTemplate)
                                     elif command == ".active":
                                         if numArgs == 1:
                                             refered_ObjectTemplate = data.getObjectTemplate(command.arguments[0])
@@ -492,7 +511,7 @@ class BF42_script:
                                 elif command == "object":
                                     if command == ".create":
                                         if numArgs == 1:
-                                            data.active_Object = BF42_Object(command.arguments[0])
+                                            data.active_Object = BF42_Object(command.arguments[0], data.getNextObjectID())
                                             data.objects.append(data.active_Object)
                                             if staticObjects:
                                                 data.staticObjects.append(data.active_Object)
@@ -531,7 +550,8 @@ class BF42_script:
                                             path_run = os.path.join(directory,command.arguments[0]+".con")
                                         else:
                                             path_run = os.path.join(directory,command.arguments[0])
-                                        BF42_script(data = data, rfaGroup = self.rfaGroup).read(path_run) # need to add v_args
+                                        v_args_run = command.arguments[1:] if len(command.arguments) > 1 else []
+                                        BF42_script(data = data, rfaGroup = self.rfaGroup).read(path_run, v_args = v_args_run)
                                 elif command == "var":
                                     if numArgs == 3:
                                         data.variables[command.arguments[0]] = command.arguments[2]
