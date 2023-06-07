@@ -304,12 +304,17 @@ class BF42_ObjectTemplate:
         self.type = type
         self.name = name
         self.geometry = "" # string will be replaced by a reference after linking
-        self.maxHitPoints = None
+        self.maxHitPoints = 10
         self.minRotation = BF42_vec3((0,0,0))
         self.maxRotation = BF42_vec3((0,0,0))
-        self.maxSpeed = None
-        self.magSize = None
-        self.numOfMag = None
+        self.maxSpeed = BF42_vec3((1,1,1))
+        self.acceleration = BF42_vec3((0.1,0.1,0.1))
+        self.inputToYaw = 55
+        self.inputToPitch = 55
+        self.inputToRoll = 55
+        self.automaticReset = False
+        self.magSize = 30
+        self.numOfMag = 3
         self.numberOfGears = None
         self.gearUp = 0.7
         self.gearDown = 0.3
@@ -349,6 +354,21 @@ class BF42_ObjectTemplate:
         def maxSpeed(value = None):
             if value != None: self.maxSpeed = BF42_vec3(value)
             return(self.maxSpeed)
+        def acceleration(value = None):
+            if value != None: self.acceleration = BF42_vec3(value)
+            return(self.acceleration)
+        def inputToPitch(value = None):
+            if value != None: self.inputToPitch = int(value)
+            return(self.inputToPitch)
+        def inputToYaw(value = None):
+            if value != None: self.inputToYaw = int(value)
+            return(self.inputToYaw)
+        def inputToRoll(value = None):
+            if value != None: self.inputToRoll = int(value)
+            return(self.inputToRoll)
+        def automaticReset(value = None):
+            if value != None: self.automaticReset = bool(int(value))
+            return(self.automaticReset)
         def magSize(value = None):
             if value != None: self.magSize = int(value)
             return(self.magSize)
