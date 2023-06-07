@@ -40,6 +40,10 @@ class BF42_vec3:
             self.x = vertex[0]
             self.y = vertex[1]
             self.z = vertex[2]
+    def __eq__(self, other):
+        if not isinstance(other, BF42_vec3):
+            return False
+        return self.x == other.x and self.y == other.y and self.z == other.z
     def str(self, numberOfSignif=6):
         strings = []
         for v in self.lst():
