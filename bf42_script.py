@@ -4,6 +4,20 @@ import math
 import pickle
 import json
 import sys
+from pathlib import PurePosixPath as BFPath
+
+# resolve . and .. in paths
+def resolvepath(path):
+    newparts = []
+    for part in path.parts:
+        if part == '..':
+            if newparts: # not empty
+                newparts.pop()
+        elif part == '.':
+            pass
+        else:
+            newparts.append(part)
+    return type(path)(*newparts)
 
 # method to store objects as strings:
 def dumps(objectToDump):
@@ -521,14 +535,14 @@ class BF42_script:
         if v_args != None:
             for i, v_arg in enumerate(v_args):
                 data.variables["v_arg"+str(i+1)] = v_arg
-        directory = os.path.dirname(path)
+        directory = BFPath(path).parent
         lineno = 0
         try:
             if self.rfaGroup == None or forceExternalPath:
                 fp = open(path, 'r', errors='replace')
                 lines = fp.readlines()
             else:
-                fileString = self.rfaGroup.extractFile(path, asString = True)
+                fileString = self.rfaGroup.extractFile(str(path), asString = True)
                 if fileString != False:
                     lines = iter(fileString.splitlines())
                 else:
@@ -651,15 +665,14 @@ class BF42_script:
                             else:
                                 if command == "include":
                                     if numArgs == 1:
-                                        path_include = os.path.join(directory,command.arguments[0])
+                                        path_include = resolvepath(directory.joinpath(command.arguments[0]))
                                         self.read(path_include, data)
                                 elif command == "run":
                                     if numArgs >= 1:
-                                        extension = os.path.splitext(command.arguments[0])[1]
-                                        if extension == "":
-                                            path_run = os.path.join(directory,command.arguments[0]+".con")
-                                        else:
-                                            path_run = os.path.join(directory,command.arguments[0])
+                                        path_run = BFPath(command.arguments[0])
+                                        if path_run.suffix == "":
+                                            path_run = path_run.with_suffix(".con")
+                                        path_run = directory / path_run
                                         v_args_run = command.arguments[1:] if len(command.arguments) > 1 else []
                                         BF42_script(data = data, rfaGroup = self.rfaGroup).read(path_run, v_args = v_args_run)
                                 elif command == "var":
@@ -691,16 +704,16 @@ class BF42_script:
 
 
 def bf42_readAllScripts(bf42_data, base_path, level = None):
-    for path, subdirs, files in os.walk(os.path.join(base_path,"Objects")):
+    script = BF42_script(bf42_data)
+    for path, subdirs, files in os.walk(BFPath(base_path) / "Objects"):
         for name in files:
-            filePath = os.path.join(path, name)
-            extension = os.path.splitext(filePath)[1]
-            if extension.lower() == ".con":
-                BF42_script().read(filePath,bf42_data)
+            filePath = BFPath(path, name)
+            if filePath.suffix.lower() == ".con":
+                script.read(filePath)
     if level != None:
-        BF42_script().read(os.path.join(base_path,"Bf1942\\Levels\\"+level+"\\Init.con"),bf42_data)
-        BF42_script().read(os.path.join(base_path,"Bf1942\\Levels\\"+level+"\\Conquest.con"),bf42_data)
-        BF42_script().read(os.path.join(base_path,"Bf1942\\Levels\\"+level+"\\StaticObjects.con"),bf42_data, True)
+        script.read(BFPath(base_path) / "Bf1942/Levels" / level / "Init.con")
+        script.read(BFPath(base_path) / "Bf1942/Levels" / level / "Conquest.con")
+        script.read(BFPath(base_path) / "Bf1942/Levels" / level / "StaticObjects.con", True)
 
 def bf42_writeStaticCon(path, objects, data):
     data.objects = objects
