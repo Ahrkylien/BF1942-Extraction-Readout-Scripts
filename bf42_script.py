@@ -130,10 +130,12 @@ def bf42_is_linked(template):
 class BF42_data:
     def __init__(self):
         self.objectTemplates = []
+        self.networkableInfos = []
         self.geometryTemplates = []
         self.objects = []
         self.staticObjects = [] # subCatergory of objects
         self.active_ObjectTemplate = None
+        self.active_NetworkableInfo = None
         self.active_GeometryTemplate = None
         self.active_Object = None
         self.textureManager_alternativePaths = []
@@ -170,6 +172,12 @@ class BF42_data:
         # print("could not find objectTemplate: "+name)
         return(None)
     
+    def getNetworkableInfo(self, name):
+        for networkableInfo in self.networkableInfos:
+            if networkableInfo.name.lower() == name.lower():
+                return(networkableInfo)
+        return(None)
+    
     def getGeometryTemplate(self, name):
         for geometryTemplate in self.geometryTemplates:
             if geometryTemplate.name.lower() == name.lower():
@@ -188,6 +196,8 @@ class BF42_data:
                     template = self.getObjectTemplate(child.template)
                     if template != None:
                         child.template = template
+            if objectTemplate.NetworkableInfo:
+                objectTemplate.NetworkableInfo = self.getNetworkableInfo(objectTemplate.NetworkableInfo)
             geometry = self.getGeometryTemplate(objectTemplate.geometry)
             if geometry != None:
                 objectTemplate.geometry = geometry
@@ -320,6 +330,8 @@ class BF42_ObjectTemplate:
         
         self.childeren = []
         self.active_child = None
+        
+        self.NetworkableInfo = None
     
     def execMethod(self, methodName, arguments):
         def geometry(value): self.geometry = value
@@ -381,6 +393,7 @@ class BF42_ObjectTemplate:
         def setRotation(value):
             if self.active_child != None:
                 self.active_child.setRotation = BF42_vec3(value)
+        def networkableInfo(value): self.NetworkableInfo = value
         
         methods = locals()
         methods = {name: methods[name] for name in methods if not name in ['methodName', 'arguments']}
@@ -396,7 +409,30 @@ class BF42_ObjectTemplateChild:
         self.template = template
         self.setPosition = BF42_vec3((0,0,0))
         self.setRotation = BF42_vec3((0,0,0))
+
+class BF42_NetworkableInfo:
+    predictionModeEnum = ['PMNone', 'PMLinear', 'PMCubic', 'PMUsePhysics']
+    def __init__(self, name):
+        self.name = name
+        self.isUnique = False
+        self.basePriority = 1.0
+        self.predictionMode = 0 # PMNone
+        self.forceNetworkableId = False
+    def execMethod(self, methodName, arguments):
+        def setBasePriority(value): self.basePriority = float(value)
+        def setIsUnique(value): self.isUnique = bool(int(value))
+        def setPredictionMode(value): self.predictionMode = self.predictionModeEnum.index(value)
         
+        methods = locals()
+        methods = {name: methods[name] for name in methods if not name in ['methodName', 'arguments']}
+        for method in methods:
+            if isMethod(methodName, method):
+                # try:
+                return(methods[method](*arguments))
+                # except: pass
+                break
+        return(False)
+
 class BF42_GeometryTemplate:
     def __init__(self, type, name):
         self.type = type
@@ -533,7 +569,15 @@ class BF42_script:
                                     else:
                                         if data.active_ObjectTemplate != None:
                                             data.active_ObjectTemplate.execMethod(command.method, command.arguments)
-                                
+                                if command == "networkableinfo":
+                                    if command == ".createNewInfo":
+                                        if numArgs == 1:
+                                            if data.getNetworkableInfo(command.arguments[0]) == None:
+                                                data.active_NetworkableInfo = BF42_NetworkableInfo(command.arguments[0])
+                                                data.networkableInfos.append(data.active_NetworkableInfo)
+                                    else:
+                                        if data.active_NetworkableInfo != None:
+                                            data.active_NetworkableInfo.execMethod(command.method, command.arguments)
                                 if command == "geometrytemplate":
                                     if command == ".create":
                                         if numArgs == 2:
