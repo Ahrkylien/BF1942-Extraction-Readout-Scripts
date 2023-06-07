@@ -3,6 +3,7 @@ import re
 import math
 import pickle
 import json
+import sys
 
 # method to store objects as strings:
 def dumps(objectToDump):
@@ -521,6 +522,7 @@ class BF42_script:
             for i, v_arg in enumerate(v_args):
                 data.variables["v_arg"+str(i+1)] = v_arg
         directory = os.path.dirname(path)
+        lineno = 0
         try:
             if self.rfaGroup == None or forceExternalPath:
                 fp = open(path, 'r', errors='replace')
@@ -531,8 +533,9 @@ class BF42_script:
                     lines = iter(fileString.splitlines())
                 else:
                     lines = []
-                    # print("Could not find file: "+path)
+                    print("Could not find file: "+path, file=sys.stderr)
             for line_raw in lines:
+                lineno += 1
                 line = line_raw.strip()
                 command = BF42_command(line)
                 if command.className != None:
@@ -680,7 +683,10 @@ class BF42_script:
                                         if command.className in data.constants:
                                             data.constants[command.className] = command.arguments[1]
         except EnvironmentError:
-            print("Could not find file: "+path)
+            print("Could not find file: "+path, file=sys.stderr)
+        except:
+            print('exception in BF42_script.read ', path, lineno, file=sys.stderr)
+            raise
         return(self.data)
 
 
