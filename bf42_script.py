@@ -196,6 +196,7 @@ class BF42_data:
                     template = self.getObjectTemplate(child.template)
                     if template != None:
                         child.template = template
+                        template.parents.append(objectTemplate)
             if objectTemplate.NetworkableInfo:
                 objectTemplate.NetworkableInfo = self.getNetworkableInfo(objectTemplate.NetworkableInfo)
             geometry = self.getGeometryTemplate(objectTemplate.geometry)
@@ -330,6 +331,7 @@ class BF42_ObjectTemplate:
         
         self.childeren = []
         self.active_child = None
+        self.parents = []
         
         self.NetworkableInfo = None
     
