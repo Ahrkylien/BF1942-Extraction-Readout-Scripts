@@ -69,7 +69,7 @@ class RefractorFlatArchive:
     
     def getCorrectFilePath(self, path):
         for fileInfo in self.fileList:
-            if fileInfo[0].lower() == path.lower():
+            if fileInfo[0].lower().replace('\\', '/') == path.lower().replace('\\', '/'):
                 return(fileInfo[0])
         return(None)
     
@@ -115,6 +115,7 @@ class RefractorFlatArchive:
             self.extractBlock(fileInfo, destinationPath)
 
     def extractFile(self, path, destinationDir = None, asString = False):
+        path = self.getCorrectFilePath(path)
         destinationPath = path if destinationDir == None else os.path.join(destinationDir, path)
         for fileInfo in self.fileList:
             if fileInfo[0] == path:

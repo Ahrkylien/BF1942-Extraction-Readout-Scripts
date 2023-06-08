@@ -465,11 +465,9 @@ class BF42_script:
                 lines = fp.readlines()
             else:
                 fileString = self.rfaGroup.extractFile(path, asString = True)
-                if fileString != False:
-                    lines = iter(fileString.splitlines())
-                else:
-                    lines = []
-                    # print("Could not find file: "+path)
+                if fileString == False:
+                    raise Exception(f"Can't find path in RFA: {path}")
+                lines = iter(fileString.splitlines())
             for line_raw in lines:
                 line = line_raw.strip()
                 command = BF42_command(line)
@@ -620,11 +618,11 @@ def bf42_readAllScripts(bf42_data, base_path, level = None):
             filePath = os.path.join(path, name)
             extension = os.path.splitext(filePath)[1]
             if extension.lower() == ".con":
-                BF42_script().read(filePath,bf42_data)
+                BF42_script(bf42_data).read(filePath)
     if level != None:
-        BF42_script().read(os.path.join(base_path,"Bf1942\\Levels\\"+level+"\\Init.con"),bf42_data)
-        BF42_script().read(os.path.join(base_path,"Bf1942\\Levels\\"+level+"\\Conquest.con"),bf42_data)
-        BF42_script().read(os.path.join(base_path,"Bf1942\\Levels\\"+level+"\\StaticObjects.con"),bf42_data, True)
+        BF42_script(bf42_data).read(os.path.join(base_path,"Bf1942\\Levels\\"+level+"\\Init.con"), v_args = ["host"])
+        BF42_script(bf42_data).read(os.path.join(base_path,"Bf1942\\Levels\\"+level+"\\Conquest.con"), v_args = ["host"])
+        BF42_script(bf42_data).read(os.path.join(base_path,"Bf1942\\Levels\\"+level+"\\StaticObjects.con"), staticObjects = True, v_args = ["host"])
 
 def bf42_writeStaticCon(path, objects, data):
     data.objects = objects
@@ -644,7 +642,7 @@ def bf42_writeStaticCon(path, objects, data):
             f.write("\n")
     return objects
 
-def bf42_readAllConFiles(base_path,level):
+def bf42_readAllConFiles(base_path, level):
     bf42_data = BF42_data()
     bf42_readAllScripts(bf42_data, base_path, level) 
     bf42_data.creatLinks()
