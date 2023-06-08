@@ -6,19 +6,6 @@ import json
 import sys
 from pathlib import PurePosixPath as BFPath
 
-# resolve . and .. in paths
-def resolvepath(path):
-    newparts = []
-    for part in path.parts:
-        if part == '..':
-            if newparts: # not empty
-                newparts.pop()
-        elif part == '.':
-            pass
-        else:
-            newparts.append(part)
-    return type(path)(*newparts)
-
 # method to store objects as strings:
 def dumps(objectToDump):
     return(json.dumps(objectToDump))
@@ -212,8 +199,9 @@ class BF42_data:
                     if template != None:
                         child.template = template
                         template.parents.append(objectTemplate)
-            if objectTemplate.NetworkableInfo:
-                objectTemplate.NetworkableInfo = self.getNetworkableInfo(objectTemplate.NetworkableInfo)
+            if objectTemplate.networkableInfo:
+                if not bf42_is_linked(objectTemplate.networkableInfo):
+                    objectTemplate.networkableInfo = self.getNetworkableInfo(objectTemplate.networkableInfo)
             geometry = self.getGeometryTemplate(objectTemplate.geometry)
             if geometry != None:
                 objectTemplate.geometry = geometry
@@ -281,6 +269,8 @@ class BF42_data:
             self.staticObjects.append(self.objects[i])
         return(self)
 
+predictionModeEnum = ['PMNone', 'PMLinear', 'PMCubic', 'PMUsePhysics']
+
 class BF42_Game:
     def __init__(self):
         self.mapId = None
@@ -318,6 +308,7 @@ class BF42_ObjectTemplate:
         self.ID = ID
         self.type = type
         self.name = name
+        self.networkableInfo = None
         self.geometry = "" # string will be replaced by a reference after linking
         self.maxHitPoints = 10
         self.minRotation = BF42_vec3((0,0,0))
@@ -351,12 +342,15 @@ class BF42_ObjectTemplate:
         
         self.childeren = []
         self.active_child = None
-        self.parents = []
-        
-        self.NetworkableInfo = None
+        self.parents = [] # not used inside module
     
     def execMethod(self, methodName, arguments):
-        def geometry(value): self.geometry = value
+        def networkableInfo(value):
+            if value != None: self.networkableInfo = geometry
+            return(self.networkableInfo)
+        def geometry(value):
+            if value != None: self.geometry = geometry
+            return(self.geometry)
         def maxHitPoints(value = None):
             if value != None: self.maxHitPoints = float(value)
             return(self.maxHitPoints)
@@ -430,7 +424,6 @@ class BF42_ObjectTemplate:
         def setRotation(value):
             if self.active_child != None:
                 self.active_child.setRotation = BF42_vec3(value)
-        def networkableInfo(value): self.NetworkableInfo = value
         
         methods = locals()
         methods = {name: methods[name] for name in methods if not name in ['methodName', 'arguments']}
@@ -448,25 +441,25 @@ class BF42_ObjectTemplateChild:
         self.setRotation = BF42_vec3((0,0,0))
 
 class BF42_NetworkableInfo:
-    predictionModeEnum = ['PMNone', 'PMLinear', 'PMCubic', 'PMUsePhysics']
     def __init__(self, name):
         self.name = name
         self.isUnique = False
         self.basePriority = 1.0
         self.predictionMode = 0 # PMNone
+        self.predictionMode = 0 # PMNone
         self.forceNetworkableId = False
+    
     def execMethod(self, methodName, arguments):
         def setBasePriority(value): self.basePriority = float(value)
         def setIsUnique(value): self.isUnique = bool(int(value))
-        def setPredictionMode(value): self.predictionMode = self.predictionModeEnum.index(value)
+        def setPredictionMode(value): self.predictionMode = predictionModeEnum.index(value)
         
         methods = locals()
         methods = {name: methods[name] for name in methods if not name in ['methodName', 'arguments']}
         for method in methods:
             if isMethod(methodName, method):
-                # try:
-                return(methods[method](*arguments))
-                # except: pass
+                try: return(methods[method](*arguments))
+                except: pass
                 break
         return(False)
 
@@ -535,21 +528,20 @@ class BF42_script:
         if v_args != None:
             for i, v_arg in enumerate(v_args):
                 data.variables["v_arg"+str(i+1)] = v_arg
-        directory = BFPath(path).parent
-        lineno = 0
+        lines = []
         try:
             if self.rfaGroup == None or forceExternalPath:
                 fp = open(path, 'r', errors='replace')
                 lines = fp.readlines()
             else:
                 fileString = self.rfaGroup.extractFile(str(path), asString = True)
-                if fileString != False:
-                    lines = iter(fileString.splitlines())
-                else:
-                    lines = []
-                    print("Could not find file: "+path, file=sys.stderr)
-            for line_raw in lines:
-                lineno += 1
+                if fileString == False:
+                    raise Exception(f"Can't find path in RFA: {path}")
+                lines = iter(fileString.splitlines())
+        except:
+            print("Could not find file: "+path, file = sys.stderr)
+        for lineNumber, line_raw in enumerate(lines):
+            try:
                 line = line_raw.strip()
                 command = BF42_command(line)
                 if command.className != None:
@@ -594,7 +586,7 @@ class BF42_script:
                                 pass # endif without if
                         elif not any(x in self.IFs for x in [0, 2]):
                             if command.method != None:
-                                if command == "objecttemplate":
+                                if command == "objectTemplate":
                                     if command == ".create":
                                         if numArgs == 2:
                                             if data.getObjectTemplate(command.arguments[1]) == None:
@@ -608,7 +600,7 @@ class BF42_script:
                                     else:
                                         if data.active_ObjectTemplate != None:
                                             data.active_ObjectTemplate.execMethod(command.method, command.arguments)
-                                if command == "networkableinfo":
+                                if command == "networkableInfo":
                                     if command == ".createNewInfo":
                                         if numArgs == 1:
                                             if data.getNetworkableInfo(command.arguments[0]) == None:
@@ -617,7 +609,7 @@ class BF42_script:
                                     else:
                                         if data.active_NetworkableInfo != None:
                                             data.active_NetworkableInfo.execMethod(command.method, command.arguments)
-                                if command == "geometrytemplate":
+                                if command == "geometryTemplate":
                                     if command == ".create":
                                         if numArgs == 2:
                                             if data.getGeometryTemplate(command.arguments[1]) == None:
@@ -665,14 +657,14 @@ class BF42_script:
                             else:
                                 if command == "include":
                                     if numArgs == 1:
-                                        path_include = resolvepath(directory.joinpath(command.arguments[0]))
+                                        path_include = os.path.relpath(str(BFPath(path).parent / command.arguments[0]))
                                         self.read(path_include, data)
                                 elif command == "run":
                                     if numArgs >= 1:
                                         path_run = BFPath(command.arguments[0])
                                         if path_run.suffix == "":
                                             path_run = path_run.with_suffix(".con")
-                                        path_run = directory / path_run
+                                        path_run = os.path.relpath(str(BFPath(path).parent / path_run))
                                         v_args_run = command.arguments[1:] if len(command.arguments) > 1 else []
                                         BF42_script(data = data, rfaGroup = self.rfaGroup).read(path_run, v_args = v_args_run)
                                 elif command == "var":
@@ -695,25 +687,21 @@ class BF42_script:
                                     if numArgs == 2:
                                         if command.className in data.constants:
                                             data.constants[command.className] = command.arguments[1]
-        except EnvironmentError:
-            print("Could not find file: "+path, file=sys.stderr)
-        except:
-            print('exception in BF42_script.read ', path, lineno, file=sys.stderr)
-            raise
+            except:
+                print(f'Exception in BF42_script.read(): {path} ({lineNumber}): {line}', file = sys.stderr)
         return(self.data)
 
 
 def bf42_readAllScripts(bf42_data, base_path, level = None):
-    script = BF42_script(bf42_data)
     for path, subdirs, files in os.walk(BFPath(base_path) / "Objects"):
         for name in files:
             filePath = BFPath(path, name)
             if filePath.suffix.lower() == ".con":
-                script.read(filePath)
+                BF42_script(bf42_data).read(filePath)
     if level != None:
-        script.read(BFPath(base_path) / "Bf1942/Levels" / level / "Init.con")
-        script.read(BFPath(base_path) / "Bf1942/Levels" / level / "Conquest.con")
-        script.read(BFPath(base_path) / "Bf1942/Levels" / level / "StaticObjects.con", True)
+        BF42_script(bf42_data).read(BFPath(base_path) / "Bf1942/Levels" / level / "Init.con", v_args = ["host"])
+        BF42_script(bf42_data).read(BFPath(base_path) / "Bf1942/Levels" / level / "Conquest.con", v_args = ["host"])
+        BF42_script(bf42_data).read(BFPath(base_path) / "Bf1942/Levels" / level / "StaticObjects.con", staticObjects = True, v_args = ["host"])
 
 def bf42_writeStaticCon(path, objects, data):
     data.objects = objects
