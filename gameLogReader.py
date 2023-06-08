@@ -94,11 +94,17 @@ class GameLogReader:
         # ToDo:
         # <bf:server>  <bf:setting
         
-        # with auto-balance the teamswiches dont get logged correctly
-        # suicides dont get logged as tk while server gives -2 for it
-        # exit vehicle is not always logged when player dies.
-        
-        
+        # exit vehicle is not always in log
+        # suicide is not in log (it only shows as death) tk should be added to log
+        # gametype (coop etc) is always "GPM_CQ"  (This is fixed in the Linux BFV server)
+        # setteam is not logged when swiched due to autoballance
+        # player IP is not logged
+        # bot creation is not logged
+        # In BF1942, radio messages sometimes (but not always) are shown as coming from wrong player_id. Haven't verified yet if this also happens in BFV.
+        # In Objective Mode games, scoreEvents for achieving an objective, or TKing an objective, are not generated, but are counted in score (5 score points).
+        #   This applies to both the BF1942 engine (which at least has "placeholders" for counts of these objectives in the roundstats structure (although they aren't populated),
+        #   and the BFV engine, which doesn't even list them in roundstats.
+        # Victory type is always logged as "4" in BF1942, despite the real victory type (it is fixed in the Linux BFV server).
         
         ###### Server Settings: ######
         # def server_settings(settings):
