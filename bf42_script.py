@@ -721,7 +721,7 @@ def bf42_writeStaticCon(path, objects, data):
             f.write("\n")
     return objects
 
-def bf42_readAllConFiles(base_path,level):
+def bf42_readAllConFiles(base_path, level):
     bf42_data = BF42_data()
     bf42_readAllScripts(bf42_data, base_path, level) 
     bf42_data.creatLinks()
