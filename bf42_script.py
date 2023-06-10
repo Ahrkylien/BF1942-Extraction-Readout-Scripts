@@ -346,10 +346,10 @@ class BF42_ObjectTemplate:
     
     def execMethod(self, methodName, arguments):
         def networkableInfo(value):
-            if value != None: self.networkableInfo = geometry
+            if value != None: self.networkableInfo = value
             return(self.networkableInfo)
         def geometry(value):
-            if value != None: self.geometry = geometry
+            if value != None: self.geometry = value
             return(self.geometry)
         def maxHitPoints(value = None):
             if value != None: self.maxHitPoints = float(value)
