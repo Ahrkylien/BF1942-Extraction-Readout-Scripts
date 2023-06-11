@@ -151,85 +151,56 @@ class GameLogReader:
                         break
                     lines.append(line.strip('\n'))
         
-        for line in lines:
+        for lineRaw in lines:
+            line = lineRaw.strip()
+            # print(line)
             if len(line) > 1:
-                if line.startswith('<bf:'):
-                    self.currentLogBlockType = line[len('<bf:'):line.find(' ')]
-                    if self.currentLogBlockType == "event":
-                        self.currentEventName = line[len('<bf:event name="'):line.find('" ',len('<bf:event name="'))]
-                    elif self.currentLogBlockType == "log":
+                lastOpening = line.rfind('<')
+                firstClosing = line.find('>')
+                value = None if lastOpening == 0 else line[firstClosing+1:lastOpening]
+                nameAndAtributesList = re.findall("(?:\".*?\"|\S)+", line[1:firstClosing])
+                name = nameAndAtributesList.pop(0)
+                closing = name.startswith('/')
+                if name.startswith('/'): name = name[1:]
+                atributes = {}
+                for atribute in nameAndAtributesList:
+                    splited = atribute.split('=', 2)
+                    atributes[splited[0]] = splited[1][1:-1]
+                    
+                if not closing:
+                    if name == "?xml":
                         self.triggerEventHandlers('mapStart', {})
-                    elif self.currentLogBlockType == "round":
+                        self.currentParams = {}
+                    elif name == "bf:setting":
                         pass
-                    elif self.currentLogBlockType == "roundstats":
+                    elif name == "bf:event":
+                        self.currentEventName = atributes['name']
+                    elif name == "bf:param":
+                        if atributes['type'] == 'int':
+                            value = int(value)
+                            if atributes['name'].startswith('is_') or atributes['name'] == 'broadcast':
+                                value = value == 1
+                        elif atributes['type'] == 'vec3':
+                            value = None if value == "(unknown)" else [float(i) for i in value.split('/')]
+                        elif atributes['type'] == 'string':
+                            value = unescape(value)
+                        self.currentParams[atributes['name']] = value
+                    elif name == "bf:roundstats":
                         pass
-                    elif self.currentLogBlockType == "server":
+                    elif name == "bf:statparam":
                         pass
-                elif line.startswith('    <bf:param '):
-                    paramType = line[line.find(' type="')+len('" type="'):line.find('" name="')]
-                    paramName = line[line.find('" name="')+len('" name="'):line.find('">')]
-                    paramValue = line[line.find('">')+len('">'):line.rfind('</bf:param>')]
-                    paramValue = unescape(paramValue)
-                    if paramType == 'int':
-                        paramValue = int(paramValue)
-                        if paramName.startsWith('is_') or paramName == 'broadcast':
-                            paramValue = paramValue == 1
-                    elif paramType == 'vec3':
-                        paramValue = None if paramValue == "(unknown)" else [float(i) for i in paramValue.split('/')]
-                    elif paramType == 'string':
-                        paramValue = paramValue
-                    self.currentParams[paramName] = paramValue
-                elif line.startswith('  <bf:setting '):
-                    settingName = line[line.find(' name="')+len(' name="'):line.find('">')]
-                    settingValue = line[line.find('">')+len('">'):line.find('</bf:setting>')]
-                    self.currentParams[settingName] = unescape(settingValue)
-                elif line.startswith('    <bf:statparam '): # Located inside roundstats.playerstat <bf:statparam name="objectivetks">0</bf:statparam>
-                    paramName = line[line.find(' name="')+len(' name="'):line.find('">')]
-                    paramValue = line[line.find('">')+len('">'):line.find('</bf:statparam>')]
-                    self.currentPlayerStatParams[paramName] = unescape(paramValue)
-                elif line.startswith('  <bf:'): # Located inside roundstats
-                    line = line.strip()
-                    firstSpace = line.find(' ')
-                    firstClosing = line.find('>')
-                    if firstSpace == -1 or firstClosing < firstSpace: # <bf:winningteam>2</bf:winningteam>
-                        paramName = line[line.find('<bf:')+len('<bf:'):line.find('>')]
-                        paramValue = line[line.find('>')+len('>'):line.find('</bf:')]
-                        self.currentParams[paramName] = unescape(paramValue)
-                    elif line.find('</bf:') != -1: # <bf:teamtickets team="1">0</bf:teamtickets>
-                        paramName = line[line.find('<bf:')+len('<bf:'):line.find(' ')]
-                        paramAtributeName = line[line.find(' ')+len(' '):line.find('"')]
-                        paramAtributeValue = line[line.find('"')+len('"'):line.find('">')]
-                        paramValue = line[line.find('>')+len('>'):line.find('</bf:')]
-                        if not paramName in self.currentParams: self.currentParams[paramName] = []
-                        self.currentParams[paramName].append({paramAtributeName: paramAtributeValue, "value": paramValue})
-                    else: # <bf:playerstat playerid="0">
-                        paramName = line[line.find('<bf:')+len('<bf:'):line.find(' ')]
-                        paramAtributeName = line[line.find(' ')+len(' '):line.find('"')]
-                        paramAtributeValue = line[line.find('"')+len('"'):line.find('">')]
-                        if not paramName in self.currentParams: self.currentParams[paramName] = []
-                        self.currentParams[paramName].append({paramAtributeName: paramAtributeValue})
-                elif line.strip().startswith('</bf:'):
-                    typeEnd = line.strip()[len('</bf:'):line.strip().find('>')]
-                    if typeEnd == "event":
-                        self.triggerEventHandlers(self.currentEventName, self.currentParams)
-                        self.currentLogBlockType = ""
-                    elif typeEnd == "log":
+                else: #closing
+                    if name == "bf:log":
                         self.triggerEventHandlers('mapEnd', {})
-                    elif typeEnd == "round":
-                        pass
-                    elif typeEnd == "server":
+                    elif name == "bf:server":
                         self.triggerEventHandlers('roundStart', {'settings': self.currentParams})
-                    elif typeEnd == "roundstats":
-                        self.triggerEventHandlers('roundEnd', {"stats": self.currentParams})
-                    elif typeEnd == "playerstat":
-                        if 'playerstat' in self.currentParams:
-                            self.currentParams['playerstat'][-1].update(self.currentPlayerStatParams)
-                    if not typeEnd == "playerstat": self.currentParams = {}
-                    self.currentPlayerStatParams = {}
-                elif line.startswith('<?xml'):
-                    self.currentParams = {}
-                else:
-                    print("Error ("+str(endLine)+"): unknown line: "+line)
-                    self.currentLogBlockType = ""
-                    self.currentParams = {}
+                    elif name == "bf:event":
+                        self.triggerEventHandlers(self.currentEventName, self.currentParams)
+                    elif name == "bf:playerstat":
+                        pass
+                    elif name == "bf:statparam":
+                        pass
+                    elif name == "bf:roundstats":
+                        self.triggerEventHandlers('roundEnd', {'settings': self.currentParams})
+                    if not name == "bf:statparam": self.currentParams = {}
         return(endLine)
