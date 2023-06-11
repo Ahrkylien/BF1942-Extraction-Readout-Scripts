@@ -90,6 +90,7 @@ class GameLogReader:
                 eventHandler[1](**parameters)
     
     def processLog(self, logPath, startLine):
+        ### Known problems with the xml logs: ###
         # exit vehicle is not always in log
         # suicide is not in log (it only shows as death) tk should be added to log
         # gametype (coop etc) is always "GPM_CQ"  (This is fixed in the Linux BFV server)
@@ -102,36 +103,35 @@ class GameLogReader:
         #   and the BFV engine, which doesn't even list them in roundstats.
         # Victory type is always logged as "4" in BF1942, despite the real victory type (it is fixed in the Linux BFV server).
         
+        ### event Names and their parameters: ###
         # mapStart()
         # mapEnd()
-        # roundStart(settings)
-        # roundEnd(roundstats)
+        # roundStart(dict: settings)
+        # roundEnd(dict: roundstats)
         
-        # chat(player_id, player_location, team, text)
-        # playerKeyHash(player_id, keyhash)
-        # disconnectPlayer(player_id, player_location)
-        # beginMedPack(player_id, player_location, medpack_status, healed_player)
-        # endMedPack(player_id, player_location, medpack_status)
-        # beginRepair(player_id, player_location, int repair_status, vehicle_type, vehicle_player = None)
-        # endRepair(player_id, player_location, repair_status)
-        # createPlayer(player_id, name, player_location, is_ai, team)
-        # destroyPlayer(player_id, player_location)
-        # destroyVehicle(vehicle, vehicle_pos, player_id = None, player_location = None)
-        # enterVehicle(player_id, player_location, vehicle, pco_id, is_default, is_fake)
-        # exitVehicle(player_id, player_location, vehicle, is_fake)
-        # pickupKit(player_id, player_location, kit)
-        # radioMessage(player_id, player_location, message, broadcast)
-        # restartMap(tickets_team1, tickets_team2)
-        # roundInit(tickets_team1, tickets_team2)
-        # scoreEvent(player_id, player_location, score_type, weapon, victim_id = None)
-        # setTeam(player_id, player_location, team)
-        # spawnEvent(player_id, player_location, team)  
-        # reSpawnEvent(player_id, player_location, team)
-        # changePlayerName(player_id, player_location, name)
-        # connectPlayer(player_id, player_location)
-        # pickupFlag(player_id, player_location)
-        
-        # content_CRC32(player_id, player_location, content_CRC32)
+        # chat(int: player_id, list: player_location, int: int: team, string: text)
+        # playerKeyHash(int: player_id, string: keyhash)
+        # disconnectPlayer(int: player_id, list: player_location)
+        # beginMedPack(int: player_id, list: player_location, int: medpack_status, int: healed_player)
+        # endMedPack(int: player_id, list: player_location, int: medpack_status)
+        # beginRepair(int: player_id, list: player_location, int: repair_status, string: vehicle_type, int: vehicle_player = None)
+        # endRepair(int: player_id, list: player_location, int: repair_status)
+        # createPlayer(int: player_id, string: name, list: player_location, bool: is_ai, int: team)
+        # destroyPlayer(int: player_id, list: player_location)
+        # destroyVehicle(string: vehicle, list: vehicle_pos, int: player_id = None, list: player_location = None)
+        # enterVehicle(int: player_id, list: player_location, string: vehicle, int: pco_id, bool: is_default, bool: is_fake)
+        # exitVehicle(int: player_id, list: player_location, string: vehicle, bool: is_fake)
+        # pickupKit(int: player_id, list: player_location, string: kit)
+        # radioMessage(int: player_id, list: player_location, int: message, bool: broadcast)
+        # restartMap(int: tickets_team1, int: tickets_team2)
+        # roundInit(int: tickets_team1, int: tickets_team2)
+        # scoreEvent(int: player_id, list: player_location, string: score_type, string: weapon, int: victim_id = None)
+        # setTeam(int: player_id, list: player_location, int: team)
+        # spawnEvent(int: player_id, list: player_location, int: team)  
+        # reSpawnEvent(int: player_id, list: player_location, int: team)
+        # changePlayerName(int: player_id, list: player_location, string: name)
+        # connectPlayer(int: player_id, list: player_location)
+        # pickupFlag(int: player_id, list: player_location)
         
         lines = []
         endLine = startLine
