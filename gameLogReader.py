@@ -24,10 +24,9 @@ class GameLogReader:
         self.currentLogSize = 0
         self.lastScoreEvent = {'score_type':''}
         
-        self.currentLogBlockType = ""
         self.currentEventName = ""
         self.currentParams = {}
-        self.currentPlayerStatParams = {}
+        self.currentPlayerStatID = None
     
     def getLogs(self):
         logs = []
@@ -91,9 +90,6 @@ class GameLogReader:
                 eventHandler[1](**parameters)
     
     def processLog(self, logPath, startLine):
-        # ToDo:
-        # <bf:server>  <bf:setting
-        
         # exit vehicle is not always in log
         # suicide is not in log (it only shows as death) tk should be added to log
         # gametype (coop etc) is always "GPM_CQ"  (This is fixed in the Linux BFV server)
@@ -106,40 +102,36 @@ class GameLogReader:
         #   and the BFV engine, which doesn't even list them in roundstats.
         # Victory type is always logged as "4" in BF1942, despite the real victory type (it is fixed in the Linux BFV server).
         
-        ###### Server Settings: ######
-        # def server_settings(settings):
+        # mapStart()
+        # mapEnd()
+        # roundStart(settings)
+        # roundEnd(roundstats)
         
-        ###### Round Stats: ######
-        # def round_stats(stats):
+        # chat(player_id, player_location, team, text)
+        # playerKeyHash(player_id, keyhash)
+        # disconnectPlayer(player_id, player_location)
+        # beginMedPack(player_id, player_location, medpack_status, healed_player)
+        # endMedPack(player_id, player_location, medpack_status)
+        # beginRepair(player_id, player_location, int repair_status, vehicle_type, vehicle_player = None)
+        # endRepair(player_id, player_location, repair_status)
+        # createPlayer(player_id, name, player_location, is_ai, team)
+        # destroyPlayer(player_id, player_location)
+        # destroyVehicle(vehicle, vehicle_pos, player_id = None, player_location = None)
+        # enterVehicle(player_id, player_location, vehicle, pco_id, is_default, is_fake)
+        # exitVehicle(player_id, player_location, vehicle, is_fake)
+        # pickupKit(player_id, player_location, kit)
+        # radioMessage(player_id, player_location, message, broadcast)
+        # restartMap(tickets_team1, tickets_team2)
+        # roundInit(tickets_team1, tickets_team2)
+        # scoreEvent(player_id, player_location, score_type, weapon, victim_id = None)
+        # setTeam(player_id, player_location, team)
+        # spawnEvent(player_id, player_location, team)  
+        # reSpawnEvent(player_id, player_location, team)
+        # changePlayerName(player_id, player_location, name)
+        # connectPlayer(player_id, player_location)
+        # pickupFlag(player_id, player_location)
         
-        ###### Events: ######
-        # def chat(player_id, player_location, team, text):
-        # def playerKeyHash(player_id, keyhash):
-        # def disconnectPlayer(player_id, player_location):
-        # def beginMedPack(player_id, player_location, medpack_status, healed_player):
-        # def endMedPack(player_id, player_location, medpack_status):
-        # def beginRepair(player_id, player_location, int: repair_status, vehicle_type, vehicle_player = None):
-        # def endRepair(player_id, player_location, repair_status):
-        # def createPlayer(player_id, name, player_location, is_ai, team):
-        # def destroyPlayer(player_id, player_location):
-        # def destroyVehicle(vehicle, vehicle_pos, player_id = None, player_location = None):
-        # def enterVehicle(player_id, player_location, vehicle, pco_id, is_default, is_fake):
-        # def exitVehicle(player_id, player_location, vehicle, is_fake):
-        # def pickupKit(player_id, player_location, kit):
-        # def radioMessage(player_id, player_location, message, broadcast):
-        # def restartMap(tickets_team1, tickets_team2):
-        # def roundInit(tickets_team1, tickets_team2):
-        # def scoreEvent(player_id, player_location, score_type, weapon, victim_id = None):
-        # def setTeam(player_id, player_location, team):
-        # def spawnEvent(player_id, player_location, team):  
-        # def reSpawnEvent(player_id, player_location, team):
-        # def changePlayerName(player_id, player_location, name):
-        # def connectPlayer(player_id, player_location):
-        # def pickupFlag(player_id, player_location):
-        # def content_CRC32(player_id, player_location, content_CRC32):
-        
-        # elementName attributes(name, value) value/childElements
-            
+        # content_CRC32(player_id, player_location, content_CRC32)
         
         lines = []
         endLine = startLine
@@ -161,7 +153,7 @@ class GameLogReader:
                 nameAndAtributesList = re.findall("(?:\".*?\"|\S)+", line[1:firstClosing])
                 name = nameAndAtributesList.pop(0)
                 closing = name.startswith('/')
-                if name.startswith('/'): name = name[1:]
+                if closing: name = name[1:]
                 atributes = {}
                 for atribute in nameAndAtributesList:
                     splited = atribute.split('=', 2)
@@ -172,7 +164,7 @@ class GameLogReader:
                         self.triggerEventHandlers('mapStart', {})
                         self.currentParams = {}
                     elif name == "bf:setting":
-                        pass
+                        self.currentParams[atributes['name']] = unescape(value)
                     elif name == "bf:event":
                         self.currentEventName = atributes['name']
                     elif name == "bf:param":
@@ -186,9 +178,17 @@ class GameLogReader:
                             value = unescape(value)
                         self.currentParams[atributes['name']] = value
                     elif name == "bf:roundstats":
-                        pass
+                        self.currentParams['teamtickets'] = {}
+                        self.currentParams['playerstats'] = {}
+                    elif name in ["bf:winningteam", "bf:victorytype"]:
+                        self.currentParams[name] = value
+                    elif name == "bf:teamtickets":
+                        self.currentParams['teamtickets'][atributes['team']] = value
+                    elif name == "bf:playerstat":
+                        self.currentPlayerStatID = atributes['playerid']
+                        self.currentParams['playerstats'][self.currentPlayerStatID] = {}
                     elif name == "bf:statparam":
-                        pass
+                        self.currentParams['playerstats'][self.currentPlayerStatID][atributes['name']] = value
                 else: #closing
                     if name == "bf:log":
                         self.triggerEventHandlers('mapEnd', {})
@@ -201,6 +201,6 @@ class GameLogReader:
                     elif name == "bf:statparam":
                         pass
                     elif name == "bf:roundstats":
-                        self.triggerEventHandlers('roundEnd', {'settings': self.currentParams})
-                    if not name == "bf:statparam": self.currentParams = {}
+                        self.triggerEventHandlers('roundEnd', {'roundstats': self.currentParams})
+                    if not name == "bf:playerstat": self.currentParams = {}
         return(endLine)
