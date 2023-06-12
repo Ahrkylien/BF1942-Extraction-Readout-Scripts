@@ -185,7 +185,13 @@ class GameLogReader:
                         self.triggerEventHandlers('mapStart', {})
                         self.currentParams = {}
                     elif name == "bf:setting":
-                        self.currentParams[atributes['name']] = unescape(value)
+                        if atributes['name'] in ['server name', 'modid', 'mapid', 'map', 'game mode']:
+                            value = unescape(value)
+                        elif atributes['name'] in ['internet', 'allownosecam', 'freecamera', 'externalviews', 'autobalance', 'hitindication', 'tkpunish', 'crosshairpoint', 'sv_punkbuster']:
+                            value = value == '1'
+                        else:
+                            value = int(value)
+                        self.currentParams[atributes['name']] = value
                     elif name == "bf:event":
                         self.currentEventName = atributes['name']
                     elif name == "bf:param":
@@ -211,6 +217,12 @@ class GameLogReader:
                         self.currentPlayerStatID = atributes['playerid']
                         self.currentParams['playerstats'][self.currentPlayerStatID] = {}
                     elif name == "bf:statparam":
+                        if atributes['name'] == 'player_name':
+                            value = unescape(value)
+                        elif atributes['name'] == 'is_ai':
+                            value = value == '1'
+                        else:
+                            value = int(value)
                         self.currentParams['playerstats'][self.currentPlayerStatID][atributes['name']] = value
                 else: #closing
                     if name == "bf:log":
