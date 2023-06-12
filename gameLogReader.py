@@ -27,6 +27,8 @@ class GameLogReader:
         self.currentEventName = ""
         self.currentParams = {}
         self.currentPlayerStatID = None
+        
+        ExtraEvents(self)
     
     def getLogs(self):
         logs = []
@@ -133,6 +135,25 @@ class GameLogReader:
         # connectPlayer(int: player_id, list: player_location)
         # pickupFlag(int: player_id, list: player_location)
         
+        ### Extra info on the different score_types in scoreEvent: ###
+        # FlagCapture: Captured CTF flag
+        # Attack: Captured ControPpoint
+        # Kill -> DeathNoMsg: Kill (weapon or killed)
+        # TK -> Death: TK and is no more
+        # Death: is no more (fall, suicide, teamswitch)
+        ## used params:
+        # "FlagCapture", [player_id, player_name, player_location]
+        # "ControlPointCapture", [player_id, player_name, player_location, controlPoint.controlPointName]
+        # "Kill", [player_id, player_name, player_location, victim_player_id, victim_player_name, victim_player_location, weapon, isTK]
+        # "Death", [player_id, player_name, player_location]
+        
+        ### Extra Custom Events (derived from one or more scoreEvents): ###
+        # scoreEventKill(player_id, player_location, weapon, victim_id, victim_location)
+        # scoreEventTK(player_id, player_location, weapon, victim_id, victim_location)
+        # scoreEventFlagCapture(player_id, player_location):
+        # scoreEventAttack(player_id, player_location):
+        # scoreEventDeath(player_id, player_location):
+        
         lines = []
         endLine = startLine
         with open(logPath, 'r', encoding='utf-8') as file:
@@ -176,6 +197,8 @@ class GameLogReader:
                             value = None if value == "(unknown)" else [float(i) for i in value.split('/')]
                         elif atributes['type'] == 'string':
                             value = unescape(value)
+                            if self.currentEventName == 'scoreEvent' and atributes['name'] == 'weapon' and value == "(none)":
+                                value = None
                         self.currentParams[atributes['name']] = value
                     elif name == "bf:roundstats":
                         self.currentParams['teamtickets'] = {}
@@ -204,3 +227,16 @@ class GameLogReader:
                         self.triggerEventHandlers('roundEnd', {'roundstats': self.currentParams})
                     if not name == "bf:playerstat": self.currentParams = {}
         return(endLine)
+
+class ExtraEvents:
+    def __init__(self, gameLogReader):
+        self.previous = {'score_type': None}
+        @gameLogReader.eventHandler("scoreEvent")
+        def scoreEvent(player_id, player_location, score_type, weapon, victim_id = None):
+            parameters = locals()
+            if (self.previous['score_type'] == "Kill" and score_type == "DeathNoMsg") or (self.previous['score_type'] == "TK" and score_type == "Death"):
+                gameLogReader.triggerEventHandlers("scoreEvent"+self.previous['score_type'], {'player_id': self.previous['player_id'], 'player_location': self.previous['player_location'], 'weapon': self.previous['weapon'], 'victim_id': player_id, 'victim_location': player_location})
+            if score_type in ["FlagCapture", "Attack", "Death"]:
+                gameLogReader.triggerEventHandlers("scoreEvent"+score_type, {'player_id': player_id, 'player_location': player_location})
+            self.previous = parameters
+    
