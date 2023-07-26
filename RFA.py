@@ -178,7 +178,7 @@ class RefractorFlatArchive:
             randomBytes = bytes(randomBytesSring, 'utf-8') + b'\x00'*(143-len(randomBytesSring))
             write_bytes(f, randomBytes)
             write_bytes(f, b'\x00') # unusedByte
-            write_i(f, 0x48128321 + sum(randomBytes)) # xpackHeaderId
+            write_i(f, (self.xpackHeaderId if self.xpackHeaderId != None else 0x48128321) + sum(randomBytes)) # xpackHeaderId
             
             fileListTotal = self.fileList + self.fileListExternal
             fileListTotal.sort(key=file_key)
