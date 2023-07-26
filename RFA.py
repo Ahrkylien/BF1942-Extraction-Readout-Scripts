@@ -25,7 +25,7 @@ def write_s(f, value):
 def write_bytes(f, value):
     return(f.write(bytearray(value)))
 
-XPackIDNames = {
+XpackHeaderIdNames = {
     0x48128321 : "Default",
     0x52382184 : "XPack1",
     0x71629419 : "XPack2",
@@ -48,8 +48,8 @@ class RefractorFlatArchive:
         self.fileList = []
         self.fileListExternal = []
         self.fileSize = None
-        self.XPackID = None
-        self.XPackIDName = None
+        self.XpackHeaderId = None
+        self.XpackHeaderIdName = None
         if read:
             self.read()
     
@@ -67,10 +67,10 @@ class RefractorFlatArchive:
                 
                 randomBytes = read_bytes(f, 143)
                 unknown = read_bytes(f, 1)
-                XPackIDEncrypted = read_i(f)
+                XpackHeaderIdEncrypted = read_i(f)
                 
-                self.XPackID = XPackIDEncrypted - sum(randomBytes)
-                self.XPackIDName = XPackIDNames.get(self.XPackID, None)
+                self.XpackHeaderId = XpackHeaderIdEncrypted - sum(randomBytes)
+                self.XpackHeaderIdName = XpackHeaderIdNames.get(self.XpackHeaderId, None)
                 
                 f.seek(offset)
                 rfaEntries = read_i(f)
