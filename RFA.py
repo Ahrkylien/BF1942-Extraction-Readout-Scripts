@@ -48,8 +48,8 @@ class RefractorFlatArchive:
         self.fileList = []
         self.fileListExternal = []
         self.fileSize = None
-        self.XpackHeaderId = None
-        self.XpackHeaderIdName = None
+        self.xpackHeaderId = None
+        self.xpackHeaderIdName = None
         if read:
             self.read()
     
@@ -59,18 +59,20 @@ class RefractorFlatArchive:
                 f.seek(0,2)
                 self.fileSize = f.tell()
                 f.seek(0)
+                isV1dot1 = False
                 if self.fileSize >= 28:
-                    if not read_s(f, 28) in ["Refractor2 FlatArchive 1.1  "]: # v 1.1 has an additional string of 28 bytes at the start
+                    isV1dot1 = read_s(f, 28) in ["Refractor2 FlatArchive 1.1  "] # v 1.1 has an additional string of 28 bytes at the start
+                    if not isV1dot1:
                         f.seek(0)
                 offset = read_i(f)
                 self.compressed = read_i(f) == 1
                 
-                randomBytes = read_bytes(f, 143)
-                unknown = read_bytes(f, 1)
-                XpackHeaderIdEncrypted = read_i(f)
-                
-                self.XpackHeaderId = XpackHeaderIdEncrypted - sum(randomBytes)
-                self.XpackHeaderIdName = XpackHeaderIdNames.get(self.XpackHeaderId, None)
+                if not isV1dot1:
+                    randomBytes = read_bytes(f, 143)
+                    unknown = read_bytes(f, 1)
+                    XpackHeaderIdEncrypted = read_i(f)
+                    self.xpackHeaderId = XpackHeaderIdEncrypted - sum(randomBytes)
+                    self.xpackHeaderIdName = XpackHeaderIdNames.get(self.xpackHeaderId, None)
                 
                 f.seek(offset)
                 rfaEntries = read_i(f)
