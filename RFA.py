@@ -1,6 +1,7 @@
 import os
 import struct
 import lzo
+from datetime import datetime
 
 def read_i(f, n = 1, forceList = False):
     res = struct.unpack('I'*n, f.read(4*n))
@@ -171,20 +172,13 @@ class RefractorFlatArchive:
         
         with open(destPath, "wb") as f:
             # write header
-            write_i(f, 0) #size (4bytes), pre-fill
-            write_i(f, 1 if compressed else 0) #compressed (4bytes)
-            # unknown part of header:
-            header_unknown = [                              0x63, 0xEC, 0x95, 0xBF, 0xFE, 0x7B, 0x09, 0x3C,
-            0x3A, 0xF0, 0x72, 0xEE, 0xA4, 0x72, 0xE7, 0xD9, 0x3F, 0xCC, 0x99, 0xC0, 0xD3, 0x71, 0xC1, 0x46,
-            0x89, 0xBD, 0xD7, 0x53, 0xB5, 0x7E, 0x05, 0xB9, 0xF3, 0xB3, 0xDB, 0x18, 0x75, 0x94, 0x44, 0xFF,
-            0x9B, 0xD2, 0xB9, 0x53, 0xC4, 0x1F, 0xB4, 0xF5, 0x65, 0xF1, 0x68, 0x9F, 0x58, 0x83, 0xAF, 0x0F,
-            0x76, 0x1D, 0x44, 0x68, 0x67, 0x96, 0x32, 0xD5, 0xB9, 0x17, 0x8C, 0x6F, 0x30, 0x21, 0x5F, 0x61,
-            0x5D, 0xD2, 0xE5, 0x49, 0x72, 0x64, 0xFB, 0xE2, 0x55, 0xF6, 0xD5, 0xE1, 0xF3, 0x8F, 0xF1, 0x1C,
-            0xD7, 0x60, 0x49, 0xF1, 0xFB, 0x49, 0xCD, 0xE6, 0xDE, 0x9F, 0x10, 0x8D, 0xD6, 0x2D, 0x42, 0xAB,
-            0xA8, 0x78, 0x5E, 0x98, 0x56, 0x48, 0xA4, 0xE9, 0x38, 0x63, 0x4A, 0x4D, 0x4E, 0x9C, 0x6F, 0xB5,
-            0xD5, 0x0C, 0x50, 0xB8, 0x18, 0xA0, 0xBE, 0x35, 0x89, 0xD4, 0xD0, 0x3A, 0x10, 0xBD, 0xD5, 0x24,
-            0xA3, 0x4D, 0x8C, 0x08, 0x17, 0xD3, 0x98, 0x00, 0x4B, 0xD0, 0x12, 0x48]
-            write_bytes(f, header_unknown)
+            write_i(f, 0) # size (4bytes), pre-fill
+            write_i(f, 1 if compressed else 0) # compressed (4bytes)
+            randomBytesSring = "Refractor Flat Archive Packed with Arkylien's Python Module on "+datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            randomBytes = bytes(randomBytesSring, 'utf-8') + b'\x00'*(143-len(randomBytesSring))
+            write_bytes(f, randomBytes)
+            write_bytes(f, b'\x00') # unusedByte
+            write_i(f, 0x48128321 + sum(randomBytes)) # xpackHeaderId
             
             fileListTotal = self.fileList + self.fileListExternal
             fileListTotal.sort(key=file_key)
@@ -192,8 +186,8 @@ class RefractorFlatArchive:
             file_infos = []
             # write file_blocks
             for file in fileListTotal:
-                if len(file) == 3: #external file
-                    if file[1]: #content as string
+                if len(file) == 3: # external file
+                    if file[1]: # content as string
                         fileBytes = bytes(file[2], "UTF-8")
                     else:
                         try:
@@ -202,25 +196,25 @@ class RefractorFlatArchive:
                         except:
                             print("cant open: "+file[1])
                             break
-                else: #internal RFA file
+                else: # internal RFA file
                     fileBytes = self.extractBlock(file, asBytes = True)
                     if fileBytes == False:
                         print("cant open: "+file[0]+" in RFA")
                         break
                 dataOffset = f.tell()
-                if not compressed: #not compressed
+                if not compressed: # not compressed
                     f.write(fileBytes)
                     csize = len(fileBytes)
                 else:
                     maxSegmentSize = 32768
                     fileBytesBlocks = [fileBytes[i:min(i + maxSegmentSize, len(fileBytes))] for i in range(0, len(fileBytes), maxSegmentSize)]
-                    write_i(f, len(fileBytesBlocks)) #number of segments
-                    write_i(f, [0]*len(fileBytesBlocks)*3) #segments header pre-fill
+                    write_i(f, len(fileBytesBlocks)) # number of segments
+                    write_i(f, [0]*len(fileBytesBlocks)*3) # segments header pre-fill
                     startDataBlocks = f.tell()
                     segmentInfos = []
                     csize = len(fileBytesBlocks)*3*4+4
                     for fileBytesBlock in fileBytesBlocks:
-                        fileBytesCompressed = lzo.compress(fileBytesBlock, 9, False) #compression level = 9, Include metadata header = False
+                        fileBytesCompressed = lzo.compress(fileBytesBlock, 9, False) # compression level = 9, Include metadata header = False
                         segmentInfos.append(RefractorFlatArchive_Info(None, len(fileBytesCompressed), len(fileBytesBlock), f.tell()-startDataBlocks))
                         f.write(fileBytesCompressed)
                         csize += len(fileBytesCompressed)
@@ -234,16 +228,16 @@ class RefractorFlatArchive:
             startFileList = f.tell()
             
             # write file_name_info_list
-            write_i(f, len(file_infos)) #number of files
+            write_i(f, len(file_infos)) # number of files
             for file_info in file_infos:
-                write_s(f, file_info[0]) #filePath
+                write_s(f, file_info[0]) # filePath
                 file_info[1].write(f)
-                write_i(f, [0, 0, 0]) #unknowns
+                write_i(f, [0, 0, 0]) # unknowns
             
-            #write eof
+            # write eof
             write_i(f, 0)
             
-            #rewrite offset
+            # rewrite offset
             f.seek(0)
             write_i(f, startFileList)
         
