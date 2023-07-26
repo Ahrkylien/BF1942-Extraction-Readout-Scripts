@@ -30,6 +30,7 @@ XpackHeaderIdNames = {
     0x48128321 : "Default",
     0x52382184 : "XPack1",
     0x71629419 : "XPack2",
+    0x81671213 : "None", # this somehow corresponds to not using a mod.dll
 }
 
 class RefractorFlatArchive_Info:
@@ -73,7 +74,7 @@ class RefractorFlatArchive:
                     unknown = read_bytes(f, 1)
                     XpackHeaderIdEncrypted = read_i(f)
                     self.xpackHeaderId = XpackHeaderIdEncrypted - sum(randomBytes)
-                    self.xpackHeaderIdName = XpackHeaderIdNames.get(self.xpackHeaderId, None)
+                    self.xpackHeaderIdName = XpackHeaderIdNames.get(self.xpackHeaderId, False)
                 
                 f.seek(offset)
                 rfaEntries = read_i(f)
