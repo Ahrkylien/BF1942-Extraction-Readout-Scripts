@@ -11,6 +11,9 @@ def read_i(f, n = 1, forceList = False):
 def read_s(f, length = None):
     return(f.read(read_i(f) if length == None else length).decode("utf-8", errors="ignore"))
 
+def read_bytes(f, n = 1):
+    return(list(f.read(n)))
+
 def write_i(f, values):
     if not isinstance(values, (list, tuple)): values = [values]
     return(f.write(struct.pack('I'*len(values), *values)))
@@ -21,6 +24,12 @@ def write_s(f, value):
 
 def write_bytes(f, value):
     return(f.write(bytearray(value)))
+
+XPackIDNames = {
+    0x48128321 : "Default",
+    0x52382184 : "XPack1",
+    0x71629419 : "XPack2",
+}
 
 class RefractorFlatArchive_Info:
     def __init__(self, f = None, csize = None, ucsize = None, doffset = None):
@@ -39,6 +48,8 @@ class RefractorFlatArchive:
         self.fileList = []
         self.fileListExternal = []
         self.fileSize = None
+        self.XPackID = None
+        self.XPackIDName = None
         if read:
             self.read()
     
@@ -53,6 +64,14 @@ class RefractorFlatArchive:
                         f.seek(0)
                 offset = read_i(f)
                 self.compressed = read_i(f) == 1
+                
+                randomBytes = read_bytes(f, 143)
+                unknown = read_bytes(f, 1)
+                XPackIDEncrypted = read_i(f)
+                
+                self.XPackID = XPackIDEncrypted - sum(randomBytes)
+                self.XPackIDName = XPackIDNames.get(self.XPackID, None)
+                
                 f.seek(offset)
                 rfaEntries = read_i(f)
                 for i in range(rfaEntries):
