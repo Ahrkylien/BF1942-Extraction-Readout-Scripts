@@ -6,8 +6,9 @@ from datetime import datetime
 from html import unescape as html_unescape #might only be needed for: &amp; &gt; &lt;
 
 def unescape(string):
-    def repl(match): return(int(match.groups()[1]).to_bytes().decode(encoding = 'cp1252', errors = 'ignore'))
-    string = re.sub(r'(<bf:nonprint>)(\d{1,3})(</bf:nonprint>)', repl, string)
+    def repl(match): return(int(match.groups()[1]).to_bytes(1, "big"))
+    bytes = string.encode(encoding = 'UTF-8', errors = 'ignore')
+    string = re.sub(b"(<bf:nonprint>)(\d{1,3})(</bf:nonprint>)", repl, bytes).decode(encoding = 'UTF-8', errors = 'ignore')
     return(html_unescape(string))
 
 class GameLogReader:
@@ -57,6 +58,7 @@ class GameLogReader:
     def eventHandler(self, eventName):
         def decorator_addEvent(func):
             self.registerEventHandler(eventName, func)
+            return func
         return decorator_addEvent
     
     def startTread(self, threadDelay = None):
@@ -189,6 +191,8 @@ class GameLogReader:
                             value = unescape(value)
                         elif atributes['name'] in ['internet', 'allownosecam', 'freecamera', 'externalviews', 'autobalance', 'hitindication', 'tkpunish', 'crosshairpoint', 'sv_punkbuster']:
                             value = value == '1'
+                        elif atributes['name'] in ['kickbacksplash']:
+                            value = float(value)
                         else:
                             value = int(value)
                         self.currentParams[atributes['name']] = value
