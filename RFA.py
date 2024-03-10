@@ -95,7 +95,7 @@ class RefractorFlatArchive:
         except: pass
     
     def getFileList(self):
-        return [file.path for file.path in self.fileList]
+        return [file.path for file in self.fileList]
     
     def getCorrectFilePath(self, path):
         for file in self.fileList:
