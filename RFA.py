@@ -141,7 +141,7 @@ class RefractorFlatArchive:
     
     def extractAll(self, destinationDir = None):
         for file in self.fileList:
-            destinationPath = file.path if destinationDir == None else os.path.join(destinationDir, fileInfo.path)
+            destinationPath = file.path if destinationDir == None else os.path.join(destinationDir, file.path)
             self.extractBlock(file.file_info, destinationPath)
 
     def extractFile(self, path, destinationDir = None, asString = False):
@@ -157,7 +157,7 @@ class RefractorFlatArchive:
         self.removeFile(relativePath)
         self.fileList.append(RefractorFlatArchiveEntry(relativePath, is_external=True, external_filepath=filePath))
         
-    def addFileAsSring(self, relativePath, contents):
+    def addFileAsString(self, relativePath, contents):
         relativePath = relativePath.replace('\\', '/')
         self.removeFile(relativePath)
         self.fileList.append(RefractorFlatArchiveEntry(relativePath, is_external=True, is_string=True, file_contents=contents))
