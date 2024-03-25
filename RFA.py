@@ -157,7 +157,7 @@ class RefractorFlatArchive:
         self.removeFile(relativePath)
         self.fileList.append(RefractorFlatArchiveEntry(relativePath, is_external=True, external_filepath=filePath))
         
-    def addFileAsSring(self, relativePath, contents):
+    def addFileAsString(self, relativePath, contents):
         relativePath = relativePath.replace('\\', '/')
         self.removeFile(relativePath)
         self.fileList.append(RefractorFlatArchiveEntry(relativePath, is_external=True, is_string=True, file_contents=contents))
