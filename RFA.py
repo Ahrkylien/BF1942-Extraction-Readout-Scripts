@@ -130,7 +130,7 @@ class RefractorFlatArchive:
                         for data_segment in data: ret_str += data_segment if asBytes else data_segment.decode("utf-8", errors="ignore")
                         return ret_str
                     dir = os.path.dirname(destinationPath)
-                    if not os.path.exists(dir):
+                    if not dir == "" and not os.path.isdir(dir):
                         os.makedirs(dir)
                     with open(destinationPath, 'wb') as fout:
                         fout.truncate()
@@ -143,7 +143,9 @@ class RefractorFlatArchive:
     
     def extractAll(self, destinationDir = None):
         for file in self.fileList:
-            destinationPath = file.path if destinationDir == None else os.path.join(destinationDir, file.path)
+            # Remove leading slashes such that the files get extracted relative to the working directory when no destinationDir is set
+            relative_file_path = file.path.lstrip('/')
+            destinationPath = relative_file_path if destinationDir == None else os.path.join(destinationDir, relative_file_path)
             self.extractBlock(file.file_info, destinationPath)
 
     def extractFile(self, path, destinationDir = None, asString = False):
