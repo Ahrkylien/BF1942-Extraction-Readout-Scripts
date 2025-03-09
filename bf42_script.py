@@ -164,7 +164,7 @@ class BF42_data:
     def getObject(self, name):
         for object in self.objects:
             if object.name.lower() == name.lower():
-                return(objectTemplate)
+                return(object)
         return(None)
     
     def getObjectTemplate(self, name):

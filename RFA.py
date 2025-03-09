@@ -92,7 +92,8 @@ class RefractorFlatArchive:
                     unknowns = read_i(f,3)
                     self.fileList.append(RefractorFlatArchiveEntry(entryPath, file_info=file_info))
                     self.success = True
-        except: pass
+        except Exception as e:
+            print(f"Exception during read: {str(e)}")
     
     def getFileList(self):
         return [file.path for file in self.fileList]
@@ -136,7 +137,8 @@ class RefractorFlatArchive:
                         self.success = True
                         for data_segment in data:
                             fout.write(data_segment)
-        except: pass
+        except Exception as e:
+            print(f"Exception during extractBlock: {str(e)}")
         return False
     
     def extractAll(self, destinationDir = None):
