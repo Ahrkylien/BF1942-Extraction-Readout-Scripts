@@ -534,7 +534,7 @@ class BF42_script:
                 fp = open(path, 'r', errors='replace')
                 lines = fp.readlines()
             else:
-                fileString = self.rfaGroup.extractFile(str(path), asString = True)
+                fileString = self.rfaGroup.extract_file(str(path), as_string= True)
                 if fileString == False:
                     raise Exception(f"Can't find path in RFA: {path}")
                 lines = iter(fileString.splitlines())

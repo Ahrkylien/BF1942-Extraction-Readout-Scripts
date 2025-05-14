@@ -12,7 +12,7 @@ def unescape(string):
 
     bytes = string.encode(encoding='UTF-8', errors='ignore')
     string = re.sub(b"(<bf:nonprint>)(\d{1,3})(</bf:nonprint>)", repl, bytes).decode(encoding='UTF-8', errors='ignore')
-    return (html_unescape(string))
+    return html_unescape(string)
 
 
 class GameLogReader:
