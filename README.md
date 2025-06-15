@@ -1,7 +1,11 @@
 # BF1942-Extraction-Readout-Scripts
 Several scripts for extracting and reading the Battlefield 1942 structure
 
-#Some examples:
+# Dependencies
+The module `refractor_flat_archive` requires Python 3.10 or higher. Other modules in this project may support earlier Python versions, but this minimum version is necessary to ensure full compatibility with refractor_flat_archive.
+The module `refractor_flat_archive` also depends on the python-lzo package for LZO compression support (pypi.org/project/python-lzo).
+
+# Some examples:
 
 With one RFA:
 

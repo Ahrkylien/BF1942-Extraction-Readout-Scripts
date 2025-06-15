@@ -1,12 +1,16 @@
-import os
+import sys
 import os
 import struct
 import lzo
 from datetime import datetime
-from typing import Union, Tuple, Any
 
 
-def read_i(f, n: int = 1, force_list: bool = False) -> Union[int, Tuple[Any, ...]]:
+if sys.version_info < (3, 10):
+    version = f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
+    sys.exit(f"Error: Python 3.10 or higher is required to use this module. You are using {version}")
+
+
+def read_i(f, n: int = 1, force_list: bool = False) -> int | tuple[int, ...]:
     res = struct.unpack('I' * n, f.read(4 * n))
     if n == 1 and not force_list:
         return res[0]
@@ -21,7 +25,7 @@ def read_bytes(f, n: int = 1) -> list[int]:
     return list(f.read(n))
 
 
-def write_i(f, values: Union[list[int], int]) -> bool:
+def write_i(f, values: list[int] | int) -> bool:
     if not isinstance(values, (list, tuple)):
         values = [values]
     return f.write(struct.pack('I' * len(values), *values))
@@ -55,7 +59,7 @@ class RefractorFlatArchiveInfo:
 
 
 class RefractorFlatArchiveEntry:
-    def __init__(self, path, is_external=False, is_string=False, file_info=None, external_filepath=None,
+    def __init__(self, path: str, is_external=False, is_string=False, file_info=None, external_filepath=None,
                  file_contents=None):
         self.path = path
         self.is_external = is_external
@@ -70,8 +74,8 @@ class RefractorFlatArchive:
         self.path = path
         self.compressed = False
         self.success = False
-        self.fileList = []
-        self.fileSize = None
+        self.file_list = []
+        self.file_size = None
         self.xpack_header_id = None
         self.xpack_headerId_name = None
         if read:
@@ -80,10 +84,10 @@ class RefractorFlatArchive:
     def read(self):
         with open(self.path, 'rb') as f:
             f.seek(0, 2)
-            self.fileSize = f.tell()
+            self.file_size = f.tell()
             f.seek(0)
             is_v1dot1 = False
-            if self.fileSize >= 28:
+            if self.file_size >= 28:
                 # v 1.1 has an additional string of 28 bytes at the start
                 is_v1dot1 = read_s(f, 28) in ["Refractor2 FlatArchive 1.1  "]
                 if not is_v1dot1:
@@ -104,20 +108,20 @@ class RefractorFlatArchive:
                 entry_path = read_s(f)
                 file_info = RefractorFlatArchiveInfo(f)
                 _ = read_i(f, 3)  # unknown
-                self.fileList.append(RefractorFlatArchiveEntry(entry_path, file_info=file_info))
+                self.file_list.append(RefractorFlatArchiveEntry(entry_path, file_info=file_info))
                 self.success = True
 
     def get_file_list(self):
-        return [file.path for file in self.fileList]
+        return [file.path for file in self.file_list]
 
-    def get_correct_file_path(self, path):
-        for file in self.fileList:
+    def get_correct_file_path(self, path: str):
+        for file in self.file_list:
             if file.path.lower().replace('\\', '/') == path.lower().replace('\\', '/'):
                 return file.path
         return None
 
-    def extract_block(self, file_info: RefractorFlatArchiveInfo, destination_path: Union[str, None] = None,
-                      as_bytes: bool = False) -> Union[bool, bytes]:
+    def extract_block(self, file_info: RefractorFlatArchiveInfo, destination_path: str | None = None,
+                      as_bytes: bool = False) -> bool | bytes:
         self.success = False
         with open(self.path, 'rb') as f:
             data = []
@@ -153,30 +157,30 @@ class RefractorFlatArchive:
         return False
 
     def extract_all(self, destination_dir=None):
-        for file in self.fileList:
+        for file in self.file_list:
             # Remove leading slashes such that the files get extracted relative to the working directory when no destination dir is set
             relative_file_path = file.path.lstrip('/')
             destination_path = relative_file_path if destination_dir is None else os.path.join(destination_dir,
                                                                                                relative_file_path)
             self.extract_block(file.file_info, destination_path)
 
-    def extract_file(self, path, destination_dir=None, as_string=False):
+    def extract_file(self, path: str, destination_dir=None, as_string=False):
         path = self.get_correct_file_path(path)
         destination_path = path if destination_dir is None else os.path.join(destination_dir, path)
-        for file in self.fileList:
+        for file in self.file_list:
             if file.path == path:
                 return self.extract_block(file.file_info, None if as_string else destination_path)
         return False
 
-    def add_file(self, file_path, base_directory):
+    def add_file(self, file_path: str, base_directory: str):
         relative_path = os.path.relpath(file_path, base_directory).replace('\\', '/')
         self.remove_file(relative_path)
-        self.fileList.append(RefractorFlatArchiveEntry(relative_path, is_external=True, external_filepath=file_path))
+        self.file_list.append(RefractorFlatArchiveEntry(relative_path, is_external=True, external_filepath=file_path))
 
-    def add_file_as_string(self, relative_path: str, contents):
+    def add_file_as_string(self, relative_path: str, contents: str):
         relative_path = relative_path.replace('\\', '/')
         self.remove_file(relative_path)
-        self.fileList.append(
+        self.file_list.append(
             RefractorFlatArchiveEntry(relative_path, is_external=True, is_string=True, file_contents=contents))
 
     def add_directory(self, directory: str, base_directory=None):
@@ -186,23 +190,23 @@ class RefractorFlatArchive:
         for file in files:
             self.add_file(file, base_directory)
 
-    def remove_file(self, file_path):
+    def remove_file(self, file_path: str) -> bool:
         file_path_corrected = self.get_correct_file_path(file_path)
         if file_path_corrected is None:
             return False
-        for file in self.fileList:
+        for file in self.file_list:
             if file.path == file_path_corrected:
-                self.fileList.remove(file)
+                self.file_list.remove(file)
                 break
         return True
 
     def delete_all_non_server_files(self):
-        for i in reversed(range(len(self.fileList))):
-            file_path = self.fileList[i].path
+        for i in reversed(range(len(self.file_list))):
+            file_path = self.file_list[i].path
             if os.path.splitext(file_path)[1].lower() in ['.bik', '.dds', '.tga', 'wav'] or os.path.basename(
                     file_path).lower() in ['palette.pal', 'envmap_g_.rcm', 'lightmapshadowbits.lsb',
                                            'terrainpalette.pal', 'textureprecache.dat']:
-                self.fileList.pop(i)
+                self.file_list.pop(i)
 
     def write(self, dest_path=None, compressed=True):
         overwrite_self = dest_path is None
@@ -224,11 +228,11 @@ class RefractorFlatArchive:
             xpack_header_id = self.xpack_header_id if self.xpack_header_id is not None else 0x48128321
             write_i(f, xpack_header_id + sum(random_bytes))
 
-            self.fileList.sort(key=file_key)
+            self.file_list.sort(key=file_key)
 
             file_infos = []
             # write file_blocks
-            for file in self.fileList:
+            for file in self.file_list:
                 if file.is_external:
                     if file.is_string:
                         file_bytes = bytes(file.file_contents, "UTF-8")
@@ -295,29 +299,29 @@ class RefractorFlatArchiveGroup:
     def __init__(self, rfa_paths=None):
         self.rfa_paths = [] if rfa_paths is None else [RefractorFlatArchive(path) for path in rfa_paths]
 
-    def extract_file(self, path, destination_dir=None, as_string=False):
+    def extract_file(self, path: str, destination_dir=None, as_string=False) -> bool:
         for rfa in self.rfa_paths:
             file_path_in_rfa = rfa.get_correct_file_path(path)
             if file_path_in_rfa is not None:
                 return rfa.extract_file(file_path_in_rfa, destination_dir, as_string)
         return False
 
-    def get_file_list(self):
+    def get_file_list(self) -> [str]:
         file_path_list = []
         for rfa in self.rfa_paths:
-            for file in rfa.fileList:
+            for file in rfa.file_list:
                 if not file.path.lower() in (path.lower() for path in file_path_list):
                     file_path_list.append(file.path)
         return file_path_list
 
-    def file_exists(self, path):
+    def file_exists(self, path: str) -> bool:
         for rfa in self.rfa_paths:
             file_path_in_rfa = rfa.get_correct_file_path(path)
             if file_path_in_rfa is not None:
                 return True
         return False
 
-    def get_correct_file_path(self, path):
+    def get_correct_file_path(self, path: str) -> str | None:
         for rfa in self.rfa_paths:
             file_path_in_rfa = rfa.get_correct_file_path(path)
             if file_path_in_rfa is not None:
