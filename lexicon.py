@@ -23,7 +23,8 @@ class LexiconFile:
             encoding = "UTF-16 LE"
             num_entries = self._read_i_32(f)
             num_cols = self._read_i_32(f)
-            lexi_strings = f.read().decode(encoding, 'ignore').split('\x00')
+            total_number_of_strings = num_entries * num_cols
+            lexi_strings = f.read().decode(encoding, 'ignore').split('\x00', total_number_of_strings)  # split 1 time too many such that tailing bytes remain together
 
             # Extract LANGUAGE row
             self.languages = lexi_strings[1:num_cols]
@@ -36,10 +37,13 @@ class LexiconFile:
                     continue
                 self.lexicon[key] = lexi_strings[1 + i * num_cols:num_cols + i * num_cols]
             
-            if len(lexi_strings) > num_entries * num_cols:
-                print(f"Extra data in footer: {lexi_strings[num_entries * num_cols:]}")
+            if len(lexi_strings) > total_number_of_strings:
+                tailing_bytes = lexi_strings[total_number_of_strings]
+                bytes_string = r'\x' + r'\x'.join(f'{b:02x}' for b in bytes(tailing_bytes, encoding))
+                print(f"{len(tailing_bytes)} extra bytes in footer: {bytes_string}")
             
-            # There are ?random? unknown bytes in the tail
+            # There are num_cols*4 unknown bytes in the tail (after the 0x0000)
+            # It might be something like column width for the editor..
 
     def write(self):
         """Write binary lexicon file."""
@@ -56,8 +60,13 @@ class LexiconFile:
                 flat_strings.append(word)
                 flat_strings.extend(values)
 
+            # Add an empty string such that the file ends with 0x0000
+            flat_strings.append("")
+
             encoded = '\x00'.join(flat_strings).encode('UTF-16 LE', 'ignore')
             f.write(encoded)
+            
+            # It seems that the game does not require the trailing bytes, so we don't write them
 
     def key_exists(self, key):
         lower_key = key.lower()
