@@ -7,8 +7,8 @@ from pathlib import Path
 class LexiconFile:
     def __init__(self, file_path):
         self.file_path = file_path
-        self.languages = []  # list of languages (from the first entry)
-        self.lexicon = {}    # {word: [translations or values]}
+        self.languages = []  # list of languages
+        self.lexicon = {}  # {key: [translations]}
 
     # ---------- Binary I/O ----------
     @staticmethod
@@ -18,7 +18,6 @@ class LexiconFile:
 
     def read(self):
         """Read binary lexicon file (with LANGUAGE row)."""
-        # Note: 38 unknown bytes in tail
         with open(self.file_path, 'rb') as f:
             encoding = "UTF-16 LE"
             num_entries = self._read_i_32(f)
@@ -33,6 +32,8 @@ class LexiconFile:
             for i in range(1, num_entries):
                 key = lexi_strings[i * num_cols]
                 if self.key_exists(key):
+                    # BF1942 ignores entries after the first occurrence of a key
+                    # So, only use/store the first entry.
                     print(f"Ignoring duplicate entry for {key}")
                     continue
                 self.lexicon[key] = lexi_strings[1 + i * num_cols:num_cols + i * num_cols]
@@ -110,7 +111,6 @@ class LexiconFile:
         xml_path = xml_path or Path(self.file_path).with_suffix('.xml')
         root = ET.Element("lexicon")
 
-        # Write entries
         for word, values in self.lexicon.items():
             entry_elem = ET.SubElement(root, "entry", word=word)
             for idx, val in enumerate(values):
@@ -119,9 +119,8 @@ class LexiconFile:
                 col_elem.text = val
 
         tree = ET.ElementTree(root)
-        ET.indent(tree, space="\t", level=0)  # use tabs like your example
+        ET.indent(tree, space="  ", level=0)
         tree.write(xml_path, encoding="utf-8", xml_declaration=True)
-
 
     def load_from_xml(self, xml_path=None):
         """Load lexicon + languages from XML with <col language="..."> structure."""
