@@ -1,0 +1,320 @@
+# Meme type file structure research
+
+## Thoughts
+- Object might be the base class
+- Data, Node, Action seem Abstract classes
+- Event seems like an Abstract class but it has fields
+
+## Interesting strings
+```
+Meme: DEPRECATED: CullActionNode
+Meme: Error: Adding named object to nodetree (%s %s)
+Meme: Error: Cannot register null pointers
+Meme: Error: Cannot register objects without name
+Meme: Error: Loading class ',27h,'%s',27h,' need to be inherited from object
+Meme: Info: Trying old format "%s"
+Meme: Warning: DEPRECATED, SetVariableSinusAction should be replaced with SetVariableSineAction
+Meme: Warning: ShowEffectNode is deprecated and will be removed, use TransitionalEffectNode instead!
+MemeFile 2.0
+```
+
+## Parse Methods
+```
+00947288 (but this seems only one of them...)
+
+04 ClassIStream?
+08 base type??
+
+
+1C Byte
+20
+24
+28
+2c
+30
+34 Float
+38 Boolean
+3C Int32
+40
+44 (in: Tree)
+48
+4C
+50 FontString
+54 SoundString
+
+68 Action
+6C Data
+70 Effect
+
+88 Next Node
+```
+
+
+## Types
+```
+VariableColorEffect
+VariablePictureNode
+CullVariableNode
+LocaleStringData
+NodeListNode
+ScaleNode
+HideDisableEffect
+BfListBoxNode
+BfNewListBoxNode
+BfListBoxData
+ListBoxData
+BfTextNode
+BfAddSubEffectNode
+BfMultiplyColorEffect
+BfMultiplyColorEffect2
+BfAddSubNextEffectNode
+BfStyle
+BfCenterStyle
+BfStyle2
+BfOutlineStyle
+BfLeftOutlineStyle
+BfSliderNode
+BfFixedSliderNode
+BfCreditsNode
+BfVerticalScrollNode
+BfVerticalScrollExNode
+BfLocaleNode
+BfLocaleData
+BfLocaleStringData
+BfButtonNode
+BfNavigationButtonNode
+BfSelectButtonNode
+BfVariablePictureNode
+BfTransformNode
+BfTransformNodeSize
+BfAnimationNode
+BfBinkNode
+BfCrosshairNode
+BfPictureFillNode
+BfVariablePictureFillNode
+BfVariablePictureFillNode2
+BfScrollPictureNode
+BfVariableTimeoutActionNode
+BfVariableTimeoutActionNode2
+BfOccupiedVehicleNode
+BfOccupiedVehicleData
+BfColorFillNode
+BfColorData
+BfGaugeNode
+BfEditNode
+BfEditNodeInt
+BfEditData
+BfEditNodeNew
+ClipNode
+PointerXData
+PointerYData
+OperatorData
+AddData
+SubData
+MulData
+DivData
+ButtonEvent
+ExtendedButtonEvent
+AnyKeyEvent
+TypeEvent
+ActionFunction
+ZoomNode
+DisableNode
+RotateEffect
+RotateAroundCoordinateEffect
+EditNode
+BfRectangle
+BoolData
+ActionNode
+IfElseEventActionNode
+TimeoutActionNode
+CullActionNode
+CullEventActionNode
+CullVariableActionNode
+CullVariableAndEventActionNode
+CullEventTimeoutActionNode
+CallFunctionAction
+CallFunctionVariableAction
+FloatData
+FloatRefData
+SizeStyle
+SingleLineSizeStyle
+RowDistanceStyle
+ColorEffect
+MultiplyColorEffect
+AlphaFadeEffect
+VertexColorEffect
+MultiplyVertexColorEffect
+PathNode
+StackPathNode
+SetPathAction
+PushPathAction
+PopPathAction
+EffectNode
+VariableEffectNode
+ShowEffectNode
+TransitionalEffectNode
+TransitionalShowEffectNode
+TransitionalHideEffectNode
+NormalToFocusEffectNode
+FocusEffectNode
+NotFocusEffectNode
+ExtendedNormalToFocusEffectNode
+FocusToPressedEffectNode
+ExtendedFocusToPressedEffectNode
+SetVariableAction
+SetStringAction
+ToggleVariableAction
+ModifyVariableAction
+SetVariableSoftAction
+SetVariableSineAction
+SetVariableSinusAction
+SetVariableArrayAction
+TransformNode
+TranslateNode
+IntData
+StringData
+StringRefData
+WstringData
+TextNode
+SliderNode
+SplitNode
+PictureNode
+Data
+System
+Node
+NameNode
+Pointer
+Object
+Effect
+ClipEffect
+MoveClipEffect
+BlendFuncEffect
+LastInputIndexAction
+RightAlignedStyle
+LogicalData
+EqualData
+NotEqualData
+LessEqualData
+LessData
+OrData
+AndData
+ExclusiveOrData
+NotData
+DataListData
+IndexDataData
+IndexCountData
+ConcatenateListData
+SoundAction
+	54 Sound
+VolumedSoundAction
+CullNode
+SplitEffect
+NavigateViewNode
+ActionListAction
+NavigateAction
+NavigateNextSiblingAction
+NavigatePreviousSiblingAction
+NavigateParentAction
+NavigateChildAction
+NavigateRunAction
+NavigateRunAndChildAction
+NavigateChildAndRunAction
+NavigateParentAndRunAction
+NavigateFirstSiblingAction
+NavigateLastSiblingAction
+NavigateSiblingIndexAction
+SplitAction
+SetFocusAction
+WindowNode
+DragWindowNode
+Style
+SingleLineStyle
+StickyNode
+MoveEffect
+SinMoveEffect
+Function
+Action
+FocusNode
+RemoveEventAction
+CenterAlignedStyle
+FocusLockedData
+OStream
+DynamicIndexPointer
+LockPointerAction
+UnlockPointerAction
+PlayerInputIndexData
+IStream
+Event
+	1C Input index (0 == all indexes)
+ClassIStream
+NavigateTree
+Tree
+	38 Bool
+	44
+	34
+	.. some fancy recursive stuff
+```
+
+## Unused (Vietnam? old binary?)
+```C
+struct dice::meme::BfScrollPictureNode2
+{
+	dice::meme::Node	"Next node";
+	String8	"Scroll picture";
+	dice::meme::Data	"Data";
+	dice::meme::Data	"Maximum value";
+	Int32	"Y offset";
+	Int32	"Size";
+	dice::meme::Data	"Var size";
+	dice::meme::Data	"Maintain value";
+	Boolean	"From top";
+};
+struct dice::meme::BfTriangleButtonsNode
+{	
+	dice::meme::Node	"Next node";
+	String8	"Picture A";
+	String8	"Picture B";
+	dice::meme::Action	"Action";
+	Float	"Width";
+	Float	"Height";
+	dice::meme::Data	"Clicked Index?";
+};
+struct dice::meme::BfControlPointGauge
+{
+	dice::meme::Node	"Next node";
+	String8	"Picture";
+	dice::meme::Data	"unkData_A";
+	dice::meme::Data	"unkData_B";	
+	dice::meme::Data	"unkData_C";
+};
+struct dice::meme::BfLocalePictureButtonNode
+{
+	dice::meme::Node	"Next node";
+	Byte	"Unk1";
+	Byte	"Unk2";
+	dice::meme::Node	"Action";
+	Float "9.0";
+	Float "32.0";
+	Float "100.0";
+	Float "36.0";
+
+	dice::meme::Node	"BoolData 0";
+	dice::meme::Node	"Float Data 9.0";
+	dice::meme::Node	"options.tga";
+	dice::meme::Node	"Main/Buttons/";
+};
+struct dice::meme::BfNewCreditsListNode
+{
+	dice::meme::Node	"Next node";
+
+	dice::meme::Node	"BfStyle";
+	dice::meme::Node	"RightAlignedStyle";
+	dice::meme::Node	"BoolData 1";
+
+	dice::meme::Node	"FloatData";
+	dice::meme::Node	"FloatData";
+	dice::meme::Node	"FloatData";
+	dice::meme::Node	"FloatData";
+};
+```
