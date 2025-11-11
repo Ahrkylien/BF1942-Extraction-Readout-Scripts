@@ -53,6 +53,10 @@ MemeFile 2.0
 ## Types
 ```
 VariableColorEffect
+	C6 Red
+	C6 Green
+	C6 Blue
+	C6 Alpha
 VariablePictureNode
 CullVariableNode
 LocaleStringData
@@ -247,7 +251,9 @@ FocusNode
 	6C Focus X
 	6C Focus Y
 RemoveEventAction
+	(No parameters)
 CenterAlignedStyle
+	50 Font handle
 FocusLockedData
 OStream
 DynamicIndexPointer
