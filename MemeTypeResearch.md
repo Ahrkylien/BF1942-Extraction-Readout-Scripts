@@ -41,6 +41,7 @@ MemeFile 2.0
 4C
 50 FontString
 54 SoundString
+58 ?Node list?
 
 68 Action
 6C Data
@@ -53,14 +54,24 @@ MemeFile 2.0
 ## Types
 ```
 VariableColorEffect
-	C6 Red
-	C6 Green
-	C6 Blue
-	C6 Alpha
+	6C Red
+	6C Green
+	6C Blue
+	6C Alpha
 VariablePictureNode
+	~Next node~
+	6C First part
+	6C Middle part
+	6C Last part
 CullVariableNode
 LocaleStringData
 NodeListNode
+	~Next node~
+	58 Node list
+	6C Index
+	34 Item height
+	54 Select sound
+	54 Up down sound
 ScaleNode
 HideDisableEffect
 BfListBoxNode
