@@ -157,6 +157,8 @@ TransitionalEffectNode
 TransitionalShowEffectNode
 TransitionalHideEffectNode
 NormalToFocusEffectNode
+	~Next node~
+	70 Effect
 FocusEffectNode
 NotFocusEffectNode
 ExtendedNormalToFocusEffectNode
@@ -186,6 +188,7 @@ Node
 NameNode
 Pointer
 Object
+	(No parameters)
 Effect
 ClipEffect
 MoveClipEffect
@@ -210,6 +213,8 @@ SoundAction
 VolumedSoundAction
 CullNode
 SplitEffect
+	70 Effect 1
+	70 Effect 2
 NavigateViewNode
 ActionListAction
 NavigateAction
@@ -234,8 +239,13 @@ StickyNode
 MoveEffect
 SinMoveEffect
 Function
+	(No parameters)
 Action
+	(No parameters)
 FocusNode
+	~Next node~
+	6C Focus X
+	6C Focus Y
 RemoveEventAction
 CenterAlignedStyle
 FocusLockedData
@@ -250,6 +260,7 @@ Event
 ClassIStream
 NavigateTree
 Tree
+	(Info below is from 0x34, not 0x30)
 	38 Bool
 	44
 	34
