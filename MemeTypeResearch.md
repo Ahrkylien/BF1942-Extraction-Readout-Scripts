@@ -191,7 +191,20 @@ BfCreditsNode
 	34 Time
 	6C Go
 BfVerticalScrollNode
+	~Next node~
+	6C Text
+	50 Font
+	34 Scroll speed
+	6C Scroll speed multiplier
+	6C Restart toggle
 BfVerticalScrollExNode
+	~Next node~
+	3C Version <do not edit>
+	6C Text
+	7C Style
+	34 Scroll speed
+	6C Scroll speed multiplier
+	6C Restart toggle
 BfLocaleNode
 BfLocaleData
 BfLocaleStringData
