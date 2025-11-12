@@ -27,6 +27,14 @@ def read_u32(f):
     return struct.unpack('<I', data)[0]
 
 
+def read_int32(f):
+    """Read a 32-bit integer (little-endian) from file."""
+    data = f.read(4)
+    if len(data) < 4:
+        raise EOFError("Unexpected EOF while reading uint32")
+    return struct.unpack('<i', data)[0]
+
+
 def read_float32(f):
     """Read a 32-bit float (little-endian) from file."""
     data = f.read(4)
@@ -130,7 +138,7 @@ class MemeFile:
         elif type_name == "Byte":
             return read_byte(f)
         elif type_name == "Int32":
-            return read_u32(f)
+            return read_int32(f)
         elif type_name == "Float":
             return read_float32(f)
         elif type_name == "String8":
