@@ -1,6 +1,7 @@
 import struct
 import json
 import xml.etree.ElementTree as ET
+from pathlib import Path
 
 
 def read_byte(f):
@@ -60,6 +61,15 @@ def read_ascii_string(f, n):
     return data.decode('ascii')
 
 
+def read_16bit_string(f, n):
+    """Read an ASCII string of length n from file."""
+    n = n * 2;
+    data = f.read(n)
+    if len(data) < n:
+        raise EOFError(f"Unexpected EOF while reading {n}-byte string")
+    return data.decode('UTF-16 LE')
+
+
 with open('meme_types.json') as f:
     meme_types = json.load(f)
 
@@ -68,8 +78,9 @@ type_string_prefix = "dice::meme::"
 
 
 class MemeFileElement:
-    def __init__(self, type_name, description, child_elements):
+    def __init__(self, type_name, object_name, description, child_elements):
         self.type_name = type_name
+        self.object_name = object_name
         self.description = description
         self.child_elements = child_elements
 
@@ -79,7 +90,7 @@ class MemeFile:
         self.file_path = file_path
         self.strings = []
         self.current_block_size = 0
-        self.root_element = MemeFileElement("MemeFile", None, [])
+        self.root_element = MemeFileElement("MemeFile", None, None, [])
     
     def read(self):
         with open(self.file_path, "rb") as f:
@@ -94,15 +105,7 @@ class MemeFile:
                 
                 self.strings.append(value)
             
-            i = 0
-            for string in self.strings:
-                print(f"{i}: {string}")
-                i += 1
-    
-            string_index = read_u16(f)
-            type_name = self.get_string(string_index)
-            
-            first_element = self.parse_element(type_name, None, f)
+            first_element = self.read_node_reference(None, f, "", skip_header=True)
             
             bytes_left_in_tail = bytes_remaining(f)
             if bytes_left_in_tail > 0:
@@ -111,11 +114,11 @@ class MemeFile:
             self.root_element.child_elements.append(first_element)
     
     def parse_element(self, type_name, description, f):
-        if type_name in ["Node", "Action", "Data", "Event", "Function"]:
+        if type_name in ["Node", "Action", "Data", "Event", "Effect", "Function", "Style"]:
             return self.read_node_reference(description, f, type_name)
         
         parameters = self.parse_type(type_name, f)
-        return MemeFileElement(type_name, description, parameters)
+        return MemeFileElement(type_name, None, description, parameters)
     
     def parse_type(self, type_name, f):
         if type_name in meme_types:
@@ -141,26 +144,20 @@ class MemeFile:
             return read_int32(f)
         elif type_name == "Float":
             return read_float32(f)
-        elif type_name == "String8":
-            raise Exception(f"Unknown type: {type_name}")
+        elif type_name in ["String8", "FontString", "SoundString"]:
+            string_size = read_byte(f)
+            return read_ascii_string(f, string_size)
         elif type_name == "String32":
             string_size = read_u32(f)
             return read_ascii_string(f, string_size)
         elif type_name == "Wstring":
-            raise Exception(f"Unknown type: {type_name} at {f.tell()}")
-        elif type_name == "FontString":
-            raise Exception(f"Unknown type: {type_name} at {f.tell()}")
-        elif type_name == "SoundString":
-            raise Exception(f"Unknown type: {type_name} at {f.tell()}")
-        elif type_name == "NodeList":
-            raise Exception(f"Unknown type: {type_name} at {f.tell()}")
-        elif type_name == "Effect":
-            raise Exception(f"Unknown type: {type_name} at {f.tell()}")
+            string_size = read_u32(f)
+            return read_16bit_string(f, string_size)
         else:
             raise Exception(f"Unknown type: {type_name}")
     
     def get_string(self, index):
-        type_string = self.strings[index]
+        type_string = self.get_raw_string(index)
         
         if not type_string.startswith(type_string_prefix):
             raise Exception(f"Type without prefix: {type_string}")
@@ -171,38 +168,40 @@ class MemeFile:
             raise Exception(f"Unknown type: {type_string_without_prefix}")
         
         return type_string_without_prefix
+    
+    def get_raw_string(self, index):
+        return self.strings[index]
 
-    def read_node_reference(self, description, f, generic_type_name):
-        self.current_block_size = read_u32(f)
-        unknown = read_u16(f)
-        
-        print(f"{generic_type_name}: {unknown}")
-        
-        if generic_type_name == "Data":
-            if unknown not in [0, 8]:
-                raise Exception(f"Unknown is not 8 but: {unknown} at {f.tell()}")
-        elif unknown != 0:
-            raise Exception(f"Unknown is not 0 but: {unknown} at {f.tell()}")
+    def read_node_reference(self, description, f, generic_type_name, skip_header=False):
+        if not skip_header:
+            self.current_block_size = read_u32(f)
+            object_name_index = read_u16(f)
+            object_name = None if object_name_index == 0 else self.get_raw_string(object_name_index)
+        else:
+            object_name = None
         
         string_index = read_u16(f)
         
         # 0 means no reference (NULL)
         if string_index == 0:
-            return MemeFileElement(f"{generic_type_name}Placeholder", description, None)
+            return MemeFileElement(f"{generic_type_name}Placeholder", object_name, description, None)
         
         type_name = self.get_string(string_index)
         
         parameters = self.parse_type(type_name, f)
         
-        return MemeFileElement(type_name, description, parameters)
+        return MemeFileElement(type_name, object_name, description, parameters)
 
-    def save_to_xml(self):
+    def save_to_xml(self, xml_path=None):
         def build_xml(element, parent_xml, parent_description = None):
             xml_node = ET.SubElement(parent_xml, element.type_name)
             
             description = parent_description if element.description == "Next node" else element.description
             if description is not None:
                 xml_node.set("description", description)
+            
+            if element.object_name is not None:
+                xml_node.set("name", element.object_name)
 
             if isinstance(element.child_elements, list):
                 if len(element.child_elements) > 0:
@@ -232,15 +231,18 @@ class MemeFile:
                     xml_node.text = str(value)
 
             return xml_node
-
+            
+        xml_path = xml_path or Path(self.file_path).with_suffix('.meme.xml')
+        
         # Build XML tree
         root_xml = ET.Element(self.root_element.type_name)
         for child in self.root_element.child_elements:
             build_xml(child, root_xml)
 
-        ET.indent(root_xml, space="  ", level=0)
+        tree = ET.ElementTree(root_xml)
+        ET.indent(tree, space="  ", level=0)
         
-        return ET.tostring(root_xml, encoding="unicode")
+        tree.write(xml_path, encoding="utf-8", xml_declaration=True)
 
 
 if __name__ == "__main__":
@@ -249,4 +251,4 @@ if __name__ == "__main__":
     filename = sys.argv[1] if len(sys.argv) > 1 else "Default"
     mem = MemeFile(filename)
     mem.read()
-    print(mem.save_to_xml())
+    mem.save_to_xml()
