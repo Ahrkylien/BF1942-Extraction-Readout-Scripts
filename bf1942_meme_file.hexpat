@@ -27,8 +27,8 @@ struct SoundString {
 };
 
 struct Wstring {
-    std::warning("Wstring");
-    return;
+    u32 string_length;
+    char16 string_value[string_length];
 };
 
 
@@ -764,6 +764,10 @@ struct ActionListAction {
     Reference terminating_reference;
 }[[name("ActionListAction")]];
 
+struct DataListData : ActionListAction {
+
+}[[name("DataListData")]];
+
 
 
 struct ReferenceWithoutHeader {
@@ -889,6 +893,7 @@ struct ReferenceWithoutHeader {
             ("dice::meme::RemoveEventAction"): RemoveEventAction node;
             ("dice::meme::FloatRefData"): FloatRefData node;
             ("dice::meme::ActionListAction"): ActionListAction node;
+            ("dice::meme::DataListData"): DataListData node;
             (_): {
                 std::warning(node_name);
                 return;
@@ -899,10 +904,9 @@ struct ReferenceWithoutHeader {
 
 struct Reference {
     u32 size;
-    u16 unknown;
-    str node_name = header.strings[unknown].string_value;
-    if (unknown != 0)
-        std::warning("Unknown is:" + std::string::to_string(unknown) + " -> " + node_name);
+    u16 name_index;
+    if (name_index != 0)
+        str node_name = header.strings[name_index].string_value[[export]];
     ReferenceWithoutHeader node;
 }[[name("Reference")]];
 
