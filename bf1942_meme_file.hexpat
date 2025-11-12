@@ -542,7 +542,7 @@ struct BfVariablePictureFillNode : Node {
     bool Fill_order;
 }[[name("BfVariablePictureFillNode")]];
 
-struct BfVariablePictureFillNode2 {
+struct BfVariablePictureFillNode2 : Node {
     Reference Picture;
     Reference Fill_picture;
     Reference Data;
@@ -741,11 +741,11 @@ struct BfNewCreditsListNode : Node {
 }[[name("BfNewCreditsListNode")]];
 
 struct PointerXData {
-    Reference Data;
+
 }[[name("PointerXData")]];
 
 struct PointerYData {
-    Reference Data;
+
 }[[name("PointerYData")]];
 
 struct RemoveEventAction {

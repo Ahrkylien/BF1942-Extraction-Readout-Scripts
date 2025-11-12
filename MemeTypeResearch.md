@@ -130,7 +130,9 @@ BfEditData
 BfEditNodeNew
 ClipNode
 PointerXData
+	(No parameters)
 PointerYData
+	(No parameters)
 OperatorData
 AddData
 SubData
