@@ -48,6 +48,8 @@ MemeFile 2.0
 6C Data
 70 Effect
 
+80 some form of file/image
+
 88 Next Node
 ```
 
@@ -78,9 +80,43 @@ NodeListNode
 	54 Select sound
 	54 Up down sound
 ScaleNode
+	~Next node~
+	6C Width scale
+	6C Height scale
 HideDisableEffect
+	(No parameters)
 BfListBoxNode
+	~Next node~
 BfNewListBoxNode
+	~Next node~
+	(dice::meme::BfLocaleData got initialized here)
+	6C Listbox data
+	50 Font
+	68 Select action
+	68 Focus action
+	54 Step sound
+	54 Select sound
+	54 Failed select sound
+	34 Row height
+	38 IsSelectable
+	38 Border or not
+	34 Background color red
+	34 Background color green
+	34 Background color blue
+	34 Background color alpha
+	34 Scrollbar width
+	34 Frame color red
+	34 Frame color green
+	34 Frame color blue
+	34 Frame color alpha
+	34 Select color red
+	34 Select color green
+	34 Select color blue
+	34 Select color alpha
+	38 Show tooltip
+	34 Scrollbar offset from border
+	80 Outlands_2.dif
+	80 Outlands_2_inv.dif
 BfListBoxData
 ListBoxData
 BfTextNode
