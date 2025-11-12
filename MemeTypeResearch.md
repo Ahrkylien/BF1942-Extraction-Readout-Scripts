@@ -117,6 +117,14 @@ BfColorFillNode
 BfColorData
 BfGaugeNode
 BfEditNode
+	~Next node~
+	50 Font
+	6C String
+	3C Max characters(-1 = no limit)
+	68 Select action
+	(dice::meme::BfEditData got initialized here)
+	6C Editbox data
+	38 Focus
 BfEditNodeInt
 BfEditData
 BfEditNodeNew
