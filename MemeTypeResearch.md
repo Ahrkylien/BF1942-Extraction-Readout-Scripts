@@ -48,6 +48,8 @@ MemeFile 2.0
 6C Data
 70 Effect
 
+7C Style
+
 80 some form of file/image
 
 88 Next Node
@@ -118,11 +120,33 @@ BfNewListBoxNode
 	80 Outlands_2.dif
 	80 Outlands_2_inv.dif
 BfListBoxData
+	68 Create new action
+	6C Create new string
+	6C Profile name
 ListBoxData
+	(No parameters)
 BfTextNode
+	~Next node~
+	6C String
+	7C Style
+	6C Type
 BfAddSubEffectNode
+	~Next node~
+	6C Value
+	6C End value
+	6C Start time
+	6C Start percentage
+	6C End time
+	6C Delay
+	6C Up
+	6C Go
 BfMultiplyColorEffect
+	6C Red
+	6C Green
+	6C Blue
+	6C Alpha
 BfMultiplyColorEffect2
+	6C Alpha
 BfAddSubNextEffectNode
 BfStyle
 BfCenterStyle
