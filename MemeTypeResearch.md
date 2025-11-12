@@ -148,14 +148,48 @@ BfMultiplyColorEffect
 BfMultiplyColorEffect2
 	6C Alpha
 BfAddSubNextEffectNode
+	~Next node~
+	6C Value
+	6C End value
+	6C Start time
+	6C Start percentage
+	6C End time
+	6C Delay
+	6C Up
+	68 Next action
+	6C Go
 BfStyle
+	50 Font handle
 BfCenterStyle
+	50 Font handle
 BfStyle2
+	50 Font handle
 BfOutlineStyle
+	50 Font handle
 BfLeftOutlineStyle
+	50 Font handle
 BfSliderNode
+	~Next node~
+	84 Cursor node
+	6C Data
+	34 Minimum value
+	34 Maximum value
+	34 Number visible
 BfFixedSliderNode
+	~Next node~
+	84 Cursor node
+	6C Data
+	34 Minimum value
+	34 Maximum value
+	34 Number visible
+	34 Interval
 BfCreditsNode
+	~Next node~
+	6C Value
+	34 End value
+	34 Reset value
+	34 Time
+	6C Go
 BfVerticalScrollNode
 BfVerticalScrollExNode
 BfLocaleNode
