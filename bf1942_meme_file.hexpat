@@ -21,16 +21,14 @@ struct FontString : String8 {
 
 };
 
-struct SoundString {
-    std::warning("SoundString");
-    return;
+struct SoundString : String8  {
+
 };
 
 struct Wstring {
     u32 string_length;
     char16 string_value[string_length];
 };
-
 
 struct Header {
     string_8bit_length strings[while(std::mem::read_unsigned($, 1) != 0x00)];
@@ -385,7 +383,6 @@ struct BfCrosshairNode : Node {
 }[[name("BfCrosshairNode")]];
 
 struct BfEditNode : Node {
-    Reference Next_node;
     FontString Font;
     Reference String;
     u32 Max_characters;
