@@ -210,13 +210,27 @@ PictureNode
 Data
 System
 Node
+	~Next node~
 NameNode
+	~Next node~ (but not inherited from Node)
 Pointer
+	(No parameters)
 Object
 	(No parameters)
 Effect
+	(No parameters)
 ClipEffect
+	34 X
+	34 Y
+	34 Width
+	34 Height
 MoveClipEffect
+	34 X
+	34 Y
+	34 Width
+	34 Height
+	34 Move length
+	34 Move direction
 BlendFuncEffect
 LastInputIndexAction
 RightAlignedStyle
