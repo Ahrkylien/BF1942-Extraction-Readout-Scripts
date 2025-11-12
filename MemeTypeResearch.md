@@ -35,13 +35,14 @@ MemeFile 2.0
 34 Float
 38 Boolean
 3C Int32
-40
-44 (in: Tree)
+40 some string type (seems to be StringData or String32)
+44 Wstring (in: Tree)
 48
 4C
 50 FontString
 54 SoundString
 58 ?Node list?
+5C Blend function?
 
 68 Action
 6C Data
@@ -64,7 +65,11 @@ VariablePictureNode
 	6C Middle part
 	6C Last part
 CullVariableNode
+	~Next node~
+	6C Variable
+	6C Data
 LocaleStringData
+	40 String <do not edit>
 NodeListNode
 	~Next node~
 	58 Node list
@@ -96,6 +101,10 @@ BfVerticalScrollExNode
 BfLocaleNode
 BfLocaleData
 BfLocaleStringData
+	(dice::meme::BfLocaleData got initialized here)
+	6C Locale
+	6C Valid
+	6C String Id
 BfButtonNode
 BfNavigationButtonNode
 BfSelectButtonNode
@@ -201,8 +210,10 @@ TransformNode
 TranslateNode
 IntData
 StringData
+	40 String <do not edit>
 StringRefData
 WstringData
+	44 Wstring <do not edit>
 TextNode
 SliderNode
 SplitNode
@@ -232,6 +243,8 @@ MoveClipEffect
 	34 Move length
 	34 Move direction
 BlendFuncEffect
+	5C Source blend func
+	5C Destination blend func
 LastInputIndexAction
 RightAlignedStyle
 LogicalData
