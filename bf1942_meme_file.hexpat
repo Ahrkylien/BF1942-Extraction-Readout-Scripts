@@ -1,5 +1,7 @@
 #pragma description BF1942 Meme Type
 
+#pragma magic [0C 4D 65 6D 65 46 69 6C 65 20 32 2E 30] @ 0x00
+
 #include "std/mem.pat"
 #include "std/sys.pat"
 #include "std/string.pat"

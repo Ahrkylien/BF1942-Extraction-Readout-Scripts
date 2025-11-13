@@ -356,7 +356,7 @@ class MemeFile:
 
                 # Recurse for remaining children
                 # If there is only one child which is a value type directly put that in the xml_node
-                if len(children) == 1 and not isinstance(first_child, MemeFileElement):
+                if len(children) == 1 and first_child.is_primitive:
                     xml_node.text = str(first_child.child_elements)
                 else:
                     for child in children:
