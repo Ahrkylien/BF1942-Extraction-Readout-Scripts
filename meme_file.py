@@ -63,7 +63,7 @@ def read_ascii_string(f, n):
 
 def read_16bit_string(f, n):
     """Read an ASCII string of length n from file."""
-    n = n * 2;
+    n = n * 2
     data = f.read(n)
     if len(data) < n:
         raise EOFError(f"Unexpected EOF while reading {n}-byte string")
@@ -86,6 +86,12 @@ class MemeFileElement:
         self.object_name = object_name
         self.description = description
         self.child_elements = child_elements
+        
+        self.is_placeholder = self.type_name.endswith("Placeholder")
+        self.is_primitive = not isinstance(self.child_elements, list) and not self.is_placeholder
+        self.is_complex_type = not self.is_primitive and not self.is_placeholder
+        self.has_next_node = self.is_complex_type and len(self.child_elements) > 0 and self.child_elements[0].description == "Next node"
+        self.has_occupied_next_node = self.has_next_node and self.child_elements[0].is_complex_type
 
 
 class MemeFile:
@@ -93,7 +99,7 @@ class MemeFile:
         self.file_path = file_path
         self.strings = []
         self.current_block_size = 0
-        self.root_element = MemeFileElement("MemeFile", None, None, [])
+        self.root_element = None
     
     def read(self):
         with open(self.file_path, "rb") as f:
@@ -108,36 +114,34 @@ class MemeFile:
                 
                 self.strings.append(value)
             
-            first_element = self.read_node_reference(None, f, "", skip_header=True)
+            self.root_element = self.read_node_reference(None, f, "", skip_header=True)
             
             bytes_left_in_tail = bytes_remaining(f)
             if bytes_left_in_tail > 0:
                 raise Exception(f"Data left at tail: {bytes_left_in_tail}")
-            
-            self.root_element.child_elements.append(first_element)
     
     def parse_element(self, type_name, description, f):
         if type_name in ["Node", "Action", "Data", "Event", "Effect", "Function", "Style"]:
             return self.read_node_reference(description, f, type_name)
         
         child_elements = self.parse_type(type_name, f)
+        
         return MemeFileElement(type_name, None, description, child_elements)
     
     def parse_type(self, type_name, f):
         if type_name in meme_types:
             child_elements = []
             for child_type_name, description in meme_types[type_name]:
-                node_data = self.parse_element(child_type_name, description, f)
-                child_elements.append(node_data)
+                if child_type_name.endswith("[]"):
+                    while True:
+                        node = self.parse_element(child_type_name[:-2], None, f)
+                        child_elements.append(node)
+                        if node.child_elements == None:
+                            break
+                else:
+                    node = self.parse_element(child_type_name, description, f)
+                    child_elements.append(node)
             return child_elements
-        elif type_name in ["ActionListAction", "DataListData"]:
-            elements = []
-            while True:
-                node = self.read_node_reference(None, f, "")
-                elements.append(node)
-                if node.child_elements == None:
-                    break
-            return elements
         elif type_name == "Boolean":
             return read_byte(f) == 1
         elif type_name == "Byte":
@@ -212,7 +216,7 @@ class MemeFile:
                 
                 # Apparently placeholders can contain names, so do this check after adding the name
                 if not isinstance(element.child_elements, list) or element.type_name.endswith("Placeholder"):
-                    return;
+                    return
                     
                 add_string(type_string_prefix + element.type_name)
                 for c in element.child_elements:
@@ -220,10 +224,7 @@ class MemeFile:
 
             # Recursive element writing
             def write_element(element, is_root=False):
-                is_placeholder = element.type_name.endswith("Placeholder")
-                is_primitive = not isinstance(element.child_elements, list) and not is_placeholder
-                
-                if is_primitive:
+                if element.is_primitive:
                     val = element.child_elements
                     if element.type_name == "Boolean":
                         f.write(struct.pack("B", 1 if val else 0))
@@ -249,7 +250,7 @@ class MemeFile:
                         raise Exception(f"Unknown primitive type: {element.type_name}")
                     return
 
-                # Complex node types
+                # Complex node types (and placeholders)
                 if not is_root:
                     block_start = f.tell()
                     f.write(struct.pack("<I", 0))  # Placeholder for block size
@@ -258,10 +259,10 @@ class MemeFile:
 
                     f.write(struct.pack("<H", name_index))
 
-                type_index = 0 if is_placeholder else strings.index(type_string_prefix + element.type_name)
+                type_index = 0 if element.is_placeholder else strings.index(type_string_prefix + element.type_name)
                 f.write(struct.pack("<H", type_index))
                 
-                if not is_placeholder:
+                if not element.is_placeholder:
                     for child in element.child_elements:
                         write_element(child)
                 
@@ -274,8 +275,7 @@ class MemeFile:
                     f.seek(block_end)
             
             # First, gather all strings used
-            for child in root_element.child_elements:
-                collect_strings(child)
+            collect_strings(root_element)
 
             # Write string table (each string prefixed by length byte)
             for s in strings:
@@ -286,56 +286,93 @@ class MemeFile:
                 f.write(b)
             f.write(b"\x00")  # Terminator byte
             
-            for child in root_element.child_elements:
-                write_element(child, is_root=True)
+            write_element(root_element, is_root=True)
+
+    def load_from_xml(self, xml_path):
+        """Load a MemeFileElement tree from an XML file."""
+        tree = ET.parse(xml_path)
+        root_xml = tree.getroot()
+
+        def parse_xml_element(xml_element):
+            type_name = xml_element.tag
+            object_name = xml_element.get("name")
+            description = xml_element.get("description")
+            
+            # Determine if this node has children or a simple value
+            if len(xml_element) == 0:
+                text_value = xml_element.text.strip() if xml_element.text else None
+                # For simple value types like Int32, Boolean, Float, etc.
+                if text_value is not None:
+                    if type_name in ["Boolean"]:
+                        value = text_value.lower() in ("true", "1")
+                    elif type_name in ["Byte", "Int32"]:
+                        value = int(text_value)
+                    elif type_name in ["Float"]:
+                        value = float(text_value)
+                    else:
+                        value = text_value
+                else:
+                    value = None
+                return MemeFileElement(type_name, object_name, description, value)
+            else:
+                # Complex type — recursively parse children
+                children = [parse_xml_element(child) for child in xml_element]
+                return MemeFileElement(type_name, object_name, description, children)
+
+        # Parse XML and rebuild internal structure
+        self.root_element = parse_xml_element(root_xml)
 
     def save_to_xml(self, xml_path=None):
-        def build_xml(element, parent_xml, parent_description = None):
+        def build_xml(element, parent_xml):
+            description = None if element.description == "Next node" else element.description
+            
+            add_group_element = element.has_occupied_next_node and not parent_xml.tag in ["g", "MemeFile"]
+            
+            if add_group_element:
+                parent_xml = ET.SubElement(parent_xml, "g")
+                if description is not None:
+                    parent_xml.set("description", description)
+            
             xml_node = ET.SubElement(parent_xml, element.type_name)
             
-            description = parent_description if element.description == "Next node" else element.description
-            if description is not None:
+            if not add_group_element and description is not None:
                 xml_node.set("description", description)
             
             if element.object_name is not None:
                 xml_node.set("name", element.object_name)
 
-            if isinstance(element.child_elements, list):
-                if len(element.child_elements) > 0:
-                    next_node = None
-                    children = element.child_elements
-                    first_child = children[0]
-                    if isinstance(first_child, MemeFileElement):
-                        if first_child.description == "Next node":
-                            next_node = first_child
-                            children = children[1:]
-
-                    # Recurse for remaining children
-                    # If there is only one child which is a value type directly put that in the xml_node
-                    if len(children) == 1 and not isinstance(children[0].child_elements, list):
-                        xml_node.text = str(children[0].child_elements)
-                    else:
-                        for child in children:
-                            build_xml(child, xml_node)
-
-                    # After processing, move "Next Node" to parent level
-                    if next_node:
-                        build_xml(next_node, parent_xml, description)
-            else:
+            if element.is_primitive:
                 # No list — just a value
                 value = element.child_elements
                 if value is not None:
                     xml_node.text = str(value)
+            elif element.is_complex_type and len(element.child_elements) > 0:
+                next_node = None
+                children = element.child_elements
+                first_child = children[0]
+                if element.has_next_node:
+                    next_node = first_child
+                    children = children[1:]
+
+                # Recurse for remaining children
+                # If there is only one child which is a value type directly put that in the xml_node
+                if len(children) == 1 and not isinstance(first_child, MemeFileElement):
+                    xml_node.text = str(first_child.child_elements)
+                else:
+                    for child in children:
+                        build_xml(child, xml_node)
+
+                # After processing, move "Next Node" to parent level
+                if element.has_occupied_next_node:
+                    build_xml(next_node, parent_xml)
 
             return xml_node
             
         xml_path = xml_path or Path(self.file_path).with_suffix('.meme.xml')
         
         # Build XML tree
-        root_xml = ET.Element(self.root_element.type_name)
-        for child in self.root_element.child_elements:
-            build_xml(child, root_xml)
-
+        root_xml = ET.Element("MemeFile")
+        build_xml(self.root_element, root_xml)
         tree = ET.ElementTree(root_xml)
         ET.indent(tree, space="  ", level=0)
         

@@ -78,7 +78,7 @@
   "BfScrollPictureNode": [["Node", "Next node"], ["String8", "Scroll picture"], ["Data", "Data"], ["Data", "Maximum value"], ["Int32", "Y offset"], ["Int32", "Size"], ["Data", "Var size"], ["Data", "Maintain value"], ["Boolean", "From bottom"]],
   "BfScrollPictureNode2": [["Node", "Next node"], ["String8", "Scroll picture"], ["Data", "Data"], ["Data", "Maximum value"], ["Int32", "Y offset"], ["Int32", "Size"], ["Data", "Var size"], ["Data", "Maintain value"], ["Boolean", "From top"]],
   "BfVariablePictureFillNode": [["Node", "Next node"], ["String8", "Picture"], ["String8", "Fill picture"], ["Data", "Data"], ["Data", "Maximum value"], ["Int32", "Size"], ["Boolean", "Horizontal align"], ["Boolean", "Fill order"]],
-  "BfVariablePictureFillNode2": [["Node", "Next Node"], ["Data", "Picture"], ["Data", "Fill picture"], ["Data", "Data"], ["Data", "Maximum value"], ["Data", "Size"], ["Boolean", "Horizontal align"], ["Boolean", "Fill order"]],
+  "BfVariablePictureFillNode2": [["Node", "Next node"], ["Data", "Picture"], ["Data", "Fill picture"], ["Data", "Data"], ["Data", "Maximum value"], ["Data", "Size"], ["Boolean", "Horizontal align"], ["Boolean", "Fill order"]],
   "FocusEffectNode": [["Node", "Next node"], ["Effect", "Effect"]],
   "ShowEffectNode": [["Node", "Next node"], ["Effect", "Effect"]],
   "NameNode": [["Node", "Next node"]],
@@ -115,5 +115,7 @@
   "PointerXData": [],
   "PointerYData": [],
   "RemoveEventAction": [],
-  "FloatRefData": []
+  "FloatRefData": [],
+  "ActionListAction": [["Action[]", null]],
+  "DataListData": [["Data[]", null]]
 }
