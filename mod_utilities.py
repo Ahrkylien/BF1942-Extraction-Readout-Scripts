@@ -54,6 +54,23 @@ def extract_mod(mod_directory_path, destination_directory_path):
         os.remove(file)
 
 
+def pack_lexicon_and_menu_files(src_folder_path, mod_name):
+    # convert meme.xml to binary form
+    for file in glob.glob(f"{src_folder_path}/Menu/*.meme.xml"):
+        print(f"packing {file}")
+        meme_file = MemeFile(Path(file).with_suffix(''))
+        meme_file.load_from_xml()
+        meme_file.write()
+
+    # convert lexiconAll.xml to lexiconAll.dat
+    lexicon_file_path = os.path.join(src_folder_path, "Mods", mod_name, "lexiconAll.xml")
+    if os.path.isfile(lexicon_file_path):
+        print(f"packing {lexicon_file_path}")
+        lex = LexiconFile(Path(lexicon_file_path).with_suffix('.dat'))
+        lex.load_from_xml()
+        lex.write()
+
+
 def pack_mod(src_folder_path, mod_name, destination_directory_path):
     packed_mod_folder_path = os.path.join(destination_directory_path, mod_name)
     levels_folder_path = os.path.join(src_folder_path, "bf1942", "levels")
@@ -68,12 +85,7 @@ def pack_mod(src_folder_path, mod_name, destination_directory_path):
 
     archive_paths = mod_archive_paths + level_paths
     
-    # convert meme.xml to binary form
-    for file in glob.glob(f"{src_folder_path}/Menu/*.meme.xml"):
-        print(f"packing {file}")
-        meme_file = MemeFile(Path(file).with_suffix(''))
-        meme_file.load_from_xml()
-        meme_file.write()
+    pack_lexicon_and_menu_files(src_folder_path, mod_name)
 
     if os.path.exists(packed_mod_folder_path):
         shutil.rmtree(packed_mod_folder_path)
@@ -104,14 +116,10 @@ def pack_mod(src_folder_path, mod_name, destination_directory_path):
     copied_logs_folder_path = os.path.join(packed_mod_folder_path, "logs")
     if os.path.exists(copied_logs_folder_path):
         shutil.rmtree(copied_logs_folder_path)
-
-    # convert lexiconAll.xml to lexiconAll.dat
+    
+    # remove the xml lexiconAll
     lexicon_file_path = os.path.join(packed_mod_folder_path, "lexiconAll.xml")
     if os.path.isfile(lexicon_file_path):
-        print(f"packing {lexicon_file_path}")
-        lex = LexiconFile(os.path.join(packed_mod_folder_path, "lexiconAll.dat"))
-        lex.load_from_xml()
-        lex.write()
         os.remove(lexicon_file_path)
 
 
