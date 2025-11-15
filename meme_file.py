@@ -105,7 +105,8 @@ class MemeFileElement:
     
     @property
     def has_occupied_next_node(self):
-        return self.has_next_node and self.child_elements[0].is_complex_type
+        # occupied means either a complex type or a placeholder with name
+        return self.has_next_node and (self.child_elements[0].is_complex_type or (self.child_elements[0].object_name is not None))
 
 
 class MemeFile:
@@ -442,7 +443,7 @@ class MemeFile:
 
                 # After processing, move "Next Node" to parent level
                 # Only do this if the next node has either an implementation (not just a placeholder) or a name
-                if element.has_occupied_next_node or (next_node and next_node.object_name):
+                if element.has_occupied_next_node:
                     build_xml(next_node, parent_xml)
             
         xml_path = xml_path or Path(self.file_path).with_suffix('.meme.xml')
