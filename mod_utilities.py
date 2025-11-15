@@ -76,11 +76,10 @@ def pack_mod(src_folder_path, mod_name, destination_directory_path):
     levels_folder_path = os.path.join(src_folder_path, "bf1942", "levels")
     game_folder_path = os.path.join(src_folder_path, "bf1942", "game")
 
-    level_paths = list(Path(levels_folder_path).iterdir()) if Path(levels_folder_path).is_dir() else []
-    mod_archive_paths = [p for p in Path(src_folder_path).iterdir() if p.name not in {"bf1942","Mods"}] if Path(src_folder_path).is_dir() else []
+    level_paths = [ f.path for f in os.scandir(levels_folder_path) if f.is_dir() ]
+    mod_archive_paths = [ f.path for f in os.scandir(src_folder_path) if f.is_dir() and f.name.lower() not in ["bf1942", "mods", "cache"] ]
 
-    game_folder_path = Path(game_folder_path)
-    if game_folder_path.is_dir():
+    if os.path.isdir(game_folder_path):
         mod_archive_paths.append(game_folder_path)
 
     archive_paths = mod_archive_paths + level_paths
