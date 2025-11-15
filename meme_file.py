@@ -75,9 +75,9 @@ with open(Path(__file__).parent / 'meme_types.json') as f:
 
 
 type_string_prefix = "dice::meme::"
-
-
 version_string = "MemeFile 2.0"
+primitive_type_names = ["Boolean", "Byte", "Int32", "Float", "String8", "FontString", "SoundString", "String32", "Wstring"]
+reference_type_names = ["Node", "Action", "Data", "Event", "Effect", "Function", "Style"]
 
 
 class MemeFileElement:
@@ -115,7 +115,7 @@ class MemeFile:
     
     def read(self):
         def parse_element(type_name, description, f):
-            if type_name in ["Node", "Action", "Data", "Event", "Effect", "Function", "Style"]:
+            if type_name in reference_type_names:
                 return read_node_reference(description, f, type_name)
             
             child_elements = parse_type(type_name, f)
@@ -195,10 +195,12 @@ class MemeFile:
 
         with open(self.file_path, "rb") as f:
             while True:
-                value = read_8bit_string(f)
+                string_length = read_byte(f)
 
-                if len(value) == 0:
+                if string_length == 0:
                     break
+                    
+                value = read_8bit_string(f, string_length)
                 
                 strings.append(value)
             
@@ -304,7 +306,7 @@ class MemeFile:
         tree = ET.parse(xml_path)
         root_xml = tree.getroot()
         
-        def parse_primitive_element_text(type_name, text_value):
+        def parse_primitive_element_text(type_name, text_value, uses_crlf):
             if type_name in ["Boolean"]:
                 return text_value.lower() == "true"
             elif type_name in ["Byte", "Int32"]:
@@ -312,7 +314,10 @@ class MemeFile:
             elif type_name in ["Float"]:
                 return float(text_value)
             elif type_name in ["String8", "FontString", "SoundString", "String32", "Wstring"]:
-                return text_value if text_value is not None else ""
+                text_value = text_value if text_value is not None else ""
+                if uses_crlf:
+                    text_value = text_value.replace('\n', '\r\n')
+                return text_value
             else:
                 raise Exception(f"Unknown primitive type {type_name} with value '{text_value}'")
 
@@ -332,30 +337,46 @@ class MemeFile:
                 return chained_elements[0]
             
             matching_meme_type = meme_types[type_name] if type_name in meme_types else None
-            has_next_node = matching_meme_type and len(matching_meme_type) > 0 and matching_meme_type[0][1] == "Next node"
-            number_of_childeren_besides_next_node = (len(matching_meme_type) - (1 if has_next_node else 0)) if matching_meme_type else 0
             
+            is_complex_type = matching_meme_type is not None
+            is_placeholder = type_name.endswith("Placeholder")
+            is_primitive_type = type_name in primitive_type_names
+            
+            if not (is_complex_type or is_placeholder or is_primitive_type):
+                raise Exception(f"Unknown type {type_name}")
+            
+            uses_crlf = xml_element.get("uses_crlf")
+            uses_crlf = False if uses_crlf is None else uses_crlf.lower() == "true"
             text_value = xml_element.text if len(xml_element) == 0 else None
             
             # Has value, thus primitive type
-            if text_value:
-                if matching_meme_type:
+            if is_primitive_type:
+                value = parse_primitive_element_text(type_name, text_value, uses_crlf)
+                meme_file_element = MemeFileElement(type_name, object_name, description, value)
+            elif is_placeholder:
+                meme_file_element = MemeFileElement(type_name, object_name, description, None)
+            else:  # complex type or placeholder
+                has_next_node = len(matching_meme_type) > 0 and matching_meme_type[0][1] == "Next node"
+                number_of_childeren_besides_next_node = len(matching_meme_type) - (1 if has_next_node else 0)
+                
+                has_primitive_value = False
+                if number_of_childeren_besides_next_node == 1:
                     primitive_child_index = 1 if has_next_node else 0
                     primitive_child_meme_type = matching_meme_type[primitive_child_index]
-                    value = parse_primitive_element_text(primitive_child_meme_type[0], text_value)
-                    child_node = MemeFileElement(primitive_child_meme_type[0], None, primitive_child_meme_type[1], value)
+                    primitive_type_name = primitive_child_meme_type[0]
+                    has_primitive_value = primitive_type_name in primitive_type_names
+                
+                if has_primitive_value:
+                    value = parse_primitive_element_text(primitive_type_name, text_value, uses_crlf)
+                    child_node = MemeFileElement(primitive_type_name, None, primitive_child_meme_type[1], value)
                     children = [child_node]
                     meme_file_element = MemeFileElement(type_name, object_name, description, [child_node])
-                else:
-                    value = parse_primitive_element_text(type_name, text_value)
-                    meme_file_element = MemeFileElement(type_name, object_name, description, value)
-            else:
-                # Complex type — recursively parse children
-                children = [parse_xml_element(child) for child in xml_element]
-                meme_file_element = MemeFileElement(type_name, object_name, description, children)
+                else:  # Complex type with not just one primitive type
+                    children = [parse_xml_element(child) for child in xml_element]
+                    meme_file_element = MemeFileElement(type_name, object_name, description, children)
             
-            if has_next_node:
-                meme_file_element.child_elements.insert(0, MemeFileElement(matching_meme_type[0][0] + "Placeholder", None, matching_meme_type[0][1], None))
+                if has_next_node:
+                    meme_file_element.child_elements.insert(0, MemeFileElement(matching_meme_type[0][0] + "Placeholder", None, matching_meme_type[0][1], None))
             
             return meme_file_element
             
@@ -363,6 +384,19 @@ class MemeFile:
         self.root_element = parse_xml_element(root_xml)
 
     def save_to_xml(self, xml_path=None):
+        def detect_line_endings(raw_string, string_with_only_lf):
+            crlf_count = raw_string.count('\r\n')
+            total_count = string_with_only_lf.count('\n')
+            
+            if total_count == 0:
+                return None
+            elif crlf_count == total_count:
+                return "CRLF"
+            elif crlf_count > 0 and total_count > 0:
+                raise Exception(f"string has mixed line ending types: {raw_string}")
+            else:
+                return "LF"
+
         def build_xml(element, parent_xml):
             description = None if element.description == "Next node" else element.description
             
@@ -389,24 +423,27 @@ class MemeFile:
             elif element.is_complex_type and len(element.child_elements) > 0:
                 next_node = None
                 children = element.child_elements
-                first_child = children[0]
                 if element.has_next_node:
-                    next_node = first_child
+                    next_node = children[0]
                     children = children[1:]
 
                 # Recurse for remaining children
                 # If there is only one child which is a value type directly put that in the xml_node
-                if len(children) == 1 and first_child.is_primitive:
-                    xml_node.text = str(first_child.child_elements)
+                if len(children) == 1 and children[0].is_primitive:
+                    string_value = str(children[0].child_elements)
+                    string_with_ln = string_value.replace('\r\n', '\n')
+                    xml_node.text = string_with_ln
+                    ending_type = detect_line_endings(string_value, string_with_ln)
+                    if ending_type == "CRLF":
+                        xml_node.set("uses_crlf", str(True))
                 else:
                     for child in children:
                         build_xml(child, xml_node)
 
                 # After processing, move "Next Node" to parent level
-                if element.has_occupied_next_node:
+                # Only do this if the next node has either an implementation (not just a placeholder) or a name
+                if element.has_occupied_next_node or (next_node and next_node.object_name):
                     build_xml(next_node, parent_xml)
-
-            return xml_node
             
         xml_path = xml_path or Path(self.file_path).with_suffix('.meme.xml')
         
