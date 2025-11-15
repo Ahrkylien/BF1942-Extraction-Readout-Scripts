@@ -2,9 +2,10 @@ import sys
 import os
 import glob
 import shutil
-from refractor_flat_archive import RefractorFlatArchive
-from lexicon import LexiconFile
-from meme_file import MemeFile
+from pathlib import Path
+from .refractor_flat_archive import RefractorFlatArchive
+from .lexicon import LexiconFile
+from .meme_file import MemeFile
 
 def extract_mod(mod_directory_path, destination_directory_path):
     mod_name = os.path.basename(mod_directory_path)
@@ -51,6 +52,67 @@ def extract_mod(mod_directory_path, destination_directory_path):
         meme_file.read()
         meme_file.save_to_xml()
         os.remove(file)
+
+
+def pack_mod(src_folder_path, mod_name, destination_directory_path):
+    packed_mod_folder_path = os.path.join(destination_directory_path, mod_name)
+    levels_folder_path = os.path.join(src_folder_path, "bf1942", "levels")
+    game_folder_path = os.path.join(src_folder_path, "bf1942", "game")
+
+    level_paths = list(Path(levels_folder_path).iterdir()) if Path(levels_folder_path).is_dir() else []
+    mod_archive_paths = [p for p in Path(src_folder_path).iterdir() if p.name not in {"bf1942","Mods"}] if Path(src_folder_path).is_dir() else []
+
+    game_folder_path = Path(game_folder_path)
+    if game_folder_path.is_dir():
+        mod_archive_paths.append(game_folder_path)
+
+    archive_paths = mod_archive_paths + level_paths
+    
+    # convert meme.xml to binary form
+    for file in glob.glob(f"{src_folder_path}/Menu/*.meme.xml"):
+        print(f"packing {file}")
+        meme_file = MemeFile(Path(file).with_suffix(''))
+        meme_file.load_from_xml()
+        meme_file.write()
+
+    if os.path.exists(packed_mod_folder_path):
+        shutil.rmtree(packed_mod_folder_path)
+
+    for archive_path in archive_paths:
+        print(f"packing {archive_path}")
+        relative_path = os.path.relpath(archive_path, src_folder_path)
+        rfa_file_path = os.path.join(packed_mod_folder_path, "Archives", f"{relative_path}.rfa")
+        
+        rfa = RefractorFlatArchive(rfa_file_path, read=False)
+        rfa.add_directory(archive_path, src_folder_path)
+        
+        # When packing the menu file dont pack the xml meme files
+        if relative_path.lower() == "menu":
+            for file_path in rfa.get_file_list():
+                if file_path.endswith(".meme.xml"):
+                    rfa.remove_file(file_path)
+        
+        folder_path = os.path.split(rfa_file_path)[0]
+
+        if not os.path.exists(folder_path):
+            os.makedirs(folder_path)
+            
+        rfa.write(rfa_file_path)
+
+    shutil.copytree(os.path.join(src_folder_path, "Mods", mod_name), packed_mod_folder_path, dirs_exist_ok=True)
+
+    copied_logs_folder_path = os.path.join(packed_mod_folder_path, "logs")
+    if os.path.exists(copied_logs_folder_path):
+        shutil.rmtree(copied_logs_folder_path)
+
+    # convert lexiconAll.xml to lexiconAll.dat
+    lexicon_file_path = os.path.join(packed_mod_folder_path, "lexiconAll.xml")
+    if os.path.isfile(lexicon_file_path):
+        print(f"packing {lexicon_file_path}")
+        lex = LexiconFile(os.path.join(packed_mod_folder_path, "lexiconAll.dat"))
+        lex.load_from_xml()
+        lex.write()
+        os.remove(lexicon_file_path)
 
 
 if __name__ == "__main__":

@@ -70,7 +70,7 @@ def read_16bit_string(f, n):
     return data.decode('UTF-16 LE')
 
 
-with open('meme_types.json') as f:
+with open(Path(__file__).parent / 'meme_types.json') as f:
     meme_types = json.load(f)
 
 
@@ -195,13 +195,10 @@ class MemeFile:
 
         with open(self.file_path, "rb") as f:
             while True:
-                length = f.read(1)[0]
+                value = read_8bit_string(f)
 
-                if length == 0:
+                if len(value) == 0:
                     break
-
-                data = f.read(length)
-                value = data.decode("ascii")
                 
                 strings.append(value)
             
@@ -248,15 +245,15 @@ class MemeFile:
                     elif element.type_name == "Float":
                         f.write(struct.pack("<f", val))
                     elif element.type_name in ["String8", "FontString", "SoundString"]:
-                        encoded = val.encode("ascii")
+                        encoded = val.encode("cp1252")
                         f.write(struct.pack("B", len(encoded)))
                         f.write(encoded)
                     elif element.type_name == "String32":
-                        encoded = val.encode("ascii")
+                        encoded = val.encode("cp1252")
                         f.write(struct.pack("<I", len(encoded)))
                         f.write(encoded)
                     elif element.type_name == "Wstring":
-                        encoded = val.encode("utf-16-le")
+                        encoded = val.encode("UTF-16 LE")
                         f.write(struct.pack("<I", len(val)))
                         f.write(encoded)
                     else:
@@ -301,8 +298,9 @@ class MemeFile:
             
             write_element(root_element, is_root=True)
 
-    def load_from_xml(self, xml_path):
+    def load_from_xml(self, xml_path=None):
         """Load a MemeFileElement tree from an XML file."""
+        xml_path = xml_path or Path(self.file_path).with_suffix('.meme.xml')
         tree = ET.parse(xml_path)
         root_xml = tree.getroot()
         
