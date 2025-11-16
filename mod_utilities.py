@@ -3,11 +3,12 @@ import os
 import glob
 import shutil
 from pathlib import Path
-from .refractor_flat_archive import RefractorFlatArchive
-from .lexicon import LexiconFile
-from .meme_file import MemeFile
 
 def extract_mod(mod_directory_path, destination_directory_path):
+    from .refractor_flat_archive import RefractorFlatArchive
+    from .lexicon import LexiconFile
+    from .meme_file import MemeFile
+    
     mod_name = os.path.basename(mod_directory_path)
     destination_mod_path = os.path.join(destination_directory_path, "Mods", mod_name)
 
@@ -55,6 +56,9 @@ def extract_mod(mod_directory_path, destination_directory_path):
 
 
 def pack_lexicon_and_menu_files(src_folder_path, mod_name):
+    from .lexicon import LexiconFile
+    from .meme_file import MemeFile
+    
     # convert meme.xml to binary form
     for file in glob.glob(f"{src_folder_path}/Menu/*.meme.xml"):
         print(f"packing {file}")
@@ -72,6 +76,8 @@ def pack_lexicon_and_menu_files(src_folder_path, mod_name):
 
 
 def pack_mod(src_folder_path, mod_name, destination_directory_path):
+    from .refractor_flat_archive import RefractorFlatArchive
+    
     packed_mod_folder_path = os.path.join(destination_directory_path, mod_name)
     levels_folder_path = os.path.join(src_folder_path, "bf1942", "levels")
     game_folder_path = os.path.join(src_folder_path, "bf1942", "game")
