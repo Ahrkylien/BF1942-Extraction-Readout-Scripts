@@ -206,14 +206,36 @@ BfVerticalScrollExNode
 	6C Scroll speed multiplier
 	6C Restart toggle
 BfLocaleNode
+	~Next node~
+	(dice::meme::BfLocaleData got initialized here)
+	6C Locale
 BfLocaleData
+	6C Valid
 BfLocaleStringData
 	(dice::meme::BfLocaleData got initialized here)
 	6C Locale
 	6C Valid
 	6C String Id
 BfButtonNode
+	~Next node~
+	4C Picture
+	4C Mouse over picture
+	68 Action
+	34 Width
+	34 Height
 BfNavigationButtonNode
+	~Next node~
+	4C Picture
+	4C Mouse over picture
+	4C Clicked picture
+	68 Action
+	38 MouseOver button
+	3C Index
+	6C Current mouseover index
+	6C Current clicked index
+	6C MouseOver active
+	34 Width
+	34 Height
 BfSelectButtonNode
 BfVariablePictureNode
 BfTransformNode
