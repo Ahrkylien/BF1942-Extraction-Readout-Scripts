@@ -237,16 +237,91 @@ BfNavigationButtonNode
 	34 Width
 	34 Height
 BfSelectButtonNode
+	~Next node~
+	4C Picture
+	4C Mouse over picture
+	4C Clicked picture
+	68 Action
+	3C Index
+	6C Current clicked index
+	34 Width
+	34 Height
 BfVariablePictureNode
+	~Next node~
+	6C picture str
+	6C redraw
 BfTransformNode
+	~Next node~
+	6C X
+	6C Y
+	34 Width
+	34 Height
+	84 Transformed node
 BfTransformNodeSize
+	~Next node~
+	34 X
+	34 Y
+	6C Width
+	6C Height
+	84 Transformed node
 BfAnimationNode
+	~Next node~
+	6C Picture name (without extension)
+	3C Frames
+	38 Start
+	38 Looping
 BfBinkNode
+	~Next node~
+	6C Bink filename (without extension)
+	6C Background picture
+	34 Fade time
+	6C Play
 BfCrosshairNode
+	~Next node~
+	6C Radius
+	6C Thickness
+	6C outline thickness
+	6C Deviation
+	(dice::meme::BfColorData got initialized here)
+	6C color
+	(dice::meme::BfColorData got initialized here)
+	6C outline
 BfPictureFillNode
+	~Next node~
+	4C Picture
+	4C Fill picture
+	6C Data
+	6C Maximum value
+	38 Horizontal align
+	38 Fill order
 BfVariablePictureFillNode
+	~Next node~
+	4C Picture
+	4C Fill picture
+	6C Data
+	6C Maximum value
+	3C Size
+	38 Horizontal align
+	38 Fill order
 BfVariablePictureFillNode2
+	~Next node~
+	6C Picture
+	6C Fill picture
+	6C Data
+	6C Maximum value
+	6C Size
+	38 Horizontal align
+	38 Fill order
 BfScrollPictureNode
+	~Next node~
+	4C Scroll picture
+	6C Data
+	6C Maximum value
+	3C Y offset
+	3C Size
+	6C Var size
+	6C Maintain value
+	38 From bottom
 BfVariableTimeoutActionNode
 BfVariableTimeoutActionNode2
 BfOccupiedVehicleNode
