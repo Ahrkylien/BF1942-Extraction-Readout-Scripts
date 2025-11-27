@@ -4,7 +4,7 @@ import math
 import pickle
 import json
 import sys
-from pathlib import PurePosixPath as BFPath
+from pathlib import Path, PurePosixPath as BFPath
 
 # method to store objects as strings:
 def dumps(objectToDump):
@@ -99,7 +99,7 @@ class BF42_command:
     def __init__(self, cmd_str):
         self.className = None; self.method = None; self.arguments = []; self.targetVariable = None
         # regex = "^([\t\f ]*)([^\t^\f^ ^\.^\n]*)(?:(\.)([^\t^\f^ ^\n]*)){0,1}([\t\f ]*)([^\n]*)" # this is the regex to parse a whole file
-        regex = "^[\t\f ]*([^\t^\f^ ^\.]*)(?:\.([^\t^\f^ ^\n]*)){0,1}[\t\f ]*(.*)"
+        regex = r"^[\t\f ]*([^\t^\f^ ^\.]*)(?:\.([^\t^\f^ ^\n]*)){0,1}[\t\f ]*(.*)"
         regexResult = re.findall(regex, cmd_str, flags = re.ASCII|re.IGNORECASE|re.MULTILINE)
         if len(regexResult) == 1:
             splitted = regexResult[0]
@@ -148,7 +148,7 @@ class BF42_data:
         self.lastObjectTemplateID = -1
         self.lastObjectID = -1
         
-        with open('constants.txt') as file:
+        with open(Path(__file__).parent / 'constants.txt') as file:
             for line in file:
                 parts = line.strip().split()
                 self.constants[parts[0]] = parts[1]
