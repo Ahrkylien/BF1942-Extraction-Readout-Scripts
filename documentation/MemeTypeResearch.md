@@ -1,5 +1,22 @@
 # Meme type file structure research
 
+## DMeme.exe and CMeme.exe
+Dice (I assume) made two command-line tools for Meme type files. One for decompiling and one for compiling.
+I know this because I found a file called [LoadMenu.mms](LoadMenu.mms), which is the decompiled Meme file.
+Alongside that file I found this bat script:
+```bat
+CMeme.exe "D:\modding\LoadMenu.mms"
+CMeme.exe "D:\modding\InGame.mms"
+CMeme.exe "D:\modding\CreditsMenu.mms"
+
+move LoadMenu menu\
+move CreditsMenu menu\
+move InGame menu\
+
+rfaPack.exe menu menu menu.rfa
+```
+Sadly the two tools seem lost to time.
+
 ## Thoughts
 - Object might be the base class
 - Data, Node, Action seem Abstract classes
@@ -468,6 +485,10 @@ SoundAction
 	54 Sound
 VolumedSoundAction
 CullNode
+	~Next node~
+	6C Data
+	34 In time
+	34 Out time
 SplitEffect
 	70 Effect 1
 	70 Effect 2
