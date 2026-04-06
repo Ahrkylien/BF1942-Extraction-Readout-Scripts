@@ -514,7 +514,9 @@ CallFunctionVariableAction
 	74 Function
 	6C Result data
 FloatData
+	34 Value <do not edit>
 FloatRefData
+	(No parameters)
 SizeStyle
 SingleLineSizeStyle
 RowDistanceStyle
