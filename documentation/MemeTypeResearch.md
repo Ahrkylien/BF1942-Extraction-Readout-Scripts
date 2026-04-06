@@ -61,9 +61,11 @@ MemeFile 2.0
 58 ?Node list?
 5C Blend function?
 
+64 Event
 68 Action
 6C Data
 70 Effect
+74 Function
 
 7C Style
 
@@ -445,23 +447,72 @@ TypeEvent
 	1C Input index (0 == all indexes)
 	5C Event type
 ActionFunction
+	68 Action
 ZoomNode
+	~Next node~
+	6C Z
 DisableNode
+	~Next node~
+	6C Disable data
 RotateEffect
+	6C Start angle
+	6C Angle multiplyer
 RotateAroundCoordinateEffect
+	6C Start angle
+	6C Angle multiplyer
+	6C X
+	6C Y
 EditNode
+	~Next node~
+	50 Font
+	6C String
+	3C Max characters(-1 = no limit)
 BfRectangle
+	~Next node~
+	34 Thickness
 BoolData
+	38 Value <do not edit>
 ActionNode
+	~Next node~
+	68 Action
 IfElseEventActionNode
+	~Next node~
+	68 Action
+	6C Variable
+	68 Else Action
+	64 Event
 TimeoutActionNode
+	~Next node~
+	68 Action
+	34 Timeout time
 CullActionNode
+	~Next node~
+	68 Action
+	1C Event type (OBS; DO NOT USE!, OLD CLASS)
+	3C Event data(OBS; DO NOT USE!, OLD CLASS)
 CullEventActionNode
+	~Next node~
+	68 Action
+	64 Event
 CullVariableActionNode
+	~Next node~
+	68 Action
+	6C Variable
 CullVariableAndEventActionNode
+	~Next node~
+	68 Action
+	6C Variable
+	64 Event
 CullEventTimeoutActionNode
+	~Next node~
+	68 Action
+	64 Event
+	34 Timeout time
 CallFunctionAction
+	74 Function
 CallFunctionVariableAction
+	74 Function
+	6C Result data
 FloatData
 FloatRefData
 SizeStyle
