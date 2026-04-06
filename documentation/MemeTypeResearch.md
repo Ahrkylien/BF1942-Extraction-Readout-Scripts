@@ -340,12 +340,44 @@ BfScrollPictureNode
 	6C Maintain value
 	38 From bottom
 BfVariableTimeoutActionNode
+	~Next node~
+	68 Action
+	6C Timeout time
 BfVariableTimeoutActionNode2
+	~Next node~
+	68 Action
+	6C Current time
+	6C Timeout time
 BfOccupiedVehicleNode
+	~Next node~
+	3C Position
+	38 Draw debug pic
+	(dice::meme::BfOccupiedVehicleData got initialized here)
+	6C BfOccupiedVehicleData
 BfOccupiedVehicleData
+	(No parameters)
+	(It does something with empty.tga/Icon_vehicledot_local.tga/Icon_vehicledot_empty.tga/Icon_vehicledot_friend.tga/Icon_vehicledot_enemy.tga. Probably some defaults)
 BfColorFillNode
+	~Next node~
+	4C Picture
+	6C Data
+	6C Maximum value
+	38 Horizontal align
+	38 Fill order
+	6C Color
+	6C Fill color
 BfColorData
+	34 Red
+	34 Green
+	34 Blue
+	34 Alpha
 BfGaugeNode
+	(dice::meme::BfColorData got initialized here)
+	6C color
+	6C background color
+	6C Data
+	6C Maximum value
+	38 Horizontal align
 BfEditNode
 	~Next node~
 	50 Font
@@ -356,22 +388,62 @@ BfEditNode
 	6C Editbox data
 	38 Focus
 BfEditNodeInt
+	~Next node~
+	50 Font
+	6C Int
+	6C String
+	3C Min value (-1 = no limit)
+	3C Max value (-1 = no limit)
+	68 Select action
+	(dice::meme::BfEditData got initialized here)
+	6C Editbox data
+	38 Focus
 BfEditData
+	(No parameters)
 BfEditNodeNew
+	~Next node~
+	50 Font
+	6C String
+	3C Max characters(-1 = no limit)
+	3C Index
+	3C Max index
+	6C Current index
 ClipNode
+	~Next node~
 PointerXData
 	(No parameters)
 PointerYData
 	(No parameters)
 OperatorData
+	6C Data 1
+	6C Data 2
 AddData
+	6C Data 1
+	6C Data 2
 SubData
+	6C Data 1
+	6C Data 2
 MulData
+	6C Data 1
+	6C Data 2
 DivData
+	6C Data 1
+	6C Data 2
 ButtonEvent
+	1C Input index (0 == all indexes)
+	5C Event type
+	5C Button type
 ExtendedButtonEvent
+	1C Input index (0 == all indexes)
+	5C Event type
+	5C Button type
+	3C Repeat count
 AnyKeyEvent
+	1C Input index (0 == all indexes)
+	5C Event type
 TypeEvent
+	1C Input index (0 == all indexes)
+	5C Event type
 ActionFunction
 ZoomNode
 DisableNode
