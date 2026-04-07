@@ -634,7 +634,19 @@ NavigateSiblingIndexAction
 SplitAction
 SetFocusAction
 WindowNode
+	~Next node~
+	34 X
+	34 Y
+	34 Width
+	34 Height
+	84 Transformed node
 DragWindowNode
+	~Next node~
+	34 X
+	34 Y
+	34 Width
+	34 Height
+	84 Transformed node
 Style
 SingleLineStyle
 StickyNode
