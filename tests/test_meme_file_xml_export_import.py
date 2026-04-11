@@ -7,7 +7,7 @@ import pytest
 from meme_file import MemeFile
 
 
-TEST_DATA_DIR = Path(__file__).parent / "data"
+TEST_DATA_DIR = Path(__file__).parent / "meme_file_data"
 
 
 def get_test_files():
