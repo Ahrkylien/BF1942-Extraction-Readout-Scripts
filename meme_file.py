@@ -327,14 +327,25 @@ class MemeFile:
             object_name = xml_element.get("name")
             description = xml_element.get("description")
             
-            is_group = type_name in ["g", "MemeFile"]
+            is_group = type_name in ["g", "MemeFile", "Transform"]
             if is_group:
                 chained_elements = [parse_xml_element(child) for child in xml_element]
                 for i in range(len(chained_elements) - 1):
                     chained_elements[i].child_elements[0] = chained_elements[i + 1]
                     chained_elements[i + 1].description = "Next node"
+                
+                if type_name == "Transform":
+                    children = [MemeFileElement("Float", None, child_description, parse_primitive_element_text("Float", xml_element.get(child_description.lower()), False))
+                        for child_description in ["X", "Y", "Width", "Height"]]
+                    transformed_node = chained_elements[0]
+                    transformed_node.description = "Transformed node"
+                    children.append(transformed_node)
+                    children.insert(0, MemeFileElement("NodePlaceholder", None, "Next node", None))
+                    return MemeFileElement("TransformNode", object_name, description, children)
+                    
                 chained_elements[0].description = description
                 chained_elements[0].object_name = object_name
+                
                 return chained_elements[0]
             
             matching_meme_type = meme_types[type_name] if type_name in meme_types else None
@@ -397,11 +408,16 @@ class MemeFile:
                 raise Exception(f"string has mixed line ending types: {raw_string}")
             else:
                 return "LF"
+        
+        def serialize_primitive_type(value):
+            if isinstance(value, float):
+                return str(value).rstrip('0').rstrip('.')
+            return str(value)
 
         def build_xml(element, parent_xml):
             description = None if element.description == "Next node" else element.description
             
-            add_group_element = element.has_occupied_next_node and not parent_xml.tag in ["g", "MemeFile"]
+            add_group_element = element.has_occupied_next_node and not parent_xml.tag in ["g", "MemeFile", "Transform"]
             
             if add_group_element:
                 parent_xml = ET.SubElement(parent_xml, "g")
@@ -420,7 +436,7 @@ class MemeFile:
                 # No list — just a value
                 value = element.child_elements
                 if value is not None:
-                    xml_node.text = str(value)
+                    xml_node.text = serialize_primitive_type(value)
             elif element.is_complex_type and len(element.child_elements) > 0:
                 next_node = None
                 children = element.child_elements
@@ -428,10 +444,16 @@ class MemeFile:
                     next_node = children[0]
                     children = children[1:]
 
-                # Recurse for remaining children
+                if element.type_name == "TransformNode":
+                    xml_node.tag = "Transform"
+                    for child in children:
+                        if child.description == "Transformed node":
+                            build_xml(child, xml_node)
+                        else:
+                            xml_node.set(child.description.lower(), serialize_primitive_type(child.child_elements))
                 # If there is only one child which is a value type directly put that in the xml_node
-                if len(children) == 1 and children[0].is_primitive:
-                    string_value = str(children[0].child_elements)
+                elif len(children) == 1 and children[0].is_primitive:
+                    string_value = serialize_primitive_type(children[0].child_elements)
                     string_with_ln = string_value.replace('\r\n', '\n')
                     xml_node.text = string_with_ln
                     ending_type = detect_line_endings(string_value, string_with_ln)
