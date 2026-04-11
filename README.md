@@ -1,5 +1,6 @@
 # BF1942-Extraction-Readout-Scripts
-Several scripts for extracting and reading the Battlefield 1942 structure
+Several scripts for extracting and reading the Battlefield 1942 structure\
+[![Build status](https://github.com/Ahrkylien/BF1942-Extraction-Readout-Scripts/actions/workflows/tests.yml/badge.svg)](https://github.com/Ahrkylien/BF1942-Extraction-Readout-Scripts/actions/workflows/tests.yml)
 
 # Dependencies
 The module `refractor_flat_archive` requires Python 3.10 or higher. Other modules in this project may support earlier Python versions, but this minimum version is necessary to ensure full compatibility with refractor_flat_archive.
