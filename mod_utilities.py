@@ -55,24 +55,28 @@ def extract_mod(mod_directory_path, destination_directory_path):
         os.remove(file)
 
 
-def pack_lexicon_and_menu_files(src_folder_path, mod_name):
+def pack_lexicon_and_menu_files(src_folder_path, mod_name, only_pack_changed_files):
     from .lexicon import LexiconFile
     from .meme_file import MemeFile
     
     # convert meme.xml to binary form
     for file in glob.glob(f"{src_folder_path}/Menu/*.meme.xml"):
-        print(f"packing {file}")
-        meme_file = MemeFile(Path(file).with_suffix(''))
-        meme_file.load_from_xml()
-        meme_file.write()
+        output_path = Path(file).with_suffix('').with_suffix('')
+        if not only_pack_changed_files or not output_path.exists() or os.path.getmtime(file) > os.path.getmtime(output_path):
+            print(f"packing {file}")
+            meme_file = MemeFile(output_path)
+            meme_file.load_from_xml()
+            meme_file.write()
 
     # convert lexiconAll.xml to lexiconAll.dat
     lexicon_file_path = os.path.join(src_folder_path, "Mods", mod_name, "lexiconAll.xml")
     if os.path.isfile(lexicon_file_path):
-        print(f"packing {lexicon_file_path}")
-        lex = LexiconFile(Path(lexicon_file_path).with_suffix('.dat'))
-        lex.load_from_xml()
-        lex.write()
+        output_path = Path(lexicon_file_path).with_suffix('.dat')
+        if not only_pack_changed_files or not output_path.exists() or os.path.getmtime(lexicon_file_path) > os.path.getmtime(output_path):
+            print(f"packing {lexicon_file_path}")
+            lex = LexiconFile(output_path)
+            lex.load_from_xml()
+            lex.write()
 
 
 def pack_mod(src_folder_path, mod_name, destination_directory_path):
@@ -90,7 +94,7 @@ def pack_mod(src_folder_path, mod_name, destination_directory_path):
 
     archive_paths = mod_archive_paths + level_paths
     
-    pack_lexicon_and_menu_files(src_folder_path, mod_name)
+    pack_lexicon_and_menu_files(src_folder_path, mod_name, only_pack_changed_files=False)
 
     if os.path.exists(packed_mod_folder_path):
         shutil.rmtree(packed_mod_folder_path)

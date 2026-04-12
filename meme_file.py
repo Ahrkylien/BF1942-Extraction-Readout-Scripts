@@ -213,7 +213,7 @@ class MemeFile:
 
     def write(self, output_path=None):
         """Write the MemeFileElement structure to a binary meme file."""
-        output_path = output_path or Path(self.file_path).with_suffix("")
+        output_path = output_path or self.file_path
         
         root_element = self.root_element
 
