@@ -276,6 +276,7 @@ BfTransformNode
 	34 Width
 	34 Height
 	84 Transformed node
+	( Seems like there are 4 5C optional parameters without name? )
 BfTransformNodeSize
 	~Next node~
 	34 X
@@ -646,22 +647,58 @@ ExtendedFocusToPressedEffectNode
 	34 Min value
 	34 Max value
 SetVariableAction
+	6C Variable
+	6C Data
 SetStringAction
+	6C Variable
+	6C Data
 ToggleVariableAction
+	6C Variable
 ModifyVariableAction
+	6C Variable
+	34 Modify value
+	34 Limit value
 SetVariableSoftAction
+	6C Variable
+	6C Data
+	34 Speed
 SetVariableSineAction
+	6C Variable
+	6C Data
+	34 Speed
+	34 Braking distance
 SetVariableSinusAction
+	6C Variable
+	6C Data
+	34 Speed
+	34 Braking distance
 SetVariableArrayAction
+	6C Variable
+	6C Data
+	6C Index
 TransformNode
+	~Next node~
+	34 X
+	34 Y
+	34 Width
+	34 Height
+	84 Transformed node
 TranslateNode
+	~Next node~
+	6C X
+	6C Y
 IntData
+	3C Value <do not edit>
 StringData
 	40 String <do not edit>
 StringRefData
+	(No parameters)
 WstringData
 	44 Wstring <do not edit>
 TextNode
+	~Next node~
+	6C String
+	7C Style
 SliderNode
 SplitNode
 PictureNode
