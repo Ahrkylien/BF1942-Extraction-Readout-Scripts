@@ -605,19 +605,46 @@ PopPathAction
 	34 Out wait time
 	38 Paint outnode over innode
 EffectNode
+	~Next node~
+	70 Effect
 VariableEffectNode
+	~Next node~
+	70 Effect
+	6C Effect level
 ShowEffectNode
+	~Next node~
+	70 Effect
 TransitionalEffectNode
+	~Next node~
+	70 Effect
 TransitionalShowEffectNode
+	~Next node~
+	70 Effect
 TransitionalHideEffectNode
+	~Next node~
+	70 Effect
 NormalToFocusEffectNode
 	~Next node~
 	70 Effect
 FocusEffectNode
+	~Next node~
+	70 Effect
 NotFocusEffectNode
+	~Next node~
+	70 Effect
 ExtendedNormalToFocusEffectNode
+	~Next node~
+	70 Effect
+	34 Min value
+	34 Max value
 FocusToPressedEffectNode
+	~Next node~
+	70 Effect
 ExtendedFocusToPressedEffectNode
+	~Next node~
+	70 Effect
+	34 Min value
+	34 Max value
 SetVariableAction
 SetStringAction
 ToggleVariableAction
