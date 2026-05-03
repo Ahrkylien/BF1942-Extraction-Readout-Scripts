@@ -17,11 +17,6 @@ rfaPack.exe menu menu menu.rfa
 ```
 Sadly the two tools seem lost to time.
 
-## Thoughts
-- Object might be the base class
-- Data, Node, Action seem Abstract classes
-- Event seems like an Abstract class but it has fields
-
 ## Interesting strings
 ```
 Meme: DEPRECATED: CullActionNode
@@ -37,43 +32,33 @@ MemeFile 2.0
 
 ## Parse Methods
 ```
-00947288 (but this seems only one of them...)
-
-04 ClassIStream?
-08 base type??
-
-
 1C Byte
-20
-24
-28
-2c
-30
+
 34 Float
 38 Boolean
 3C Int32
-40 some string type (seems to be StringData or String32)
-44 Wstring (in: Tree)
-48
-4C
+40 String32
+44 Wstring
+
+4C PictureString
 50 FontString
 54 SoundString
-58 ?Node list?
-5C Blend function?
+58 Node/Data/Action list
+5C type/function? (Int32)
 
 64 Event
 68 Action
 6C Data
 70 Effect
 74 Function
-
+78 (Stack)PathNode/NameNode?
 7C Style
-
-80 some form of file/image
-
+80 Tree?
+84 Node acted on
 88 Next Node
 ```
-
+Functions 1C -> 5C are primitive types.
+Functions 64 -> 88 are reference / complex types
 
 ## Types
 ```
@@ -92,7 +77,7 @@ CullVariableNode
 	6C Variable
 	6C Data
 LocaleStringData
-	40 String <do not edit>
+	3C Int
 NodeListNode
 	~Next node~
 	58 Node list
@@ -136,6 +121,7 @@ BfNewListBoxNode
 	34 Select color alpha
 	38 Show tooltip
 	34 Scrollbar offset from border
+	( these are optional?: )
 	80 Outlands_2.dif
 	80 Outlands_2_inv.dif
 BfListBoxData
