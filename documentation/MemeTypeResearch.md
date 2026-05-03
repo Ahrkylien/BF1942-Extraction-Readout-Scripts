@@ -700,9 +700,20 @@ TextNode
 	6C String
 	7C Style
 SliderNode
+	~Next node~
+	84 Cursor node
+	6C Data
+	34 Minimum value
+	34 Maximum value
+	34 Number visible
 SplitNode
+	~Next node~
+	84 Split node
 PictureNode
+	~Next node~
+	4C Picture
 Data
+	(No parameters)
 System
 	(No parameters)
 Node
@@ -731,19 +742,42 @@ BlendFuncEffect
 	5C Source blend func
 	5C Destination blend func
 LastInputIndexAction
+	6C Last input index
 RightAlignedStyle
+	50 Font handle
 LogicalData
+	6C Data 1
+	6C Data 2
 EqualData
+	6C Data 1
+	6C Data 2
 NotEqualData
+	6C Data 1
+	6C Data 2
 LessEqualData
+	6C Data 1
+	6C Data 2
 LessData
+	6C Data 1
+	6C Data 2
 OrData
+	6C Data 1
+	6C Data 2
 AndData
+	6C Data 1
+	6C Data 2
 ExclusiveOrData
+	6C Data 1
+	6C Data 2
 NotData
+	6C Data
 DataListData
+	58 Data list
 IndexDataData
+	6C Data
+	6C Index
 IndexCountData
+	6C Data
 ConcatenateListData
 	58 Data list
 SoundAction
