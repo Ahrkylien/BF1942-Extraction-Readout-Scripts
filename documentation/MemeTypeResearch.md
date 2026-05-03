@@ -518,18 +518,92 @@ FloatData
 FloatRefData
 	(No parameters)
 SizeStyle
+	50 Font handle
+	34 Size constant
 SingleLineSizeStyle
+	50 Font handle
+	34 Size constant
 RowDistanceStyle
+	50 Font handle
+	34 Row distance
 ColorEffect
+	34 Red
+	34 Green
+	34 Blue
+	34 Alpha
 MultiplyColorEffect
+	34 Red
+	34 Green
+	34 Blue
+	34 Alpha
 AlphaFadeEffect
+	(No parameters)
 VertexColorEffect
+	34 Top left red
+	34 Top left green
+	34 Top left blue
+	34 Top left alpha
+	34 Top right red
+	34 Top right green
+	34 Top right blue
+	34 Top right alpha
+	34 Bottom right red
+	34 Bottom right green
+	34 Bottom right blue
+	34 Bottom right alpha
+	34 Bottom left red
+	34 Bottom left green
+	34 Bottom left blue
+	34 Bottom left alpha
 MultiplyVertexColorEffect
+	34 Top left red
+	34 Top left green
+	34 Top left blue
+	34 Top left alpha
+	34 Top right red
+	34 Top right green
+	34 Top right blue
+	34 Top right alpha
+	34 Bottom right red
+	34 Bottom right green
+	34 Bottom right blue
+	34 Bottom right alpha
+	34 Bottom left red
+	34 Bottom left green
+	34 Bottom left blue
+	34 Bottom left alpha
 PathNode
+	~Next node~
 StackPathNode
+	~Next node~
 SetPathAction
+	(dice::meme::PathNode got initialized here)
+	78 Path node
+	(dice::meme::NameNode got initialized here)
+	78 Destination node
+	34 In time
+	34 Out time
+	34 In wait time
+	34 Out wait time
+	38 Paint outnode over innode
 PushPathAction
+	(dice::meme::StackPathNode got initialized here)
+	78 Stack path node
+	(dice::meme::NameNode got initialized here)
+	78 Destination node
+	34 In time
+	34 Out time
+	34 In wait time
+	34 Out wait time
+	38 Paint outnode over innode
 PopPathAction
+	(dice::meme::StackPathNode got initialized here)
+	78 Stack path node
+	34 In time
+	34 Out time
+	34 In wait time
+	34 Out wait time
+	38 Paint outnode over innode
 EffectNode
 VariableEffectNode
 ShowEffectNode
@@ -566,6 +640,7 @@ SplitNode
 PictureNode
 Data
 System
+	(No parameters)
 Node
 	~Next node~
 NameNode
@@ -606,9 +681,12 @@ DataListData
 IndexDataData
 IndexCountData
 ConcatenateListData
+	58 Data list
 SoundAction
 	54 Sound
 VolumedSoundAction
+	54 Sound
+	34 Volume (0-1)
 CullNode
 	~Next node~
 	6C Data
@@ -632,6 +710,8 @@ NavigateFirstSiblingAction
 NavigateLastSiblingAction
 NavigateSiblingIndexAction
 SplitAction
+	68 Action 1
+	68 Action 2
 SetFocusAction
 WindowNode
 	~Next node~
@@ -650,8 +730,15 @@ DragWindowNode
 Style
 SingleLineStyle
 StickyNode
+	~Next node~
+	6C Variable
+	6C Data
 MoveEffect
+	6C Move length
+	6C Move direction
 SinMoveEffect
+	6C Move length
+	6C Move direction
 Function
 	(No parameters)
 Action
