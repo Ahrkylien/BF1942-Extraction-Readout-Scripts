@@ -794,23 +794,41 @@ SplitEffect
 	70 Effect 1
 	70 Effect 2
 NavigateViewNode
+	80 Navigate tree
+	50 Font
 ActionListAction
+	58 Action list
 NavigateAction
+	80 Action tree
 NavigateNextSiblingAction
+	80 Action tree
 NavigatePreviousSiblingAction
+	80 Action tree
 NavigateParentAction
+	80 Action tree
 NavigateChildAction
+	80 Action tree
 NavigateRunAction
+	80 Action tree
 NavigateRunAndChildAction
+	80 Action tree
 NavigateChildAndRunAction
+	80 Action tree
 NavigateParentAndRunAction
+	80 Action tree
 NavigateFirstSiblingAction
+	80 Action tree
 NavigateLastSiblingAction
+	80 Action tree
 NavigateSiblingIndexAction
+	80 Action tree
+	3C Index
 SplitAction
 	68 Action 1
 	68 Action 2
 SetFocusAction
+	6C x
+	6C y
 WindowNode
 	~Next node~
 	34 X
@@ -826,7 +844,9 @@ DragWindowNode
 	34 Height
 	84 Transformed node
 Style
+	50 Font handle
 SingleLineStyle
+	50 Font handle
 StickyNode
 	~Next node~
 	6C Variable
@@ -850,16 +870,25 @@ RemoveEventAction
 CenterAlignedStyle
 	50 Font handle
 FocusLockedData
+	(No parameters)
 OStream
+	( No parse method? )
 DynamicIndexPointer
+	(No parameters)
 LockPointerAction
+	6C Input index data
 UnlockPointerAction
+	(No parameters)
 PlayerInputIndexData
+	(No parameters)
 IStream
+	( No parse method? )
 Event
 	1C Input index (0 == all indexes)
 ClassIStream
+	( No parse method? )
 NavigateTree
+	( No parse method? )
 Tree
 	(Info below is from 0x34, not 0x30)
 	38 Bool
