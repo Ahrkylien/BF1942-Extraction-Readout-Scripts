@@ -30,9 +30,8 @@
 | Tree |  |
 | Node |  |
 
-Each instance of a complex/reference type has a name.
-This name most often is a refernce to a variable.
-But it can also refer to a layer for instance.
+Each instance of a complex/reference type has a name, which is a CP-1252 encoded string, preceded by 8 bit length indicator.
+This name most often is a refernce to a variable, but it can also refer to a layer for instance.
 How this name is used by that type is depending on that type.
 
 
