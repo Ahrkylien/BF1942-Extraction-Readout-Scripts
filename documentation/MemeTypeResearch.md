@@ -363,6 +363,7 @@ BfColorData
 BfGaugeNode
 	(dice::meme::BfColorData got initialized here)
 	6C color
+	(dice::meme::BfColorData got initialized here)
 	6C background color
 	6C Data
 	6C Maximum value
