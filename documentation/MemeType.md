@@ -1,6 +1,6 @@
 # Parameter Types
 
-## Primitive Types
+## Types
 
 | Type Name      | Description |
 |----|----|
@@ -976,5 +976,3 @@ _No parameters_
 - Data: Data
 - Data: Maximum value
 - Boolean: Horizontal align
-
-```
