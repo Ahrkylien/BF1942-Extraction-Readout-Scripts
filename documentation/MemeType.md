@@ -334,7 +334,7 @@ For ease of reading this first parameter has been omitted from the documentation
 - Float: Timeout time
 
 ## CullActionNode
-(OBS; DO NOT USE!, OLD CLASS)
+This node is deprecated.
 - Action: Action
 - Byte: Event type
 - Int: Event data
@@ -376,6 +376,7 @@ For ease of reading this first parameter has been omitted from the documentation
 - Data: Effect level
 
 ## ShowEffectNode
+This node is deprecated, use TransitionalEffectNode instead.
 - Effect: Effect
 
 ## TransitionalEffectNode
@@ -509,6 +510,8 @@ _No parameters_
 - Float: Braking distance
 
 ## SetVariableSinusAction
+This node is deprecated, use SetVariableSineAction instead.
+
 - Data: Variable
 - Data: Data
 - Float: Speed
@@ -620,19 +623,19 @@ _No parameters_
 _No parameters_
 
 ## BoolData
-- Boolean: Value <do not edit>
+- Boolean: Value
 
 ## IntData
-- Int: Value <do not edit>
+- Int: Value
 
 ## FloatData
-- Float: Value <do not edit>
+- Float: Value
 
 ## StringData
-- String: String <do not edit>
+- String: String
 
 ## WstringData
-- WideString: Wstring <do not edit>
+- WideString: String
 
 ## FloatRefData
 _No parameters_
