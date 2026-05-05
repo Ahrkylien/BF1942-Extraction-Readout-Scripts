@@ -34,27 +34,27 @@ MemeFile 2.0
 ```
 1C Byte
 
-34 Float
-38 Boolean
-3C Int32
-40 String32
-44 Wstring
+34 Float (32 bit)
+38 Boolean (8 bit)
+3C Int (32 bit)
+40 String (CP-1252 encoded string, preceded by 32 bit length indicator)
+44 Wstring (UTF-16 LE encoded string, preceded by 32 bit length indicator)
 
-4C PictureString
-50 FontString
-54 SoundString
+4C PictureString (CP-1252 encoded string, preceded by 8 bit length indicator)
+50 FontString (CP-1252 encoded string, preceded by 8 bit length indicator)
+54 SoundString (CP-1252 encoded string, preceded by 8 bit length indicator)
 58 Node/Data/Action list
-5C type/function? (Int32)
+5C type/function? (32 bit int)
 
 64 Event
 68 Action
 6C Data
 70 Effect
 74 Function
-78 (Stack)PathNode/NameNode?
+78 Seems to be an empty/null where only the name is used
 7C Style
 80 Tree?
-84 Node acted on
+84 Node
 88 Next Node
 ```
 Functions 1C -> 5C are primitive types.

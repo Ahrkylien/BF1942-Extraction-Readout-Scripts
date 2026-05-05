@@ -4,7 +4,7 @@
 
 | Type Name      | Description |
 |----|----|
-| Byte           | 1-byte value  |
+| Byte           | 1-byte value |
 | Float          | 32-bit float |
 | Boolean        | Boolean value |
 | Int            | 32-bit integer |
@@ -18,75 +18,72 @@
 
 ## Complex / Reference Types
 
-| Type Name |
-|----------|
-| Event |
-| Action |
-| Data |
-| Effect |
-| Function |
-| PathNameNode |
-| Style |
-| Tree |
-| NodeRef |
-| NextNode |
+| Type Name | Description |
+|----|----|
+| Event |  |
+| Action |  |
+| Data |  |
+| Effect |  |
+| Function |  |
+| Empty  | Seems to only be used for the name, while the reference is null |
+| Style |  |
+| Tree |  |
+| Node |  |
+
+Each instance of a complex/reference type has a name.
+This name most often is a refernce to a variable.
+But it can also refer to a layer for instance.
+How this name is used by that type is depending on that type.
 
 
 
 # Nodes
 
+Each node's first parameter is the next node.
+This is the definition of node in a meme file.
+For ease of reading this first parameter has been omitted from the documentation for each node.
+
 ## Node
-- NextNode: Next node
 
 ## NameNode
-- NextNode: Next node
 
 ## TransformNode
-- NextNode: Next node
 - Float: X
 - Float: Y
 - Float: Width
 - Float: Height
-- NodeRef: Transformed node
+- Node: Transformed node
 
 ## BfTransformNode
-- NextNode: Next node
 - Data: X
 - Data: Y
 - Float: Width
 - Float: Height
-- NodeRef: Transformed node
+- Node: Transformed node
 
 ## BfTransformNodeSize
-- NextNode: Next node
 - Float: X
 - Float: Y
 - Data: Width
 - Data: Height
-- NodeRef: Transformed node
+- Node: Transformed node
 
 ## TranslateNode
-- NextNode: Next node
 - Data: X
 - Data: Y
 
 ## ScaleNode
-- NextNode: Next node
 - Data: Width scale
 - Data: Height scale
 
 ## ClipNode
-- NextNode: Next node
 
 ## ZoomNode
-- NextNode: Next node
 - Data: Z
 
 ## BfListBoxNode
-- NextNode: Next node
 
 ## BfNewListBoxNode
-- NextNode: Next node
 - Data: Listbox data
 - FontString: Font
 - Action: Select action
@@ -114,27 +111,23 @@
 - Float: Scrollbar offset from border
 
 ## TextNode
-- NextNode: Next node
 - Data: String
 - Style: Style
 
 ## BfTextNode
-- NextNode: Next node
 - Data: String
 - Style: Style
 - Data: Type
 
 ## BfSliderNode
-- NextNode: Next node
-- NodeRef: Cursor node
+- Node: Cursor node
 - Data: Data
 - Float: Minimum value
 - Float: Maximum value
 - Float: Number visible
 
 ## BfFixedSliderNode
-- NextNode: Next node
-- NodeRef: Cursor node
+- Node: Cursor node
 - Data: Data
 - Float: Minimum value
 - Float: Maximum value
@@ -142,7 +135,6 @@
 - Float: Interval
 
 ## BfCreditsNode
-- NextNode: Next node
 - Data: Value
 - Float: End value
 - Float: Reset value
@@ -150,7 +142,6 @@
 - Data: Go
 
 ## BfVerticalScrollNode
-- NextNode: Next node
 - Data: Text
 - FontString: Font
 - Float: Scroll speed
@@ -158,7 +149,6 @@
 - Data: Restart toggle
 
 ## BfVerticalScrollExNode
-- NextNode: Next node
 - Int: Version <do not edit>
 - Data: Text
 - Style: Style
@@ -167,7 +157,6 @@
 - Data: Restart toggle
 
 ## BfButtonNode
-- NextNode: Next node
 - PictureString: Picture
 - PictureString: Mouse over picture
 - Action: Action
@@ -175,7 +164,6 @@
 - Float: Height
 
 ## BfNavigationButtonNode
-- NextNode: Next node
 - PictureString: Picture
 - PictureString: Mouse over picture
 - PictureString: Clicked picture
@@ -189,7 +177,6 @@
 - Float: Height
 
 ## BfSelectButtonNode
-- NextNode: Next node
 - PictureString: Picture
 - PictureString: Mouse over picture
 - PictureString: Clicked picture
@@ -200,21 +187,18 @@
 - Float: Height
 
 ## BfAnimationNode
-- NextNode: Next node
 - Data: Picture name
 - Int: Frames
 - Boolean: Start
 - Boolean: Looping
 
 ## BfBinkNode
-- NextNode: Next node
 - Data: Bink filename
 - Data: Background picture
 - Float: Fade time
 - Data: Play
 
 ## BfCrosshairNode
-- NextNode: Next node
 - Data: Radius
 - Data: Thickness
 - Data: Outline thickness
@@ -223,22 +207,18 @@
 - Data: Outline
 
 ## PictureNode
-- NextNode: Next node
 - PictureString: Picture
 
 ## VariablePictureNode
-- NextNode: Next node
 - Data: First part
 - Data: Middle part
 - Data: Last part
 
 ## BfVariablePictureNode
-- NextNode: Next node
 - Data: Picture str
 - Data: Redraw
 
 ## BfPictureFillNode
-- NextNode: Next node
 - PictureString: Picture
 - PictureString: Fill picture
 - Data: Data
@@ -247,7 +227,6 @@
 - Boolean: Fill order
 
 ## BfVariablePictureFillNode
-- NextNode: Next node
 - PictureString: Picture
 - PictureString: Fill picture
 - Data: Data
@@ -257,7 +236,6 @@
 - Boolean: Fill order
 
 ## BfVariablePictureFillNode2
-- NextNode: Next node
 - Data: Picture
 - Data: Fill picture
 - Data: Data
@@ -267,7 +245,6 @@
 - Boolean: Fill order
 
 ## BfScrollPictureNode
-- NextNode: Next node
 - PictureString: Scroll picture
 - Data: Data
 - Data: Maximum value
@@ -278,13 +255,11 @@
 - Boolean: From bottom
 
 ## BfOccupiedVehicleNode
-- NextNode: Next node
 - Int: Position
 - Boolean: Draw debug pic
 - Data: BfOccupiedVehicleData
 
 ## BfColorFillNode
-- NextNode: Next node
 - PictureString: Picture
 - Data: Data
 - Data: Maximum value
@@ -294,13 +269,11 @@
 - Data: Fill color
 
 ## EditNode
-- NextNode: Next node
 - FontString: Font
 - Data: String
 - Int: Max characters (-1 = no limit)
 
 ## BfEditNode
-- NextNode: Next node
 - FontString: Font
 - Data: String
 - Int: Max characters (-1 = no limit)
@@ -309,7 +282,6 @@
 - Boolean: Focus
 
 ## BfEditNodeInt
-- NextNode: Next node
 - FontString: Font
 - Data: Int
 - Data: String
@@ -320,7 +292,6 @@
 - Boolean: Focus
 
 ## BfEditNodeNew
-- NextNode: Next node
 - FontString: Font
 - Data: String
 - Int: Max characters (-1 = no limit)
@@ -329,72 +300,65 @@
 - Data: Current index
 
 ## SliderNode
-- NextNode: Next node
-- NodeRef: Cursor node
+- Node: Cursor node
 - Data: Data
 - Float: Minimum value
 - Float: Maximum value
 - Float: Number visible
 
 ## BfRectangle
-- NextNode: Next node
 - Float: Thickness
 
 ## BfLocaleNode
-- NextNode: Next node
 - Data: Locale
 
 ## ActionNode
-- NextNode: Next node
 - Action: Action
 
 ## BfVariableTimeoutActionNode
-- NextNode: Next node
 - Action: Action
 - Data: Timeout time
 
 ## BfVariableTimeoutActionNode2
-- NextNode: Next node
 - Action: Action
 - Data: Current time
 - Data: Timeout time
 
 ## IfElseEventActionNode
-- NextNode: Next node
 - Action: Action
 - Data: Variable
 - Action: Else action
 - Event: Event
 
 ## TimeoutActionNode
-- NextNode: Next node
 - Action: Action
 - Float: Timeout time
 
 ## CullActionNode
-- NextNode: Next node
+(OBS; DO NOT USE!, OLD CLASS)
 - Action: Action
-- Byte: Event type (OBS; DO NOT USE!, OLD CLASS)
-- Int: Event data (OBS; DO NOT USE!, OLD CLASS)
+- Byte: Event type
+- Int: Event data
 
 ## CullEventActionNode
-- NextNode: Next node
 - Action: Action
 - Event: Event
 
+## CullEventTimeoutActionNode
+- Action: Action
+- Event: Event
+- Float: Timeout time
+
 ## CullVariableActionNode
-- NextNode: Next node
 - Action: Action
 - Data: Variable
 
 ## CullVariableAndEventActionNode
-- NextNode: Next node
 - Action: Action
 - Data: Variable
 - Event: Event
 
 ## NodeListNode
-- NextNode: Next node
 - List: Node list
 - Data: Index
 - Float: Item height
@@ -402,66 +366,51 @@
 - SoundString: Up down sound
 
 ## PathNode
-- NextNode: Next node
 
 ## StackPathNode
-- NextNode: Next node
 
 ## EffectNode
-- NextNode: Next node
 - Effect: Effect
 
 ## VariableEffectNode
-- NextNode: Next node
 - Effect: Effect
 - Data: Effect level
 
 ## ShowEffectNode
-- NextNode: Next node
 - Effect: Effect
 
 ## TransitionalEffectNode
-- NextNode: Next node
 - Effect: Effect
 
 ## TransitionalShowEffectNode
-- NextNode: Next node
 - Effect: Effect
 
 ## TransitionalHideEffectNode
-- NextNode: Next node
 - Effect: Effect
 
 ## NormalToFocusEffectNode
-- NextNode: Next node
 - Effect: Effect
 
 ## FocusEffectNode
-- NextNode: Next node
 - Effect: Effect
 
 ## NotFocusEffectNode
-- NextNode: Next node
 - Effect: Effect
 
 ## ExtendedNormalToFocusEffectNode
-- NextNode: Next node
 - Effect: Effect
 - Float: Min value
 - Float: Max value
 
 ## FocusToPressedEffectNode
-- NextNode: Next node
 - Effect: Effect
 
 ## ExtendedFocusToPressedEffectNode
-- NextNode: Next node
 - Effect: Effect
 - Float: Min value
 - Float: Max value
 
 ## BfAddSubEffectNode
-- NextNode: Next node
 - Data: Value
 - Data: End value
 - Data: Start time
@@ -472,7 +421,6 @@
 - Data: Go
 
 ## BfAddSubNextEffectNode
-- NextNode: Next node
 - Data: Value
 - Data: End value
 - Data: Start time
@@ -484,49 +432,41 @@
 - Data: Go
 
 ## CullNode
-- NextNode: Next node
 - Data: Data
 - Float: In time
 - Float: Out time
 
 ## SplitNode
-- NextNode: Next node
-- NodeRef: Split node
+- Node: Split node
 
 ## FocusNode
-- NextNode: Next node
 - Data: Focus X
 - Data: Focus Y
 
 ## DisableNode
-- NextNode: Next node
 - Data: Disable data
 
 ## CullVariableNode
-- NextNode: Next node
 - Data: Variable
 - Data: Data
 
 ## StickyNode
-- NextNode: Next node
 - Data: Variable
 - Data: Data
 
 ## WindowNode
-- NextNode: Next node
 - Float: X
 - Float: Y
 - Float: Width
 - Float: Height
-- NodeRef: Transformed node
+- Node: Transformed node
 
 ## DragWindowNode
-- NextNode: Next node
 - Float: X
 - Float: Y
 - Float: Width
 - Float: Height
-- NodeRef: Transformed node
+- Node: Transformed node
 
 
 
@@ -627,8 +567,8 @@ _No parameters_
 - Int: Index
 
 ## SetPathAction
-- PathNameNode: Path node
-- PathNameNode: Destination node
+- Empty: Path node
+- Empty: Destination node
 - Float: In time
 - Float: Out time
 - Float: In wait time
@@ -636,8 +576,8 @@ _No parameters_
 - Boolean: Paint outnode over innode
 
 ## PushPathAction
-- PathNameNode: Stack path node
-- PathNameNode: Destination node
+- Empty: Stack path node
+- Empty: Destination node
 - Float: In time
 - Float: Out time
 - Float: In wait time
@@ -659,12 +599,6 @@ _No parameters_
 ## SetFocusAction
 - Data: X
 - Data: Y
-
-## CullEventTimeoutActionNode
-- NextNode: Next node
-- Action: Action
-- Event: Event
-- Float: Timeout time
 
 ## CallFunctionAction
 - Function: Function
