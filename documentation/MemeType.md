@@ -1,6 +1,6 @@
-# Parameter Types
+# Types
 
-## Types
+## Primitive Types
 
 | Type Name      | Description |
 |----|----|
