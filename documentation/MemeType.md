@@ -14,7 +14,7 @@
 | FontString     | Font reference - CP-1252 encoded string (preceded by 8 bit length indicator) |
 | SoundString    | Sound reference - CP-1252 encoded string (preceded by 8 bit length indicator) |
 | List           | Node/Data/Action list |
-| FunctionIndex  | Function/type reference |
+| TypeIndex      | Function/Button/Event reference - 32-bit integer |
 
 ## Complex / Reference Types
 
@@ -268,32 +268,36 @@ For ease of reading this first parameter has been omitted from the documentation
 - Data: Fill color
 
 ## EditNode
+Use -1 for `Max characters` no limit is desired.
 - FontString: Font
 - Data: String
-- Int: Max characters (-1 = no limit)
+- Int: Max characters
 
 ## BfEditNode
+Use -1 for `Max characters` no limit is desired.
 - FontString: Font
 - Data: String
-- Int: Max characters (-1 = no limit)
+- Int: Max characters
 - Action: Select action
 - Data: Editbox data
 - Boolean: Focus
 
 ## BfEditNodeInt
+Use -1 for `Min/Max characters` no limit is desired.
 - FontString: Font
 - Data: Int
 - Data: String
-- Int: Min value (-1 = no limit)
-- Int: Max value (-1 = no limit)
+- Int: Min value
+- Int: Max value
 - Action: Select action
 - Data: Editbox data
 - Boolean: Focus
 
 ## BfEditNodeNew
+Use -1 for `Max characters` no limit is desired.
 - FontString: Font
 - Data: String
-- Int: Max characters (-1 = no limit)
+- Int: Max characters
 - Int: Index
 - Int: Max index
 - Data: Current index
@@ -358,6 +362,7 @@ This node is deprecated.
 - Event: Event
 
 ## NodeListNode
+Not used in any meme file made by Dice.
 - List: Node list
 - Data: Index
 - Float: Item height
@@ -479,8 +484,9 @@ _No parameters_
 - SoundString: Sound
 
 ## VolumedSoundAction
+The Volume is float that should range from 0 to 1.
 - SoundString: Sound
-- Float: Volume (0-1)
+- Float: Volume
 
 ## SetVariableAction
 - Data: Variable
@@ -665,6 +671,7 @@ _No parameters_
 - Data: Data
 
 ## ConcatenateListData
+Not used in any meme file made by Dice.
 - List: Data list
 
 ## BfColorData
@@ -776,8 +783,8 @@ _No parameters_
 - Float: Move direction
 
 ## BlendFuncEffect
-- FunctionIndex: Source blend func
-- FunctionIndex: Destination blend func
+- TypeIndex: Source blend function
+- TypeIndex: Destination blend function
 
 ## MoveEffect
 - Data: Move length
@@ -916,28 +923,29 @@ _No parameters_
 
 
 # Events
+Use Input index 0 when refering to "all indexes".
 
 ## Event
-- Byte: Input index (0 == all indexes)
+- Byte: Input index
 
 ## TypeEvent
-- Byte: Input index (0 == all indexes)
-- FunctionRef: Event type
+- Byte: Input index
+- TypeIndex: Event type
 
 ## ButtonEvent
-- Byte: Input index (0 == all indexes)
-- FunctionRef: Event type
-- FunctionRef: Button type
+- Byte: Input index
+- TypeIndex: Event type
+- TypeIndex: Button type
 
 ## ExtendedButtonEvent
-- Byte: Input index (0 == all indexes)
-- FunctionRef: Event type
-- FunctionRef: Button type
+- Byte: Input index
+- TypeIndex: Event type
+- TypeIndex: Button type
 - Int: Repeat count
 
 ## AnyKeyEvent
-- Byte: Input index (0 == all indexes)
-- FunctionRef: Event type
+- Byte: Input index
+- TypeIndex: Event type
 
 
 
@@ -979,3 +987,62 @@ _No parameters_
 - Data: Data
 - Data: Maximum value
 - Boolean: Horizontal align
+
+
+
+# Non-BF1942 Types
+These types were found in the meme edit tool made by rex.
+For completeness I'll add them here as well.
+BfTriangleButtonsNode, BfControlPointGauge, BfLocalePictureButtonNode and BfNewCreditsListNode are use in the BFVietnam binary.
+Where BfScrollPictureNode2 is used remains a mistery. Its not in the bf1942 or bfv binary.
+
+## BfScrollPictureNode2x
+- NextNode: Next node
+- PictureString: Scroll picture
+- Data: Data
+- Data: Maximum value
+- Int: Y offset
+- Int: Size
+- Data: Var size
+- Data: Maintain value
+- Boolean: From top
+
+## BfTriangleButtonsNode
+- NextNode: Next node
+- PictureString: Picture A
+- PictureString: Picture B
+- Action: Action
+- Float: Width
+- Float: Height
+- Data: Clicked Index?
+
+## BfControlPointGauge
+- NextNode: Next node
+- PictureString: Picture
+- Data: Unknown
+- Data: Unknown
+- Data: Unknown
+
+## BfLocalePictureButtonNode
+- NextNode: Next node
+- Byte: Unknown
+- Byte: Unknown
+- Action: Action
+- Float: Unknown
+- Float: Unknown
+- Float: Unknown
+- Float: Unknown
+- Data: Unknown
+- Data: Unknown
+- Data: Unknown
+- Data: Unknown
+
+## BfNewCreditsListNode
+- NextNode: Next node
+- Style: BfStyle
+- Style: RightAlignedStyle
+- Data: Unknown
+- Data: Unknown
+- Data: Unknown
+- Data: Unknown
+- Data: Unknown

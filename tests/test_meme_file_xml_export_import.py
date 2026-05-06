@@ -11,7 +11,10 @@ TEST_DATA_DIR = Path(__file__).parent / "meme_file_data"
 
 
 def get_test_files():
-    return [f for f in TEST_DATA_DIR.iterdir() if f.is_file()]
+    return [
+        f for f in TEST_DATA_DIR.rglob("*")
+        if f.is_file() and f.suffix == ""
+    ]
 
 
 @pytest.mark.parametrize("file_path", get_test_files())

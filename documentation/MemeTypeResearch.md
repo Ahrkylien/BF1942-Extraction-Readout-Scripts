@@ -884,7 +884,9 @@ Tree
 	.. some fancy recursive stuff
 ```
 
-## Unused (Vietnam? old binary?)
+## Unused
+BfTriangleButtonsNode, BfControlPointGauge, BfLocalePictureButtonNode and BfNewCreditsListNode are use in the BFVietnam binary.
+I dont know where BfScrollPictureNode2 is used. Its not in the bf1942 or bfv binary.
 ```C
 struct dice::meme::BfScrollPictureNode2
 {

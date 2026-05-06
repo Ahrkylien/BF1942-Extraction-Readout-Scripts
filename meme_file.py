@@ -76,8 +76,8 @@ with open(Path(__file__).parent / 'meme_types.json') as f:
 
 type_string_prefix = "dice::meme::"
 version_string = "MemeFile 2.0"
-primitive_type_names = ["Boolean", "Byte", "Int32", "Float", "String8", "FontString", "SoundString", "String32", "Wstring"]
-reference_type_names = ["Node", "Action", "Data", "Event", "Effect", "Function", "Style"]
+primitive_type_names = ["Boolean", "Byte", "Int", "Float", "TypeIndex", "PictureString", "FontString", "SoundString", "String", "WideString"]
+reference_type_names = ["Object", "Event", "Action", "Data", "Effect", "Function", "Empty", "Style", "Tree", "Node", "NextNode"]
 
 
 class MemeFileElement:
@@ -127,9 +127,9 @@ class MemeFile:
             if type_name in meme_types:
                 child_elements = []
                 for child_type_name, description in meme_types[type_name]:
-                    if child_type_name.endswith("[]"):
+                    if child_type_name == "List":
                         while True:
-                            node = parse_element(child_type_name[:-2], None, f)
+                            node = parse_element("Object", None, f)
                             child_elements.append(node)
                             if node.child_elements == None:
                                 break
@@ -141,17 +141,17 @@ class MemeFile:
                 return read_byte(f) == 1
             elif type_name == "Byte":
                 return read_byte(f)
-            elif type_name == "Int32":
+            elif type_name in ["Int", "TypeIndex"]:
                 return read_int32(f)
             elif type_name == "Float":
                 return read_float32(f)
-            elif type_name in ["String8", "FontString", "SoundString"]:
+            elif type_name in ["PictureString", "FontString", "SoundString"]:
                 string_size = read_byte(f)
                 return read_8bit_string(f, string_size)
-            elif type_name == "String32":
+            elif type_name == "String":
                 string_size = read_u32(f)
                 return read_8bit_string(f, string_size)
-            elif type_name == "Wstring":
+            elif type_name == "WideString":
                 string_size = read_u32(f)
                 return read_16bit_string(f, string_size)
             else:
@@ -243,19 +243,19 @@ class MemeFile:
                         f.write(struct.pack("B", 1 if val else 0))
                     elif element.type_name == "Byte":
                         f.write(struct.pack("B", val))
-                    elif element.type_name == "Int32":
+                    elif element.type_name in ["Int", "TypeIndex"]:
                         f.write(struct.pack("<i", val))
                     elif element.type_name == "Float":
                         f.write(struct.pack("<f", val))
-                    elif element.type_name in ["String8", "FontString", "SoundString"]:
+                    elif element.type_name in ["PictureString", "FontString", "SoundString"]:
                         encoded = val.encode("cp1252")
                         f.write(struct.pack("B", len(encoded)))
                         f.write(encoded)
-                    elif element.type_name == "String32":
+                    elif element.type_name == "String":
                         encoded = val.encode("cp1252")
                         f.write(struct.pack("<I", len(encoded)))
                         f.write(encoded)
-                    elif element.type_name == "Wstring":
+                    elif element.type_name == "WideString":
                         encoded = val.encode("UTF-16 LE")
                         f.write(struct.pack("<I", len(val)))
                         f.write(encoded)
@@ -310,11 +310,11 @@ class MemeFile:
         def parse_primitive_element_text(type_name, text_value, uses_crlf):
             if type_name in ["Boolean"]:
                 return text_value.lower() == "true"
-            elif type_name in ["Byte", "Int32"]:
+            elif type_name in ["Byte", "Int", "TypeIndex"]:
                 return int(text_value)
             elif type_name in ["Float"]:
                 return float(text_value)
-            elif type_name in ["String8", "FontString", "SoundString", "String32", "Wstring"]:
+            elif type_name in ["PictureString", "FontString", "SoundString", "String", "WideString"]:
                 text_value = text_value if text_value is not None else ""
                 if uses_crlf:
                     text_value = text_value.replace('\n', '\r\n')
