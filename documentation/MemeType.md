@@ -1,3 +1,11 @@
+MemeFile 2.0 is used by (at least) these games, by DICE Studios:
+- Rallisport Challenge
+- Battlefield 1942
+- Rallisport Challenge 2
+- Battlefield Vietnam
+
+In this documentation and the python scripts only support has been added for Battlefield 1942 and Battlefield Vietnam.
+
 # Types
 
 ## Primitive Types
@@ -992,7 +1000,7 @@ _No parameters_
 
 # Non-BF1942 Types
 These types were found in the meme edit tool made by rex.
-For completeness I'll add them here as well.
+For completeness I'll add them here as well, such that Battlefield Vietnam is also supported.
 BfTriangleButtonsNode, BfControlPointGauge, BfLocalePictureButtonNode and BfNewCreditsListNode are use in the BFVietnam binary.
 Where BfScrollPictureNode2 is used remains a mistery. Its not in the bf1942 or bfv binary.
 
