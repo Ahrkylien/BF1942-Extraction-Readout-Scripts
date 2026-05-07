@@ -6,7 +6,7 @@ MemeFile 2.0 is used by (at least) these games, by DICE Studios:
 - Battlefield 2
 
 In this documentation and the python scripts only support has been added for Battlefield 1942, Battlefield Vietnam and Battlefield 2.
-It supports all types available Battlefield 1942 while for the other two games only types actually used by DICE are added.
+It supports all types available for Battlefield 1942, while for the other two games only types actually used by DICE are added.
 This means that all meme files for these three games can be read.
 
 # Types
