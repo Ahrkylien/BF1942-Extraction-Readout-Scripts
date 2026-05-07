@@ -190,9 +190,9 @@
   "System": [],
   "NavigateViewNode": [["Tree", "Navigate tree"], ["FontString", "Font"]],
   "BfGaugeNode": [["Data", "Color"], ["Data", "Background color"], ["Data", "Data"], ["Data", "Maximum value"], ["Boolean", "Horizontal align"]],
-  "BfScrollPictureNode2x": [["NextNode", "Next node"], ["PictureString", "Scroll picture"], ["Data", "Data"], ["Data", "Maximum value"], ["Int", "Y offset"], ["Int", "Size"], ["Data", "Var size"], ["Data", "Maintain value"], ["Boolean", "From top"]],
-  "BfTriangleButtonsNode": [["NextNode", "Next node"], ["PictureString", "Picture A"], ["PictureString", "Picture B"], ["Action", "Action"], ["Float", "Width"], ["Float", "Height"], ["Data", "Clicked Index?"]],
-  "BfControlPointGauge": [["NextNode", "Next node"], ["PictureString", "Picture"], ["Data", "Unknown"], ["Data", "Unknown"], ["Data", "Unknown"]],
-  "BfLocalePictureButtonNode": [["NextNode", "Next node"], ["Byte", "Unknown"], ["Byte", "Unknown"], ["Action", "Action"], ["Float", "Unknown"], ["Float", "Unknown"], ["Float", "Unknown"], ["Float", "Unknown"], ["Data", "Unknown"], ["Data", "Unknown"], ["Data", "Unknown"], ["Data", "Unknown"]],
-  "BfNewCreditsListNode": [["NextNode", "Next node"], ["Style", "BfStyle"], ["Style", "RightAlignedStyle"], ["Data", "Unknown"], ["Data", "Unknown"], ["Data", "Unknown"], ["Data", "Unknown"], ["Data", "Unknown"]]
+  "ToggleData": [["Data", "Toggle data"], ["Data", "Data 1"], ["Data", "Data 2"]],
+  "BfTriangleButtonsNode": [["NextNode", "Next node"], ["PictureString", "Top Triangle Selected"], ["PictureString", "Bottom Triangle Selected"], ["Action", "Action"], ["Float", "Width"], ["Float", "Height"], ["Data", "Selected Team"]],
+  "BfControlPointGauge": [["NextNode", "Next node"], ["PictureString", "Quarter Circle"], ["Data", "Gauge Position"], ["Data", "Owning Team"], ["Data", "Taking Team"]],
+  "BfLocalePictureButtonNode": [["NextNode", "Next node"], ["PictureString", "Picture"], ["PictureString", "Mouse over picture"], ["Action", "Action"], ["Float", "Start X"], ["Float", "Total Movement"], ["Float", "Width"], ["Float", "Height"], ["Data", "Is Selected"], ["Data", "Current X"], ["Data", "Picture Name"], ["Data", "Picture Path"]],
+  "BfNewCreditsListNode": [["NextNode", "Next node"], ["Style", "Style"], ["Style", "HeadingStyle"], ["Data", "Go"], ["Data", "CurrentPosition"], ["Data", "Step"], ["Data", "StartValue"], ["Data", "EndValue"]]
 }

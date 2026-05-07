@@ -1,0 +1,35 @@
+rem ** Format is <name> <filename(s)> <volume> <looping>
+rem ** Filenames can be one or more files separated by commas. The files will
+rem ** be played randomly.
+
+sound.addMenuSound accept "Common/Sound/Menu/front_end/menuButton.wav" 0.65
+sound.addMenuSound decline "Common/Sound/Menu/front_end/decline.wav" 0.65
+sound.addMenuSound tab "Common/Sound/Menu/front_end/menuButton.wav" 0.65
+sound.addMenuSound promotion "Common/Sound/Promotion.ogg" 1
+sound.addMenuSound demotion "Common/Sound/Demotion.ogg" 1
+sound.addMenuSound unlock "Common/Sound/Award.ogg" 1
+sound.addMenuSound error "Common/Sound/Menu/front_end/negativ.wav" 0.65
+sound.addMenuSound message "Common/Sound/Menu/front_end/message.wav" 0.65
+sound.addMenuSound unlockPress "Common/Sound/Menu/front_end/unlockPress.wav" 0.7
+sound.addMenuSound unlockSelect "Common/Sound/Menu/front_end/unlockPress.wav" 1
+
+sound.addMenuSound menuButton "Common/Sound/Menu/front_end/menuButton.wav" 0.7
+sound.addMenuSound menuButtonOpen "Common/Sound/Menu/front_end/menuButtonOpen.wav" 0.6
+sound.addMenuSound sliderDrag "Common/Sound/Menu/kitOver.wav" 0.65
+sound.addMenuSound buttonPress "Common/Sound/Menu/front_end/menuButton.wav" 0.65
+sound.addMenuSound tabPress "Common/Sound/Menu/front_end/menuButton.wav" 0.65
+sound.addMenuSound scrollArrowPress "Common/Sound/Menu/front_end/checkbox.wav" 0.65
+sound.addMenuSound scrollSkipPress "Common/Sound/Menu/front_end/checkbox.wav" 0.65
+sound.addMenuSound scrollSlidePress "Common/Sound/Menu/front_end/checkbox.wav" 0.65
+sound.addMenuSound checkboxCheck "Common/Sound/Menu/front_end/checkbox.wav" 0.7
+sound.addMenuSound checkboxUnCheck "Common/Sound/Menu/front_end/checkbox.wav" 0.7
+sound.addMenuSound radioSelect "Common/Sound/Menu/front_end/menuButton.wav" 0.65
+sound.addMenuSound keyCatcherClick "Common/Sound/Menu/front_end/menuButton.wav" 0.65
+sound.addMenuSound selectBoxOpen "Common/Sound/Menu/front_end/menuButton.wav" 0.65
+sound.addMenuSound selectBoxClose "Common/Sound/Menu/front_end/menuButtonOpen.wav" 0.65
+sound.addMenuSound listSelect "Common/Sound/Menu/front_end/menuButton.wav" 0.65
+sound.addMenuSound inputFieldPress "Common/Sound/Menu/front_end/checkbox.wav" 0.65
+sound.addMenuSound sortPress "Common/Sound/Menu/front_end/menuButton.wav" 0.65
+sound.addMenuSound toggleFieldPress "Common/Sound/Menu/kitOver.wav" 0.65
+sound.addMenuSound playNow "Common/Sound/Menu/front_end/playNow.wav" 0.7
+

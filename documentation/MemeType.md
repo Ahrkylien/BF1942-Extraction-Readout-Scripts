@@ -999,58 +999,56 @@ _No parameters_
 
 
 # Non-BF1942 Types
-These types were found in the meme edit tool made by rex.
-For completeness I'll add them here as well, such that Battlefield Vietnam is also supported.
-BfTriangleButtonsNode, BfControlPointGauge, BfLocalePictureButtonNode and BfNewCreditsListNode are use in the BFVietnam binary.
-Where BfScrollPictureNode2 is used remains a mistery. Its not in the bf1942 or bfv binary.
+Such that Battlefield Vietnam and Battlefield 2 are also supported these types are also documented.
+Note that there are more types available for these games (which can be seen from the binaries).
+But these types are not used in any meme file made by DICE.
 
-## BfScrollPictureNode2x
-- NextNode: Next node
-- PictureString: Scroll picture
-- Data: Data
-- Data: Maximum value
-- Int: Y offset
-- Int: Size
-- Data: Var size
-- Data: Maintain value
-- Boolean: From top
+## ToggleData
+Used (and only usable) in Battlefield 2.
+- Data: Toggle data
+- Data: Data 1
+- Data: Data 2
 
 ## BfTriangleButtonsNode
+Used (and only usable) in Battlefield Vietnam.
 - NextNode: Next node
-- PictureString: Picture A
-- PictureString: Picture B
+- PictureString: Top Triangle Selected
+- PictureString: Bottom Triangle Selected
 - Action: Action
 - Float: Width
 - Float: Height
-- Data: Clicked Index?
+- Data: Selected Team
 
 ## BfControlPointGauge
+Used (and only usable) in Battlefield Vietnam.
 - NextNode: Next node
-- PictureString: Picture
-- Data: Unknown
-- Data: Unknown
-- Data: Unknown
+- PictureString: Quarter Circle
+- Data: Gauge Position
+- Data: Owning Team
+- Data: Taking Team
 
 ## BfLocalePictureButtonNode
+Used (and only usable) in Battlefield Vietnam.
 - NextNode: Next node
-- Byte: Unknown
-- Byte: Unknown
+- PictureString: Picture
+- PictureString: Mouse over picture
 - Action: Action
-- Float: Unknown
-- Float: Unknown
-- Float: Unknown
-- Float: Unknown
-- Data: Unknown
-- Data: Unknown
-- Data: Unknown
-- Data: Unknown
+- Float: Start X
+- Float: Total Movement
+- Float: Width
+- Float: Height
+- Data: Is Selected
+- Data: Current X
+- Data: Picture Name
+- Data: Picture Path
 
 ## BfNewCreditsListNode
+Used (and only usable) in Battlefield Vietnam.
 - NextNode: Next node
-- Style: BfStyle
-- Style: RightAlignedStyle
-- Data: Unknown
-- Data: Unknown
-- Data: Unknown
-- Data: Unknown
-- Data: Unknown
+- Style: Style
+- Style: HeadingStyle
+- Data: Go
+- Data: CurrentPosition
+- Data: Step
+- Data: StartValue
+- Data: EndValue
