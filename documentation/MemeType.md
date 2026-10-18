@@ -604,7 +604,7 @@ This node is deprecated, use SetVariableSineAction instead.
 - Boolean: Paint outnode over innode
 
 ## PopPathAction
-- PathNode: Stack path node
+- Empty: Stack path node
 - Float: In time
 - Float: Out time
 - Float: In wait time
@@ -934,7 +934,7 @@ _No parameters_
 
 
 # Events
-Use Input index 0 when refering to "all indexes".
+Use Input index 0 when refering to "all indexes". Any other value is a player input, numbered 1 to 55 by the game (see the names in the XML format documentation).
 
 ## Event
 - Byte: Input index

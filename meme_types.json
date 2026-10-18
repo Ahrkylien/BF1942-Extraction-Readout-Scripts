@@ -102,7 +102,7 @@
   "NavigateSiblingIndexAction": [["Tree", "Action tree"], ["Int", "Index"]],
   "SetPathAction": [["Empty", "Path node"], ["Empty", "Destination node"], ["Float", "In time"], ["Float", "Out time"], ["Float", "In wait time"], ["Float", "Out wait time"], ["Boolean", "Paint outnode over innode"]],
   "PushPathAction": [["Empty", "Stack path node"], ["Empty", "Destination node"], ["Float", "In time"], ["Float", "Out time"], ["Float", "In wait time"], ["Float", "Out wait time"], ["Boolean", "Paint outnode over innode"]],
-  "PopPathAction": [["PathNode", "Stack path node"], ["Float", "In time"], ["Float", "Out time"], ["Float", "In wait time"], ["Float", "Out wait time"], ["Boolean", "Paint outnode over innode"]],
+  "PopPathAction": [["Empty", "Stack path node"], ["Float", "In time"], ["Float", "Out time"], ["Float", "In wait time"], ["Float", "Out wait time"], ["Boolean", "Paint outnode over innode"]],
   "SplitAction": [["Action", "Action 1"], ["Action", "Action 2"]],
   "SetFocusAction": [["Data", "X"], ["Data", "Y"]],
   "CallFunctionAction": [["Function", "Function"]],

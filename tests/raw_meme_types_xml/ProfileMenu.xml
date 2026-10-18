@@ -1,0 +1,139 @@
+<?xml version='1.0' encoding='utf-8'?>
+<MemeFile>
+  <NameNode />
+  <CullEventActionNode>
+    <ActionListAction description="Action">
+      <List description="Action list">
+        <CallFunctionAction description="Action list">
+          <Function description="Function" name="Profile/InitProfile" />
+        </CallFunctionAction>
+      </List>
+    </ActionListAction>
+    <TypeEvent description="Event">
+      <Byte description="Input index">0</Byte>
+      <TypeIndex description="Event type">PreShow</TypeIndex>
+    </TypeEvent>
+  </CullEventActionNode>
+  <EffectNode>
+    <BfMultiplyColorEffect2 description="Effect">
+      <FloatData description="Alpha" name="FocusEffect/Init/Alpha6">
+        <Float description="Value">1</Float>
+      </FloatData>
+    </BfMultiplyColorEffect2>
+  </EffectNode>
+  <TransformNode>
+    <Float description="X">0</Float>
+    <Float description="Y">0</Float>
+    <Float description="Width">800</Float>
+    <Float description="Height">600</Float>
+    <CullNode description="Transformed node">
+      <g description="Next node">
+        <EffectNode>
+          <ColorEffect description="Effect">
+            <Float description="Red">0</Float>
+            <Float description="Green">0</Float>
+            <Float description="Blue">0</Float>
+            <Float description="Alpha">0.4</Float>
+          </ColorEffect>
+        </EffectNode>
+        <PictureNode>
+          <PictureString description="Picture" />
+        </PictureNode>
+      </g>
+      <BoolData description="Data" name="Profile/ShowProfile">
+        <Boolean description="Value">false</Boolean>
+      </BoolData>
+      <Float description="In time">0</Float>
+      <Float description="Out time">0</Float>
+    </CullNode>
+  </TransformNode>
+  <TransformNode>
+    <Float description="X">669</Float>
+    <Float description="Y">85</Float>
+    <Float description="Width">128</Float>
+    <Float description="Height">128</Float>
+    <CullNode description="Transformed node">
+      <g description="Next node">
+        <BfButtonNode>
+          <PictureString description="Picture">Menu/knappPrf_N.tga</PictureString>
+          <PictureString description="Mouse over picture">Menu/knappPrf_MO.tga</PictureString>
+          <Placeholder description="Action" />
+          <Float description="Width">109</Float>
+          <Float description="Height">24</Float>
+        </BfButtonNode>
+        <TransformNode>
+          <Float description="X">8</Float>
+          <Float description="Y">9</Float>
+          <Float description="Width">98</Float>
+          <Float description="Height">18</Float>
+          <TextNode description="Transformed node">
+            <StringData description="String" name="Profile/ProfileName">
+              <String description="String">ABCDEWWW</String>
+            </StringData>
+            <CenterAlignedStyle description="Style">
+              <FontString description="Font handle">standard6 - Latin.dif</FontString>
+            </CenterAlignedStyle>
+          </TextNode>
+        </TransformNode>
+        <TransformNode>
+          <Float description="X">5</Float>
+          <Float description="Y">2</Float>
+          <Float description="Width">103</Float>
+          <Float description="Height">23</Float>
+          <CullEventActionNode description="Transformed node">
+            <CallFunctionAction description="Action">
+              <Function description="Function" name="Sound/PlayMenuHighLight" />
+            </CallFunctionAction>
+            <TypeEvent description="Event">
+              <Byte description="Input index">0</Byte>
+              <TypeIndex description="Event type">PointerIn</TypeIndex>
+            </TypeEvent>
+          </CullEventActionNode>
+        </TransformNode>
+        <TransformNode>
+          <Float description="X">1</Float>
+          <Float description="Y">1</Float>
+          <Float description="Width">111</Float>
+          <Float description="Height">25</Float>
+          <CullVariableAndEventActionNode description="Transformed node">
+            <ActionListAction description="Action">
+              <List description="Action list">
+                <CallFunctionAction description="Action list">
+                  <Function description="Function" name="Sound/PlayMenuOk" />
+                </CallFunctionAction>
+                <SetVariableAction description="Action list">
+                  <BoolData description="Variable" name="Profile/ShowProfile">
+                    <Boolean description="Value">false</Boolean>
+                  </BoolData>
+                  <BoolData description="Data">
+                    <Boolean description="Value">true</Boolean>
+                  </BoolData>
+                </SetVariableAction>
+                <CallFunctionAction description="Action list">
+                  <Function description="Function" name="Profile/InitProfile" />
+                </CallFunctionAction>
+              </List>
+            </ActionListAction>
+            <NotData description="Variable">
+              <BoolData description="Data" name="Profile/ShowMainProfile">
+                <Boolean description="Value">true</Boolean>
+              </BoolData>
+            </NotData>
+            <ButtonEvent description="Event">
+              <Byte description="Input index">0</Byte>
+              <TypeIndex description="Event type">ButtonPress</TypeIndex>
+              <TypeIndex description="Button type">Select</TypeIndex>
+            </ButtonEvent>
+          </CullVariableAndEventActionNode>
+        </TransformNode>
+      </g>
+      <NotData description="Data">
+        <IntData description="Data" name="Join/Disconnect/ShowDisconnect">
+          <Int description="Value">0</Int>
+        </IntData>
+      </NotData>
+      <Float description="In time">0</Float>
+      <Float description="Out time">0</Float>
+    </CullNode>
+  </TransformNode>
+</MemeFile>
