@@ -178,28 +178,13 @@ Each tag lists the types it writes, its attributes and its content.
 
 ### Node tags
 
-#### `<Action>`
+#### `<Action>`&nbsp;&nbsp;&nbsp;🔗 [ActionNode](MemeType.md#actionnode)
 
-XML tag for `ActionNode`. Content: one action. No attributes.
+Content: one action. No attributes.
 
-#### `<AddSubEffect>`
+#### `<AddSubEffect>`&nbsp;&nbsp;&nbsp;🔗 [BfAddSubEffectNode](MemeType.md#bfaddsubeffectnode)
 
-XML tag for `BfAddSubEffectNode`. Content: none.
-
-| Attribute | Holds | Required |
-|---|---|---|
-| `value` | numerical expression | yes |
-| `end-value` | numerical expression | yes |
-| `start-time` | numerical expression | yes |
-| `start-percentage` | numerical expression | yes |
-| `end-time` | numerical expression | yes |
-| `delay` | numerical expression | yes |
-| `up` | bool expression | yes |
-| `trigger` | bool expression | yes |
-
-#### `<AddSubNextEffect>`
-
-XML tag for `BfAddSubNextEffectNode`. Content: one action.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -212,9 +197,24 @@ XML tag for `BfAddSubNextEffectNode`. Content: one action.
 | `up` | bool expression | yes |
 | `trigger` | bool expression | yes |
 
-#### `<Animation>`
+#### `<AddSubNextEffect>`&nbsp;&nbsp;&nbsp;🔗 [BfAddSubNextEffectNode](MemeType.md#bfaddsubnexteffectnode)
 
-XML tag for `BfAnimationNode`. Content: none.
+Content: one action.
+
+| Attribute | Holds | Required |
+|---|---|---|
+| `value` | numerical expression | yes |
+| `end-value` | numerical expression | yes |
+| `start-time` | numerical expression | yes |
+| `start-percentage` | numerical expression | yes |
+| `end-time` | numerical expression | yes |
+| `delay` | numerical expression | yes |
+| `up` | bool expression | yes |
+| `trigger` | bool expression | yes |
+
+#### `<Animation>`&nbsp;&nbsp;&nbsp;🔗 [BfAnimationNode](MemeType.md#bfanimationnode)
+
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -223,9 +223,9 @@ XML tag for `BfAnimationNode`. Content: none.
 | `start` | bool | yes |
 | `looping` | bool | yes |
 
-#### `<BfSlider>`
+#### `<BfSlider>`&nbsp;&nbsp;&nbsp;🔗 [BfSliderNode](MemeType.md#bfslidernode), [BfFixedSliderNode](MemeType.md#bffixedslidernode)
 
-XML tag for `BfSliderNode`, `BfFixedSliderNode`. Content: nodes.
+Content: nodes.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -235,9 +235,9 @@ XML tag for `BfSliderNode`, `BfFixedSliderNode`. Content: nodes.
 | `number-visible` | float | yes |
 | `interval` | float | no |
 
-#### `<Bink>`
+#### `<Bink>`&nbsp;&nbsp;&nbsp;🔗 [BfBinkNode](MemeType.md#bfbinknode)
 
-XML tag for `BfBinkNode`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -246,9 +246,9 @@ XML tag for `BfBinkNode`. Content: none.
 | `fade-time` | float | yes |
 | `play` | bool expression | yes |
 
-#### `<Button>`
+#### `<Button>`&nbsp;&nbsp;&nbsp;🔗 [BfButtonNode](MemeType.md#bfbuttonnode), [BfLocalePictureButtonNode](MemeType.md#bflocalepicturebuttonnode), [BfNavigationButtonNode](MemeType.md#bfnavigationbuttonnode), [BfSelectButtonNode](MemeType.md#bfselectbuttonnode)
 
-XML tag for `BfButtonNode`, `BfLocalePictureButtonNode`, `BfNavigationButtonNode`, `BfSelectButtonNode`. Content: one action.
+Content: one action.
 
 Base attributes, every type has these:
 
@@ -283,13 +283,13 @@ Group 2, optional, on top of the base attributes:
 
 A tag uses the attributes of one group only.
 
-#### `<Clip>`
+#### `<Clip>`&nbsp;&nbsp;&nbsp;🔗 [ClipNode](MemeType.md#clipnode)
 
-XML tag for `ClipNode`. Content: none. No attributes.
+Content: none. No attributes.
 
-#### `<ColorFill>`
+#### `<ColorFill>`&nbsp;&nbsp;&nbsp;🔗 [BfColorFillNode](MemeType.md#bfcolorfillnode)
 
-XML tag for `BfColorFillNode`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -301,9 +301,9 @@ XML tag for `BfColorFillNode`. Content: none.
 | `color` | expression | yes |
 | `fill-color` | expression | yes |
 
-#### `<ControlPointGauge>`
+#### `<ControlPointGauge>`&nbsp;&nbsp;&nbsp;🔗 [BfControlPointGauge](MemeType.md#bfcontrolpointgauge)
 
-XML tag for `BfControlPointGauge`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -312,9 +312,9 @@ XML tag for `BfControlPointGauge`. Content: none.
 | `owning-team` | numerical expression | yes |
 | `taking-team` | numerical expression | yes |
 
-#### `<Credits>`
+#### `<Credits>`&nbsp;&nbsp;&nbsp;🔗 [BfCreditsNode](MemeType.md#bfcreditsnode)
 
-XML tag for `BfCreditsNode`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -324,9 +324,9 @@ XML tag for `BfCreditsNode`. Content: none.
 | `time` | float | yes |
 | `trigger` | bool expression | yes |
 
-#### `<Crosshair>`
+#### `<Crosshair>`&nbsp;&nbsp;&nbsp;🔗 [BfCrosshairNode](MemeType.md#bfcrosshairnode)
 
-XML tag for `BfCrosshairNode`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -337,61 +337,61 @@ XML tag for `BfCrosshairNode`. Content: none.
 | `color` | expression | yes |
 | `outline-color` | expression | yes |
 
-#### `<CullAction>`
+#### `<CullAction>`&nbsp;&nbsp;&nbsp;🔗 [CullActionNode](MemeType.md#cullactionnode)
 
-XML tag for `CullActionNode`. Content: one action.
+Content: one action.
 
 | Attribute | Holds | Required |
 |---|---|---|
 | `event-type` | int | yes |
 | `event-data` | int | yes |
 
-#### `<CullEventAction>`
+#### `<CullEventAction>`&nbsp;&nbsp;&nbsp;🔗 [CullEventActionNode](MemeType.md#culleventactionnode), [CullEventTimeoutActionNode](MemeType.md#culleventtimeoutactionnode)
 
-XML tag for `CullEventActionNode`, `CullEventTimeoutActionNode`. Content: one action.
+Content: one action.
 
 | Attribute | Holds | Required |
 |---|---|---|
 | `event` | event text | yes |
 | `timeout-time` | float | no |
 
-#### `<CullVariable>`
+#### `<CullVariable>`&nbsp;&nbsp;&nbsp;🔗 [CullVariableNode](MemeType.md#cullvariablenode)
 
-XML tag for `CullVariableNode`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
 | `variable` | expression | yes |
 | `data` | expression | yes |
 
-#### `<CullVariableAction>`
+#### `<CullVariableAction>`&nbsp;&nbsp;&nbsp;🔗 [CullVariableActionNode](MemeType.md#cullvariableactionnode)
 
-XML tag for `CullVariableActionNode`. Content: one action.
+Content: one action.
 
 | Attribute | Holds | Required |
 |---|---|---|
 | `variable` | expression | yes |
 
-#### `<CullVariableAndEventAction>`
+#### `<CullVariableAndEventAction>`&nbsp;&nbsp;&nbsp;🔗 [CullVariableAndEventActionNode](MemeType.md#cullvariableandeventactionnode)
 
-XML tag for `CullVariableAndEventActionNode`. Content: one action.
+Content: one action.
 
 | Attribute | Holds | Required |
 |---|---|---|
 | `variable` | expression | yes |
 | `event` | event text | yes |
 
-#### `<Disable>`
+#### `<Disable>`&nbsp;&nbsp;&nbsp;🔗 [DisableNode](MemeType.md#disablenode)
 
-XML tag for `DisableNode`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
 | `disable-data` | bool expression | yes |
 
-#### `<DragWindow>`
+#### `<DragWindow>`&nbsp;&nbsp;&nbsp;🔗 [DragWindowNode](MemeType.md#dragwindownode)
 
-XML tag for `DragWindowNode`. Content: nodes.
+Content: nodes.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -400,9 +400,9 @@ XML tag for `DragWindowNode`. Content: nodes.
 | `width` | float | yes |
 | `height` | float | yes |
 
-#### `<Edit>`
+#### `<Edit>`&nbsp;&nbsp;&nbsp;🔗 [BfEditNode](MemeType.md#bfeditnode), [BfEditNodeNew](MemeType.md#bfeditnodenew), [EditNode](MemeType.md#editnode)
 
-XML tag for `BfEditNode`, `BfEditNodeNew`, `EditNode`. Content: one action or none.
+Content: one action or none.
 
 Base attributes, every type has these:
 
@@ -429,9 +429,9 @@ Group 2, optional, on top of the base attributes:
 
 A tag uses the attributes of one group only.
 
-#### `<EditInt>`
+#### `<EditInt>`&nbsp;&nbsp;&nbsp;🔗 [BfEditNodeInt](MemeType.md#bfeditnodeint)
 
-XML tag for `BfEditNodeInt`. Content: one action.
+Content: one action.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -443,48 +443,48 @@ XML tag for `BfEditNodeInt`. Content: one action.
 | `editbox-data` | expression | yes |
 | `focus` | bool | yes |
 
-#### `<Effect>`
+#### `<Effect>`&nbsp;&nbsp;&nbsp;🔗 [EffectNode](MemeType.md#effectnode)
 
-XML tag for `EffectNode`. Content: one effect. No attributes.
+Content: one effect. No attributes.
 
-#### `<ExtendedFocusToPressedEffect>`
+#### `<ExtendedFocusToPressedEffect>`&nbsp;&nbsp;&nbsp;🔗 [ExtendedFocusToPressedEffectNode](MemeType.md#extendedfocustopressedeffectnode)
 
-XML tag for `ExtendedFocusToPressedEffectNode`. Content: one effect.
-
-| Attribute | Holds | Required |
-|---|---|---|
-| `min-value` | float | yes |
-| `max-value` | float | yes |
-
-#### `<ExtendedNormalToFocusEffect>`
-
-XML tag for `ExtendedNormalToFocusEffectNode`. Content: one effect.
+Content: one effect.
 
 | Attribute | Holds | Required |
 |---|---|---|
 | `min-value` | float | yes |
 | `max-value` | float | yes |
 
-#### `<Focus>`
+#### `<ExtendedNormalToFocusEffect>`&nbsp;&nbsp;&nbsp;🔗 [ExtendedNormalToFocusEffectNode](MemeType.md#extendednormaltofocuseffectnode)
 
-XML tag for `FocusNode`. Content: none.
+Content: one effect.
+
+| Attribute | Holds | Required |
+|---|---|---|
+| `min-value` | float | yes |
+| `max-value` | float | yes |
+
+#### `<Focus>`&nbsp;&nbsp;&nbsp;🔗 [FocusNode](MemeType.md#focusnode)
+
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
 | `focus-x` | expression | yes |
 | `focus-y` | expression | yes |
 
-#### `<FocusEffect>`
+#### `<FocusEffect>`&nbsp;&nbsp;&nbsp;🔗 [FocusEffectNode](MemeType.md#focuseffectnode)
 
-XML tag for `FocusEffectNode`. Content: one effect. No attributes.
+Content: one effect. No attributes.
 
-#### `<FocusToPressedEffect>`
+#### `<FocusToPressedEffect>`&nbsp;&nbsp;&nbsp;🔗 [FocusToPressedEffectNode](MemeType.md#focustopressedeffectnode)
 
-XML tag for `FocusToPressedEffectNode`. Content: one effect. No attributes.
+Content: one effect. No attributes.
 
-#### `<Gauge>`
+#### `<Gauge>`&nbsp;&nbsp;&nbsp;🔗 [BfGaugeNode](MemeType.md#bfgaugenode)
 
-XML tag for `BfGaugeNode`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -494,13 +494,13 @@ XML tag for `BfGaugeNode`. Content: none.
 | `maximum-value` | expression | yes |
 | `horizontal-align` | bool | yes |
 
-#### `<Group>`
+#### `<Group>`&nbsp;&nbsp;&nbsp;🔗 [SplitNode](MemeType.md#splitnode)
 
-XML tag for `SplitNode`. Content: nodes. No attributes.
+Content: nodes. No attributes.
 
-#### `<If>`
+#### `<If>`&nbsp;&nbsp;&nbsp;🔗 [CullNode](MemeType.md#cullnode)
 
-XML tag for `CullNode`. Content: nodes.
+Content: nodes.
 
 When nodes follow it in the same list, it is wrapped in a `<Group>`.
 
@@ -510,9 +510,9 @@ When nodes follow it in the same list, it is wrapped in a `<Group>`.
 | `in-time` | float | no | `0` |
 | `out-time` | float | no | `0` |
 
-#### `<ListBox>`
+#### `<ListBox>`&nbsp;&nbsp;&nbsp;🔗 [BfNewListBoxNode](MemeType.md#bfnewlistboxnode)
 
-XML tag for `BfNewListBoxNode`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required | Default |
 |---|---|---|---|
@@ -538,29 +538,29 @@ Child elements, each with a `field` attribute:
 | `select-action` | action |
 | `focus-action` | action |
 
-#### `<Locale>`
+#### `<Locale>`&nbsp;&nbsp;&nbsp;🔗 [BfLocaleNode](MemeType.md#bflocalenode)
 
-XML tag for `BfLocaleNode`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
 | `locale` | expression | yes |
 
-#### `<Name>`
+#### `<Name>`&nbsp;&nbsp;&nbsp;🔗 [NameNode](MemeType.md#namenode)
 
-XML tag for `NameNode`. Content: none. No attributes.
+Content: none. No attributes.
 
-#### `<NavigateView>`
+#### `<NavigateView>`&nbsp;&nbsp;&nbsp;🔗 [NavigateViewNode](MemeType.md#navigateviewnode)
 
-XML tag for `NavigateViewNode`. Content: one element.
+Content: one element.
 
 | Attribute | Holds | Required |
 |---|---|---|
 | `font` | string | yes |
 
-#### `<NewCreditsList>`
+#### `<NewCreditsList>`&nbsp;&nbsp;&nbsp;🔗 [BfNewCreditsListNode](MemeType.md#bfnewcreditslistnode)
 
-XML tag for `BfNewCreditsListNode`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -572,9 +572,9 @@ XML tag for `BfNewCreditsListNode`. Content: none.
 | `start-value` | numerical expression | yes |
 | `end-value` | numerical expression | yes |
 
-#### `<NodeList>`
+#### `<NodeList>`&nbsp;&nbsp;&nbsp;🔗 [NodeListNode](MemeType.md#nodelistnode)
 
-XML tag for `NodeListNode`. Content: items.
+Content: items.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -583,17 +583,17 @@ XML tag for `NodeListNode`. Content: items.
 | `select-sound` | string | yes |
 | `up-down-sound` | string | yes |
 
-#### `<NormalToFocusEffect>`
+#### `<NormalToFocusEffect>`&nbsp;&nbsp;&nbsp;🔗 [NormalToFocusEffectNode](MemeType.md#normaltofocuseffectnode)
 
-XML tag for `NormalToFocusEffectNode`. Content: one effect. No attributes.
+Content: one effect. No attributes.
 
-#### `<NotFocusEffect>`
+#### `<NotFocusEffect>`&nbsp;&nbsp;&nbsp;🔗 [NotFocusEffectNode](MemeType.md#notfocuseffectnode)
 
-XML tag for `NotFocusEffectNode`. Content: one effect. No attributes.
+Content: one effect. No attributes.
 
-#### `<OccupiedVehicle>`
+#### `<OccupiedVehicle>`&nbsp;&nbsp;&nbsp;🔗 [BfOccupiedVehicleNode](MemeType.md#bfoccupiedvehiclenode)
 
-XML tag for `BfOccupiedVehicleNode`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -601,13 +601,13 @@ XML tag for `BfOccupiedVehicleNode`. Content: none.
 | `draw-debug-pic` | bool | yes |
 | `occupied-vehicle` | expression | yes |
 
-#### `<Path>`
+#### `<Path>`&nbsp;&nbsp;&nbsp;🔗 [PathNode](MemeType.md#pathnode)
 
-XML tag for `PathNode`. Content: none. No attributes.
+Content: none. No attributes.
 
-#### `<Picture>`
+#### `<Picture>`&nbsp;&nbsp;&nbsp;🔗 [BfPictureFillNode](MemeType.md#bfpicturefillnode), [BfVariablePictureFillNode](MemeType.md#bfvariablepicturefillnode), [PictureNode](MemeType.md#picturenode), [BfVariablePictureFillNode2](MemeType.md#bfvariablepicturefillnode2)
 
-XML tag for `BfPictureFillNode`, `BfVariablePictureFillNode`, `PictureNode`, `BfVariablePictureFillNode2`. Content: none.
+Content: none.
 
 Base attributes, every type has these:
 
@@ -626,26 +626,26 @@ Group 1, optional, on top of the base attributes:
 | `fill-order` | bool | yes |
 | `size` | numerical expression | yes |
 
-#### `<Rectangle>`
+#### `<Rectangle>`&nbsp;&nbsp;&nbsp;🔗 [BfRectangle](MemeType.md#bfrectangle)
 
-XML tag for `BfRectangle`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
 | `thickness` | float | yes |
 
-#### `<Scale>`
+#### `<Scale>`&nbsp;&nbsp;&nbsp;🔗 [ScaleNode](MemeType.md#scalenode)
 
-XML tag for `ScaleNode`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
 | `width-scale` | expression | yes |
 | `height-scale` | expression | yes |
 
-#### `<ScrollPicture>`
+#### `<ScrollPicture>`&nbsp;&nbsp;&nbsp;🔗 [BfScrollPictureNode](MemeType.md#bfscrollpicturenode)
 
-XML tag for `BfScrollPictureNode`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -658,13 +658,13 @@ XML tag for `BfScrollPictureNode`. Content: none.
 | `maintain-value` | numerical expression | yes |
 | `from-bottom` | bool | yes |
 
-#### `<ShowEffect>`
+#### `<ShowEffect>`&nbsp;&nbsp;&nbsp;🔗 [ShowEffectNode](MemeType.md#showeffectnode)
 
-XML tag for `ShowEffectNode`. Content: one effect. No attributes.
+Content: one effect. No attributes.
 
-#### `<Slider>`
+#### `<Slider>`&nbsp;&nbsp;&nbsp;🔗 [SliderNode](MemeType.md#slidernode)
 
-XML tag for `SliderNode`. Content: nodes.
+Content: nodes.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -673,22 +673,22 @@ XML tag for `SliderNode`. Content: nodes.
 | `maximum-value` | float | yes |
 | `number-visible` | float | yes |
 
-#### `<StackPath>`
+#### `<StackPath>`&nbsp;&nbsp;&nbsp;🔗 [StackPathNode](MemeType.md#stackpathnode)
 
-XML tag for `StackPathNode`. Content: none. No attributes.
+Content: none. No attributes.
 
-#### `<Sticky>`
+#### `<Sticky>`&nbsp;&nbsp;&nbsp;🔗 [StickyNode](MemeType.md#stickynode)
 
-XML tag for `StickyNode`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
 | `variable` | expression | yes |
 | `data` | expression | yes |
 
-#### `<Text>`
+#### `<Text>`&nbsp;&nbsp;&nbsp;🔗 [BfTextNode](MemeType.md#bftextnode), [TextNode](MemeType.md#textnode)
 
-XML tag for `BfTextNode`, `TextNode`. Content: none.
+Content: none.
 
 Base attributes, every type has these:
 
@@ -703,17 +703,17 @@ Group 1, optional, on top of the base attributes:
 |---|---|---|
 | `type` | numerical expression | yes |
 
-#### `<TimeoutAction>`
+#### `<TimeoutAction>`&nbsp;&nbsp;&nbsp;🔗 [TimeoutActionNode](MemeType.md#timeoutactionnode)
 
-XML tag for `TimeoutActionNode`. Content: one action.
+Content: one action.
 
 | Attribute | Holds | Required |
 |---|---|---|
 | `timeout-time` | float | yes |
 
-#### `<Transform>`
+#### `<Transform>`&nbsp;&nbsp;&nbsp;🔗 [BfTransformNode](MemeType.md#bftransformnode), [BfTransformNodeSize](MemeType.md#bftransformnodesize), [TransformNode](MemeType.md#transformnode)
 
-XML tag for `BfTransformNode`, `BfTransformNodeSize`, `TransformNode`. Content: nodes.
+Content: nodes.
 
 Base attributes, every type has these:
 
@@ -725,30 +725,30 @@ Base attributes, every type has these:
 | `height` | numerical expression | yes |
 Expressions are allowed for `x`, `y` or `width`, `height`, not for both at once.
 
-#### `<TransitionalEffect>`
+#### `<TransitionalEffect>`&nbsp;&nbsp;&nbsp;🔗 [TransitionalEffectNode](MemeType.md#transitionaleffectnode)
 
-XML tag for `TransitionalEffectNode`. Content: one effect. No attributes.
+Content: one effect. No attributes.
 
-#### `<TransitionalHideEffect>`
+#### `<TransitionalHideEffect>`&nbsp;&nbsp;&nbsp;🔗 [TransitionalHideEffectNode](MemeType.md#transitionalhideeffectnode)
 
-XML tag for `TransitionalHideEffectNode`. Content: one effect. No attributes.
+Content: one effect. No attributes.
 
-#### `<TransitionalShowEffect>`
+#### `<TransitionalShowEffect>`&nbsp;&nbsp;&nbsp;🔗 [TransitionalShowEffectNode](MemeType.md#transitionalshoweffectnode)
 
-XML tag for `TransitionalShowEffectNode`. Content: one effect. No attributes.
+Content: one effect. No attributes.
 
-#### `<Translate>`
+#### `<Translate>`&nbsp;&nbsp;&nbsp;🔗 [TranslateNode](MemeType.md#translatenode)
 
-XML tag for `TranslateNode`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
 | `x` | numerical expression | yes |
 | `y` | numerical expression | yes |
 
-#### `<TriangleButtons>`
+#### `<TriangleButtons>`&nbsp;&nbsp;&nbsp;🔗 [BfTriangleButtonsNode](MemeType.md#bftrianglebuttonsnode)
 
-XML tag for `BfTriangleButtonsNode`. Content: one action.
+Content: one action.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -758,17 +758,17 @@ XML tag for `BfTriangleButtonsNode`. Content: one action.
 | `height` | float | yes |
 | `selected-team` | numerical expression | yes |
 
-#### `<VariableEffect>`
+#### `<VariableEffect>`&nbsp;&nbsp;&nbsp;🔗 [VariableEffectNode](MemeType.md#variableeffectnode)
 
-XML tag for `VariableEffectNode`. Content: one effect.
+Content: one effect.
 
 | Attribute | Holds | Required |
 |---|---|---|
 | `effect-level` | numerical expression | yes |
 
-#### `<VariablePicture>`
+#### `<VariablePicture>`&nbsp;&nbsp;&nbsp;🔗 [BfVariablePictureNode](MemeType.md#bfvariablepicturenode), [VariablePictureNode](MemeType.md#variablepicturenode)
 
-XML tag for `BfVariablePictureNode`, `VariablePictureNode`. Content: none.
+Content: none.
 
 Group 1:
 
@@ -787,9 +787,9 @@ Group 2:
 
 A tag uses the attributes of one group only.
 
-#### `<VariableTimeoutAction>`
+#### `<VariableTimeoutAction>`&nbsp;&nbsp;&nbsp;🔗 [BfVariableTimeoutActionNode](MemeType.md#bfvariabletimeoutactionnode), [BfVariableTimeoutActionNode2](MemeType.md#bfvariabletimeoutactionnode2)
 
-XML tag for `BfVariableTimeoutActionNode`, `BfVariableTimeoutActionNode2`. Content: one action.
+Content: one action.
 
 Base attributes, every type has these:
 
@@ -803,9 +803,9 @@ Group 1, optional, on top of the base attributes:
 |---|---|---|
 | `current-time` | numerical expression | yes |
 
-#### `<VerticalScroll>`
+#### `<VerticalScroll>`&nbsp;&nbsp;&nbsp;🔗 [BfVerticalScrollNode](MemeType.md#bfverticalscrollnode), [BfVerticalScrollExNode](MemeType.md#bfverticalscrollexnode)
 
-XML tag for `BfVerticalScrollNode`, `BfVerticalScrollExNode`. Content: none.
+Content: none.
 
 Base attributes, every type has these:
 
@@ -831,9 +831,9 @@ Group 2, optional, on top of the base attributes:
 
 A tag uses the attributes of one group only.
 
-#### `<Window>`
+#### `<Window>`&nbsp;&nbsp;&nbsp;🔗 [WindowNode](MemeType.md#windownode)
 
-XML tag for `WindowNode`. Content: nodes.
+Content: nodes.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -842,9 +842,9 @@ XML tag for `WindowNode`. Content: nodes.
 | `width` | float | yes |
 | `height` | float | yes |
 
-#### `<Zoom>`
+#### `<Zoom>`&nbsp;&nbsp;&nbsp;🔗 [ZoomNode](MemeType.md#zoomnode)
 
-XML tag for `ZoomNode`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -852,38 +852,38 @@ XML tag for `ZoomNode`. Content: none.
 
 ### Action tags
 
-#### `<ActionList>`
+#### `<ActionList>`&nbsp;&nbsp;&nbsp;🔗 [ActionListAction](MemeType.md#actionlistaction)
 
-XML tag for `ActionListAction`. Content: items. No attributes.
+Content: items. No attributes.
 
-#### `<CallFunction>`
+#### `<CallFunction>`&nbsp;&nbsp;&nbsp;🔗 [CallFunctionAction](MemeType.md#callfunctionaction), [CallFunctionVariableAction](MemeType.md#callfunctionvariableaction)
 
-XML tag for `CallFunctionAction`, `CallFunctionVariableAction`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
 | `function` | function text | yes |
 | `result-data` | expression | no |
 
-#### `<LastInputIndex>`
+#### `<LastInputIndex>`&nbsp;&nbsp;&nbsp;🔗 [LastInputIndexAction](MemeType.md#lastinputindexaction)
 
-XML tag for `LastInputIndexAction`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
 | `last-input-index` | expression | yes |
 
-#### `<LockPointer>`
+#### `<LockPointer>`&nbsp;&nbsp;&nbsp;🔗 [LockPointerAction](MemeType.md#lockpointeraction)
 
-XML tag for `LockPointerAction`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
 | `input-index-data` | expression | yes |
 
-#### `<ModifyVariable>`
+#### `<ModifyVariable>`&nbsp;&nbsp;&nbsp;🔗 [ModifyVariableAction](MemeType.md#modifyvariableaction)
 
-XML tag for `ModifyVariableAction`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -891,61 +891,61 @@ XML tag for `ModifyVariableAction`. Content: none.
 | `modify-value` | float | yes |
 | `limit-value` | float | yes |
 
-#### `<Navigate>`
+#### `<Navigate>`&nbsp;&nbsp;&nbsp;🔗 [NavigateAction](MemeType.md#navigateaction)
 
-XML tag for `NavigateAction`. Content: one element. No attributes.
+Content: one element. No attributes.
 
-#### `<NavigateChild>`
+#### `<NavigateChild>`&nbsp;&nbsp;&nbsp;🔗 [NavigateChildAction](MemeType.md#navigatechildaction)
 
-XML tag for `NavigateChildAction`. Content: one element. No attributes.
+Content: one element. No attributes.
 
-#### `<NavigateChildAndRun>`
+#### `<NavigateChildAndRun>`&nbsp;&nbsp;&nbsp;🔗 [NavigateChildAndRunAction](MemeType.md#navigatechildandrunaction)
 
-XML tag for `NavigateChildAndRunAction`. Content: one element. No attributes.
+Content: one element. No attributes.
 
-#### `<NavigateFirstSibling>`
+#### `<NavigateFirstSibling>`&nbsp;&nbsp;&nbsp;🔗 [NavigateFirstSiblingAction](MemeType.md#navigatefirstsiblingaction)
 
-XML tag for `NavigateFirstSiblingAction`. Content: one element. No attributes.
+Content: one element. No attributes.
 
-#### `<NavigateLastSibling>`
+#### `<NavigateLastSibling>`&nbsp;&nbsp;&nbsp;🔗 [NavigateLastSiblingAction](MemeType.md#navigatelastsiblingaction)
 
-XML tag for `NavigateLastSiblingAction`. Content: one element. No attributes.
+Content: one element. No attributes.
 
-#### `<NavigateNextSibling>`
+#### `<NavigateNextSibling>`&nbsp;&nbsp;&nbsp;🔗 [NavigateNextSiblingAction](MemeType.md#navigatenextsiblingaction)
 
-XML tag for `NavigateNextSiblingAction`. Content: one element. No attributes.
+Content: one element. No attributes.
 
-#### `<NavigateParent>`
+#### `<NavigateParent>`&nbsp;&nbsp;&nbsp;🔗 [NavigateParentAction](MemeType.md#navigateparentaction)
 
-XML tag for `NavigateParentAction`. Content: one element. No attributes.
+Content: one element. No attributes.
 
-#### `<NavigateParentAndRun>`
+#### `<NavigateParentAndRun>`&nbsp;&nbsp;&nbsp;🔗 [NavigateParentAndRunAction](MemeType.md#navigateparentandrunaction)
 
-XML tag for `NavigateParentAndRunAction`. Content: one element. No attributes.
+Content: one element. No attributes.
 
-#### `<NavigatePreviousSibling>`
+#### `<NavigatePreviousSibling>`&nbsp;&nbsp;&nbsp;🔗 [NavigatePreviousSiblingAction](MemeType.md#navigateprevioussiblingaction)
 
-XML tag for `NavigatePreviousSiblingAction`. Content: one element. No attributes.
+Content: one element. No attributes.
 
-#### `<NavigateRun>`
+#### `<NavigateRun>`&nbsp;&nbsp;&nbsp;🔗 [NavigateRunAction](MemeType.md#navigaterunaction)
 
-XML tag for `NavigateRunAction`. Content: one element. No attributes.
+Content: one element. No attributes.
 
-#### `<NavigateRunAndChild>`
+#### `<NavigateRunAndChild>`&nbsp;&nbsp;&nbsp;🔗 [NavigateRunAndChildAction](MemeType.md#navigaterunandchildaction)
 
-XML tag for `NavigateRunAndChildAction`. Content: one element. No attributes.
+Content: one element. No attributes.
 
-#### `<NavigateSiblingIndex>`
+#### `<NavigateSiblingIndex>`&nbsp;&nbsp;&nbsp;🔗 [NavigateSiblingIndexAction](MemeType.md#navigatesiblingindexaction)
 
-XML tag for `NavigateSiblingIndexAction`. Content: one element.
+Content: one element.
 
 | Attribute | Holds | Required |
 |---|---|---|
 | `index` | int | yes |
 
-#### `<PopPath>`
+#### `<PopPath>`&nbsp;&nbsp;&nbsp;🔗 [PopPathAction](MemeType.md#poppathaction)
 
-XML tag for `PopPathAction`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -956,9 +956,9 @@ XML tag for `PopPathAction`. Content: none.
 | `out-wait-time` | float | yes |
 | `paint-outnode-over-innode` | bool | yes |
 
-#### `<PushPath>`
+#### `<PushPath>`&nbsp;&nbsp;&nbsp;🔗 [PushPathAction](MemeType.md#pushpathaction)
 
-XML tag for `PushPathAction`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -970,22 +970,22 @@ XML tag for `PushPathAction`. Content: none.
 | `out-wait-time` | float | yes |
 | `paint-outnode-over-innode` | bool | yes |
 
-#### `<RemoveEvent>`
+#### `<RemoveEvent>`&nbsp;&nbsp;&nbsp;🔗 [RemoveEventAction](MemeType.md#removeeventaction)
 
-XML tag for `RemoveEventAction`. Content: none. No attributes.
+Content: none. No attributes.
 
-#### `<SetFocus>`
+#### `<SetFocus>`&nbsp;&nbsp;&nbsp;🔗 [SetFocusAction](MemeType.md#setfocusaction)
 
-XML tag for `SetFocusAction`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
 | `x` | expression | yes |
 | `y` | expression | yes |
 
-#### `<SetPath>`
+#### `<SetPath>`&nbsp;&nbsp;&nbsp;🔗 [SetPathAction](MemeType.md#setpathaction)
 
-XML tag for `SetPathAction`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -997,18 +997,18 @@ XML tag for `SetPathAction`. Content: none.
 | `out-wait-time` | float | yes |
 | `paint-outnode-over-innode` | bool | yes |
 
-#### `<SetString>`
+#### `<SetString>`&nbsp;&nbsp;&nbsp;🔗 [SetStringAction](MemeType.md#setstringaction)
 
-XML tag for `SetStringAction`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
 | `variable` | string expression | yes |
 | `value` | string expression | yes |
 
-#### `<SetVariable>`
+#### `<SetVariable>`&nbsp;&nbsp;&nbsp;🔗 [SetVariableAction](MemeType.md#setvariableaction), [SetVariableArrayAction](MemeType.md#setvariablearrayaction), [SetVariableSoftAction](MemeType.md#setvariablesoftaction)
 
-XML tag for `SetVariableAction`, `SetVariableArrayAction`, `SetVariableSoftAction`. Content: none.
+Content: none.
 
 Base attributes, every type has these:
 
@@ -1031,9 +1031,9 @@ Group 2, optional, on top of the base attributes:
 
 A tag uses the attributes of one group only.
 
-#### `<SetVariableSine>`
+#### `<SetVariableSine>`&nbsp;&nbsp;&nbsp;🔗 [SetVariableSineAction](MemeType.md#setvariablesineaction)
 
-XML tag for `SetVariableSineAction`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -1042,9 +1042,9 @@ XML tag for `SetVariableSineAction`. Content: none.
 | `speed` | float | yes |
 | `braking-distance` | float | yes |
 
-#### `<SetVariableSinus>`
+#### `<SetVariableSinus>`&nbsp;&nbsp;&nbsp;🔗 [SetVariableSinusAction](MemeType.md#setvariablesinusaction)
 
-XML tag for `SetVariableSinusAction`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -1053,45 +1053,45 @@ XML tag for `SetVariableSinusAction`. Content: none.
 | `speed` | float | yes |
 | `braking-distance` | float | yes |
 
-#### `<Sound>`
+#### `<Sound>`&nbsp;&nbsp;&nbsp;🔗 [SoundAction](MemeType.md#soundaction), [VolumedSoundAction](MemeType.md#volumedsoundaction)
 
-XML tag for `SoundAction`, `VolumedSoundAction`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
 | `sound` | string | yes |
 | `volume` | float | no |
 
-#### `<ToggleVariable>`
+#### `<ToggleVariable>`&nbsp;&nbsp;&nbsp;🔗 [ToggleVariableAction](MemeType.md#togglevariableaction)
 
-XML tag for `ToggleVariableAction`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
 | `variable` | bool expression | yes |
 
-#### `<UnlockPointer>`
+#### `<UnlockPointer>`&nbsp;&nbsp;&nbsp;🔗 [UnlockPointerAction](MemeType.md#unlockpointeraction)
 
-XML tag for `UnlockPointerAction`. Content: none. No attributes.
+Content: none. No attributes.
 
 ### Effect tags
 
-#### `<AlphaFade>`
+#### `<AlphaFade>`&nbsp;&nbsp;&nbsp;🔗 [AlphaFadeEffect](MemeType.md#alphafadeeffect)
 
-XML tag for `AlphaFadeEffect`. Content: none. No attributes.
+Content: none. No attributes.
 
-#### `<BlendFunc>`
+#### `<BlendFunc>`&nbsp;&nbsp;&nbsp;🔗 [BlendFuncEffect](MemeType.md#blendfunceffect)
 
-XML tag for `BlendFuncEffect`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
 | `source-blend-function` | int | yes |
 | `destination-blend-function` | int | yes |
 
-#### `<Clip>`
+#### `<Clip>`&nbsp;&nbsp;&nbsp;🔗 [ClipEffect](MemeType.md#clipeffect), [MoveClipEffect](MemeType.md#moveclipeffect)
 
-XML tag for `ClipEffect`, `MoveClipEffect`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -1102,9 +1102,9 @@ XML tag for `ClipEffect`, `MoveClipEffect`. Content: none.
 | `move-length` | float | no |
 | `move-direction` | float | no |
 
-#### `<Color>`
+#### `<Color>`&nbsp;&nbsp;&nbsp;🔗 [ColorEffect](MemeType.md#coloreffect), [VariableColorEffect](MemeType.md#variablecoloreffect)
 
-XML tag for `ColorEffect`, `VariableColorEffect`. Content: none.
+Content: none.
 
 Base attributes, every type has these:
 
@@ -1112,22 +1112,22 @@ Base attributes, every type has these:
 |---|---|---|
 | `color` | color of numerical expressions | yes |
 
-#### `<HideDisable>`
+#### `<HideDisable>`&nbsp;&nbsp;&nbsp;🔗 [HideDisableEffect](MemeType.md#hidedisableeffect)
 
-XML tag for `HideDisableEffect`. Content: none. No attributes.
+Content: none. No attributes.
 
-#### `<Move>`
+#### `<Move>`&nbsp;&nbsp;&nbsp;🔗 [MoveEffect](MemeType.md#moveeffect)
 
-XML tag for `MoveEffect`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
 | `move-length` | expression | yes |
 | `move-direction` | expression | yes |
 
-#### `<MultiplyColor>`
+#### `<MultiplyColor>`&nbsp;&nbsp;&nbsp;🔗 [BfMultiplyColorEffect](MemeType.md#bfmultiplycoloreffect), [BfMultiplyColorEffect2](MemeType.md#bfmultiplycoloreffect2), [MultiplyColorEffect](MemeType.md#multiplycoloreffect)
 
-XML tag for `BfMultiplyColorEffect`, `BfMultiplyColorEffect2`, `MultiplyColorEffect`. Content: none.
+Content: none.
 
 Group 1:
 
@@ -1143,9 +1143,9 @@ Group 2:
 
 A tag uses the attributes of one group only.
 
-#### `<MultiplyVertexColor>`
+#### `<MultiplyVertexColor>`&nbsp;&nbsp;&nbsp;🔗 [MultiplyVertexColorEffect](MemeType.md#multiplyvertexcoloreffect)
 
-XML tag for `MultiplyVertexColorEffect`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -1154,9 +1154,9 @@ XML tag for `MultiplyVertexColorEffect`. Content: none.
 | `bottom-right-color` | color of numbers | yes |
 | `bottom-left-color` | color of numbers | yes |
 
-#### `<Rotate>`
+#### `<Rotate>`&nbsp;&nbsp;&nbsp;🔗 [RotateEffect](MemeType.md#rotateeffect), [RotateAroundCoordinateEffect](MemeType.md#rotatearoundcoordinateeffect)
 
-XML tag for `RotateEffect`, `RotateAroundCoordinateEffect`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -1165,18 +1165,18 @@ XML tag for `RotateEffect`, `RotateAroundCoordinateEffect`. Content: none.
 | `x` | numerical expression | no |
 | `y` | numerical expression | no |
 
-#### `<SinMove>`
+#### `<SinMove>`&nbsp;&nbsp;&nbsp;🔗 [SinMoveEffect](MemeType.md#sinmoveeffect)
 
-XML tag for `SinMoveEffect`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
 | `move-length` | expression | yes |
 | `move-direction` | expression | yes |
 
-#### `<VertexColor>`
+#### `<VertexColor>`&nbsp;&nbsp;&nbsp;🔗 [VertexColorEffect](MemeType.md#vertexcoloreffect)
 
-XML tag for `VertexColorEffect`. Content: none.
+Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -1187,9 +1187,9 @@ XML tag for `VertexColorEffect`. Content: none.
 
 ### Pointer tags
 
-#### `<DynamicIndex>`
+#### `<DynamicIndex>`&nbsp;&nbsp;&nbsp;🔗 [DynamicIndexPointer](MemeType.md#dynamicindexpointer)
 
-XML tag for `DynamicIndexPointer`. Content: none. No attributes.
+Content: none. No attributes.
 
 ### Text calls
 
@@ -1197,61 +1197,61 @@ Calls are written inside an attribute, and their arguments are in the order list
 
 ### Data calls
 
-#### `Color(...)`
+#### `Color(...)`&nbsp;&nbsp;&nbsp;🔗 [BfColorData](MemeType.md#bfcolordata)
 
-Text call for `BfColorData`. Arguments:
+Arguments:
 
 | Argument | Description | Holds |
 |---|---|---|
 | 1 | Red | color of numbers |
 
-#### `ConcatenateList(...)`
+#### `ConcatenateList(...)`&nbsp;&nbsp;&nbsp;🔗 [ConcatenateListData](MemeType.md#concatenatelistdata)
 
-Text call for `ConcatenateListData`. Arguments:
+Arguments:
 
 | Argument | Description | Holds |
 |---|---|---|
 | 1 | Data list | List |
 
-#### `Data(...)`
+#### `Data(...)`&nbsp;&nbsp;&nbsp;🔗 [Data](MemeType.md#data)
 
-Text call for `Data`. No arguments.
+No arguments.
 
-#### `Edit(...)`
+#### `Edit(...)`&nbsp;&nbsp;&nbsp;🔗 [BfEditData](MemeType.md#bfeditdata)
 
-Text call for `BfEditData`. No arguments.
+No arguments.
 
-#### `FloatRef(...)`
+#### `FloatRef(...)`&nbsp;&nbsp;&nbsp;🔗 [FloatRefData](MemeType.md#floatrefdata)
 
-Text call for `FloatRefData`. No arguments.
+No arguments.
 
-#### `FocusLocked(...)`
+#### `FocusLocked(...)`&nbsp;&nbsp;&nbsp;🔗 [FocusLockedData](MemeType.md#focuslockeddata)
 
-Text call for `FocusLockedData`. No arguments.
+No arguments.
 
-#### `IndexCount(...)`
+#### `IndexCount(...)`&nbsp;&nbsp;&nbsp;🔗 [IndexCountData](MemeType.md#indexcountdata)
 
-Text call for `IndexCountData`. Arguments:
+Arguments:
 
 | Argument | Description | Holds |
 |---|---|---|
 | 1 | Data | expression |
 
-#### `ListBox(...)`
+#### `ListBox(...)`&nbsp;&nbsp;&nbsp;🔗 [ListBoxData](MemeType.md#listboxdata)
 
-Text call for `ListBoxData`. No arguments.
+No arguments.
 
-#### `Locale(...)`
+#### `Locale(...)`&nbsp;&nbsp;&nbsp;🔗 [BfLocaleData](MemeType.md#bflocaledata)
 
-Text call for `BfLocaleData`. Arguments:
+Arguments:
 
 | Argument | Description | Holds |
 |---|---|---|
 | 1 | Valid | bool expression |
 
-#### `LocaleString(...)`
+#### `LocaleString(...)`&nbsp;&nbsp;&nbsp;🔗 [BfLocaleStringData](MemeType.md#bflocalestringdata)
 
-Text call for `BfLocaleStringData`. Arguments:
+Arguments:
 
 | Argument | Description | Holds |
 |---|---|---|
@@ -1259,55 +1259,55 @@ Text call for `BfLocaleStringData`. Arguments:
 | 2 | Valid | bool expression |
 | 3 | String Id | string expression |
 
-#### `LocaleStringInt(...)`
+#### `LocaleStringInt(...)`&nbsp;&nbsp;&nbsp;🔗 [LocaleStringData](MemeType.md#localestringdata)
 
-Text call for `LocaleStringData`. Arguments:
+Arguments:
 
 | Argument | Description | Holds |
 |---|---|---|
 | 1 | Int | int |
 
-#### `Logical(...)`
+#### `Logical(...)`&nbsp;&nbsp;&nbsp;🔗 [LogicalData](MemeType.md#logicaldata)
 
-Text call for `LogicalData`. Arguments:
-
-| Argument | Description | Holds |
-|---|---|---|
-| 1 | Data 1 | expression |
-| 2 | Data 2 | expression |
-
-#### `OccupiedVehicle(...)`
-
-Text call for `BfOccupiedVehicleData`. No arguments.
-
-#### `Operator(...)`
-
-Text call for `OperatorData`. Arguments:
+Arguments:
 
 | Argument | Description | Holds |
 |---|---|---|
 | 1 | Data 1 | expression |
 | 2 | Data 2 | expression |
 
-#### `PlayerInputIndex(...)`
+#### `OccupiedVehicle(...)`&nbsp;&nbsp;&nbsp;🔗 [BfOccupiedVehicleData](MemeType.md#bfoccupiedvehicledata)
 
-Text call for `PlayerInputIndexData`. No arguments.
+No arguments.
 
-#### `PointerX(...)`
+#### `Operator(...)`&nbsp;&nbsp;&nbsp;🔗 [OperatorData](MemeType.md#operatordata)
 
-Text call for `PointerXData`. No arguments.
+Arguments:
 
-#### `PointerY(...)`
+| Argument | Description | Holds |
+|---|---|---|
+| 1 | Data 1 | expression |
+| 2 | Data 2 | expression |
 
-Text call for `PointerYData`. No arguments.
+#### `PlayerInputIndex(...)`&nbsp;&nbsp;&nbsp;🔗 [PlayerInputIndexData](MemeType.md#playerinputindexdata)
 
-#### `StringRef(...)`
+No arguments.
 
-Text call for `StringRefData`. No arguments.
+#### `PointerX(...)`&nbsp;&nbsp;&nbsp;🔗 [PointerXData](MemeType.md#pointerxdata)
 
-#### `Toggle(...)`
+No arguments.
 
-Text call for `ToggleData`. Arguments:
+#### `PointerY(...)`&nbsp;&nbsp;&nbsp;🔗 [PointerYData](MemeType.md#pointerydata)
+
+No arguments.
+
+#### `StringRef(...)`&nbsp;&nbsp;&nbsp;🔗 [StringRefData](MemeType.md#stringrefdata)
+
+No arguments.
+
+#### `Toggle(...)`&nbsp;&nbsp;&nbsp;🔗 [ToggleData](MemeType.md#toggledata)
+
+Arguments:
 
 | Argument | Description | Holds |
 |---|---|---|
@@ -1317,100 +1317,100 @@ Text call for `ToggleData`. Arguments:
 
 ### Style calls
 
-#### `BfStyle(...)`
+#### `BfStyle(...)`&nbsp;&nbsp;&nbsp;🔗 [BfStyle](MemeType.md#bfstyle)
 
-Text call for `BfStyle`. Arguments:
-
-| Argument | Description | Holds |
-|---|---|---|
-| 1 | Font handle | string |
-
-#### `Center(...)`
-
-Text call for `BfCenterStyle`. Arguments:
+Arguments:
 
 | Argument | Description | Holds |
 |---|---|---|
 | 1 | Font handle | string |
 
-#### `CenterAligned(...)`
+#### `Center(...)`&nbsp;&nbsp;&nbsp;🔗 [BfCenterStyle](MemeType.md#bfcenterstyle)
 
-Text call for `CenterAlignedStyle`. Arguments:
-
-| Argument | Description | Holds |
-|---|---|---|
-| 1 | Font handle | string |
-
-#### `LeftOutline(...)`
-
-Text call for `BfLeftOutlineStyle`. Arguments:
+Arguments:
 
 | Argument | Description | Holds |
 |---|---|---|
 | 1 | Font handle | string |
 
-#### `Outline(...)`
+#### `CenterAligned(...)`&nbsp;&nbsp;&nbsp;🔗 [CenterAlignedStyle](MemeType.md#centeralignedstyle)
 
-Text call for `BfOutlineStyle`. Arguments:
-
-| Argument | Description | Holds |
-|---|---|---|
-| 1 | Font handle | string |
-
-#### `RightAligned(...)`
-
-Text call for `RightAlignedStyle`. Arguments:
+Arguments:
 
 | Argument | Description | Holds |
 |---|---|---|
 | 1 | Font handle | string |
 
-#### `RowDistance(...)`
+#### `LeftOutline(...)`&nbsp;&nbsp;&nbsp;🔗 [BfLeftOutlineStyle](MemeType.md#bfleftoutlinestyle)
 
-Text call for `RowDistanceStyle`. Arguments:
+Arguments:
+
+| Argument | Description | Holds |
+|---|---|---|
+| 1 | Font handle | string |
+
+#### `Outline(...)`&nbsp;&nbsp;&nbsp;🔗 [BfOutlineStyle](MemeType.md#bfoutlinestyle)
+
+Arguments:
+
+| Argument | Description | Holds |
+|---|---|---|
+| 1 | Font handle | string |
+
+#### `RightAligned(...)`&nbsp;&nbsp;&nbsp;🔗 [RightAlignedStyle](MemeType.md#rightalignedstyle)
+
+Arguments:
+
+| Argument | Description | Holds |
+|---|---|---|
+| 1 | Font handle | string |
+
+#### `RowDistance(...)`&nbsp;&nbsp;&nbsp;🔗 [RowDistanceStyle](MemeType.md#rowdistancestyle)
+
+Arguments:
 
 | Argument | Description | Holds |
 |---|---|---|
 | 1 | Font handle | string |
 | 2 | Row distance | float |
 
-#### `SingleLine(...)`
+#### `SingleLine(...)`&nbsp;&nbsp;&nbsp;🔗 [SingleLineStyle](MemeType.md#singlelinestyle)
 
-Text call for `SingleLineStyle`. Arguments:
-
-| Argument | Description | Holds |
-|---|---|---|
-| 1 | Font handle | string |
-
-#### `SingleLineSize(...)`
-
-Text call for `SingleLineSizeStyle`. Arguments:
+Arguments:
 
 | Argument | Description | Holds |
 |---|---|---|
 | 1 | Font handle | string |
-| 2 | Size constant | float |
 
-#### `Size(...)`
+#### `SingleLineSize(...)`&nbsp;&nbsp;&nbsp;🔗 [SingleLineSizeStyle](MemeType.md#singlelinesizestyle)
 
-Text call for `SizeStyle`. Arguments:
+Arguments:
 
 | Argument | Description | Holds |
 |---|---|---|
 | 1 | Font handle | string |
 | 2 | Size constant | float |
 
-#### `Style(...)`
+#### `Size(...)`&nbsp;&nbsp;&nbsp;🔗 [SizeStyle](MemeType.md#sizestyle)
 
-Text call for `Style`. Arguments:
+Arguments:
+
+| Argument | Description | Holds |
+|---|---|---|
+| 1 | Font handle | string |
+| 2 | Size constant | float |
+
+#### `Style(...)`&nbsp;&nbsp;&nbsp;🔗 [Style](MemeType.md#style)
+
+Arguments:
 
 | Argument | Description | Holds |
 |---|---|---|
 | 1 | Font handle | string |
 
-#### `Style2(...)`
+#### `Style2(...)`&nbsp;&nbsp;&nbsp;🔗 [BfStyle2](MemeType.md#bfstyle2)
 
-Text call for `BfStyle2`. Arguments:
+Arguments:
 
 | Argument | Description | Holds |
 |---|---|---|
@@ -1418,16 +1418,16 @@ Text call for `BfStyle2`. Arguments:
 
 ### Event calls
 
-#### `AnyKey(...)`
+#### `AnyKey(...)`&nbsp;&nbsp;&nbsp;🔗 [AnyKeyEvent](MemeType.md#anykeyevent)
 
-Text call for `AnyKeyEvent`. Arguments:
+Arguments:
 
 | Argument | Description | Holds |
 |---|---|---|
 | 1 | Input index | int, named by PlayerInput |
 | 2 | Event type | int, named by EventType |
 
-#### `Button(...)`
+#### `Button(...)`&nbsp;&nbsp;&nbsp;🔗 [ButtonEvent](MemeType.md#buttonevent), [ExtendedButtonEvent](MemeType.md#extendedbuttonevent)
 
 Text call for one of these types, picked by how many arguments it has:
 
@@ -1448,17 +1448,17 @@ Text call for one of these types, picked by how many arguments it has:
 | 3 | Button type | int, named by ButtonType |
 | 4 | Repeat count | int |
 
-#### `Event(...)`
+#### `Event(...)`&nbsp;&nbsp;&nbsp;🔗 [Event](MemeType.md#event)
 
-Text call for `Event`. Arguments:
+Arguments:
 
 | Argument | Description | Holds |
 |---|---|---|
 | 1 | Input index | int, named by PlayerInput |
 
-#### `Type(...)`
+#### `Type(...)`&nbsp;&nbsp;&nbsp;🔗 [TypeEvent](MemeType.md#typeevent)
 
-Text call for `TypeEvent`. Arguments:
+Arguments:
 
 | Argument | Description | Holds |
 |---|---|---|
