@@ -1427,24 +1427,14 @@ Arguments:
 
 #### `Button(...)`&nbsp;&nbsp;&nbsp;🔗 [ButtonEvent](MemeType.md#buttonevent), [ExtendedButtonEvent](MemeType.md#extendedbuttonevent)
 
-Text call for one of these types, picked by how many arguments it has:
+Arguments:
 
-`ButtonEvent`, 3 arguments:
-
-| Argument | Description | Holds |
-|---|---|---|
-| 1 | Input index | int, named by [PlayerInput](#player-inputs) |
-| 2 | Event type | int, named by [EventType](#event-types) |
-| 3 | Button type | int, named by [ButtonType](#button-types) |
-
-`ExtendedButtonEvent`, 4 arguments:
-
-| Argument | Description | Holds |
-|---|---|---|
-| 1 | Input index | int, named by [PlayerInput](#player-inputs) |
-| 2 | Event type | int, named by [EventType](#event-types) |
-| 3 | Button type | int, named by [ButtonType](#button-types) |
-| 4 | Repeat count | int |
+| Argument | Description | Holds | Required |
+|---|---|---|---|
+| 1 | Input index | int, named by [PlayerInput](#player-inputs) | yes |
+| 2 | Event type | int, named by [EventType](#event-types) | yes |
+| 3 | Button type | int, named by [ButtonType](#button-types) | yes |
+| 4 | Repeat count | int | no |
 
 #### `Event(...)`&nbsp;&nbsp;&nbsp;🔗 [Event](MemeType.md#event)
 
