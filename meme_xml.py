@@ -167,7 +167,7 @@ class _Reader:
         """The first node of the chain that the elements form. A CullNode with nodes after it gets a SplitNode around it."""
         if not xml_children:
             return MemeFileElement.placeholder(empty_slot, label)
-        nodes = [self.element(child, "Node", None) for child in xml_children]
+        nodes = [self._chain_node(child, empty_slot if index == 0 else "NextNode") for index, child in enumerate(xml_children)]
         for index, node in enumerate(nodes[:-1]):
             if node.type_name == "CullNode":
                 # A CullNode's next node holds its body, so the nodes after an if are the next node of a SplitNode
@@ -182,14 +182,21 @@ class _Reader:
         nodes[0].description = label
         return nodes[0]
 
+    def _chain_node(self, xml, slot):
+        """A node of a chain. A placeholder fills the slot of its position: the first node's, or the next node of the one before."""
+        return self.element(xml, slot if xml.tag == "Placeholder" else "Node", None)
+
     def element(self, xml, category, label):
         """The object of one element, in a field of category (None: any category)."""
         tag = xml.tag
         name = xml.get("name")
         if tag == "g":
             raise XmlError("<g> is only allowed around the nodes of a field in the raw form")
-        if tag.endswith("Placeholder") and tag[:-len("Placeholder")] in PLACEHOLDER_SLOTS:
-            return MemeFileElement(tag, name, label, None)
+        if tag == "Placeholder":
+            # The field the placeholder fills comes from its position: the category passed in
+            if category not in PLACEHOLDER_SLOTS:
+                raise XmlError(f"<Placeholder> needs a field to fill, but it is in a {category} position")
+            return MemeFileElement.placeholder(category, label, name)
         if tag in primitive_formats:
             raise XmlError(f"<{tag}> is a value, which belongs in a field of an element")
         # A variable is written by its name alone (an <Object> also carries its type)
@@ -375,8 +382,14 @@ class _Writer:
                 return written
         return self._raw(element, parent, field_category, label)
 
+    def _chain_elements(self, head, label):
+        """The elements that write a chain: one for each node, the first labelled. An empty chain is one placeholder."""
+        holder = ET.Element("holder")
+        self.chain(head, holder, label)
+        return list(holder)
+
     def _placeholder(self, element, parent, label):
-        node = ET.SubElement(parent, element.type_name)
+        node = ET.SubElement(parent, "Placeholder")
         if label is not None:
             node.set("description", label)
         if element.object_name is not None:
@@ -519,39 +532,22 @@ class _Writer:
                 wrapper = ET.SubElement(node, "List", description=field_label)
                 items = value if value[-1].object_name is not None else value[:-1]
                 for item in items:
-                    holder = ET.Element("holder")
-                    self.chain(item, holder, field_label)
-                    children = list(holder)
+                    children = self._chain_elements(item, field_label)
                     if len(children) == 1:
                         wrapper.append(children[0])
                     else:
-                        group = ET.SubElement(wrapper, "g")
-                        group.extend(children)
-            elif slot == "Node" or slot == "NextNode":
-                holder = ET.Element("holder")
-                if value.is_occupied:
-                    self.chain(value, holder, field_label)
-                children = list(holder)
-                if not children:
-                    self._empty(node, value, field_label)
-                elif len(children) == 1:
+                        ET.SubElement(wrapper, "g").extend(children)
+            elif slot in ("Node", "NextNode"):
+                children = self._chain_elements(value, field_label)
+                if len(children) == 1:
                     node.append(children[0])
                 else:
                     group = ET.SubElement(node, "g", description=field_label)
                     children[0].attrib.pop("description", None)
                     group.extend(children)
-            elif value.is_occupied:
-                self.element(value, node, _slot_category(slot, tag), field_label)
             else:
-                self._empty(node, value, field_label)
+                self.element(value, node, _slot_category(slot, tag), field_label)
         return node
-
-    @staticmethod
-    def _empty(node, value, field_label):
-        """An empty field: a <Placeholder />, labelled by the field, with the name of the placeholder when it has one."""
-        placeholder = ET.SubElement(node, "Placeholder", description=field_label)
-        if value.object_name is not None:
-            placeholder.set("name", value.object_name)
 
 
 def load_xml(xml_path):

@@ -350,6 +350,16 @@ def test_if_with_nodes_after_is_a_split_node_around_the_cull_node(tmp_path):
     assert split.child_elements[0].type_name == "NameNode"
 
 
+def test_placeholder_after_a_node_is_its_next_node(tmp_path):
+    placeholder = load(tmp_path, '<Placeholder name="Global" />')
+    assert (placeholder.type_name, placeholder.object_name) == ("NextNodePlaceholder", "Global")
+
+
+def test_placeholder_in_a_field_is_that_field(tmp_path):
+    effect_node = load(tmp_path, '<Effect><Placeholder /></Effect>')
+    assert effect_node.child_elements[1].type_name == "EffectPlaceholder"
+
+
 def test_if_defaults_its_fade_times_to_zero(tmp_path):
     cull = load(tmp_path, '<If condition="null" />')
     assert cull.type_name == "CullNode"

@@ -229,6 +229,17 @@ def test_every_type_roundtrip(tmp_path, compact):
     assert_xml_roundtrip(tmp_path / "every_type", tmp_path, compact)
 
 
+@pytest.mark.parametrize("compact", [True, False], ids=["compact", "element form"])
+def test_empty_references_are_written_as_placeholder(tmp_path, compact):
+    """An empty reference is always <Placeholder>, in both forms; its slot comes from its position."""
+    meme = MemeFile(tmp_path / "every_type")
+    meme.root_element = every_type_tree()
+    meme.save_to_xml(tmp_path / "placeholders.xml", compact)
+    tags_ending_in_placeholder = {element.tag for element in ET.parse(tmp_path / "placeholders.xml").getroot().iter()
+                                  if element.tag.endswith("Placeholder")}
+    assert tags_ending_in_placeholder == {"Placeholder"}
+
+
 def test_every_type_compact_xml_is_stable(tmp_path):
     """Writing the XML of a file that was read from that XML gives the same XML."""
     meme = MemeFile(tmp_path / "every_type")

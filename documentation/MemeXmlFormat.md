@@ -39,6 +39,25 @@ A field that cannot be an attribute is a named child element instead. The child 
 
 An `<If>` with nodes after it is a CullNode inside a SplitNode. The reader builds that structure; you only write the `<If>` and the nodes after it.
 
+### Placeholders
+
+An empty reference is written as `<Placeholder />`, in both forms. A name on it is kept, as `name="..."`, because the binary stores a name on empty references too (for example the end of the `Global` chain in `Battlefield 2/Ingame`):
+
+```xml
+<Group>
+  <If condition="somevar is 1"><NameNode /></If>
+  <Placeholder name="Global" />
+</Group>
+```
+
+The field a placeholder fills comes from its position:
+
+- After a node in a chain, it is the next node of that node.
+- At the start of a chain, or as the content of a tag such as `<Group>` or `<Effect>`, it is the node or effect in that field.
+- As a named child with a `field` attribute, it is that field.
+
+The raw form uses `<Placeholder description="..." />` for every empty field, so the compact form uses the same tag.
+
 ## Variables
 
 `<Variables>` defines the named objects of the file once. A name that is used in several places is written as its name, and its value is listed here. It is the first child of `<MemeFile>`.
