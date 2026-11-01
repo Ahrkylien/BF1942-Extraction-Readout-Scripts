@@ -299,12 +299,16 @@ def test_float_only_attribute_takes_no_expression(tmp_path):
 
 
 @pytest.mark.parametrize(("body", "expected_type"), [
+    ('<Action><CallFunction function="Some/Func" /></Action>', "CallFunctionAction"),
+    ('<Action><CallFunction function="Some/Func" result-data="somevar" /></Action>', "CallFunctionVariableAction"),
+    ('<Effect><Rotate start-angle="0" angle-multiplier="1" /></Effect>', "RotateEffect"),
+    ('<Effect><Rotate start-angle="0" angle-multiplier="1" x="1" y="2" /></Effect>', "RotateAroundCoordinateEffect"),
     ("<Clip />", "ClipNode"),
     ('<Effect><Clip x="0" y="0" width="1" height="1" /></Effect>', "ClipEffect"),
 ])
 def test_a_tag_is_read_in_the_category_of_its_field(tmp_path, body, expected_type):
     node = load(tmp_path, body)
-    found = node.child_elements[1] if node.type_name == "EffectNode" else node
+    found = node.child_elements[1] if node.type_name in ("EffectNode", "ActionNode") else node
     assert found.type_name == expected_type
 
 

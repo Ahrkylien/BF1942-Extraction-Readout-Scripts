@@ -97,7 +97,24 @@ An attribute that holds an object holds it as text. A Data object is an expressi
 - Comparisons do not chain. Write `(a is 1) is b`, not `a is 1 is b`.
 - `a is_not b` means "not equal". `a is not b` means `a` compared with `not b`.
 
-The operators are in the [operators](#operators) of the tag reference.
+### Operators
+
+From loosest to tightest binding. Operators with the same precedence bind equally.
+
+| Written as | Data object | Precedence |
+|---|---|---|
+| `or` | OrData | 1 |
+| `xor` | ExclusiveOrData | 2 |
+| `and` | AndData | 3 |
+| `is` | EqualData | 4 |
+| `is_not` | NotEqualData | 4 |
+| `less_than` | LessData | 4 |
+| `less_than_or_equal` | LessEqualData | 4 |
+| `plus` | AddData | 5 |
+| `minus` | SubData | 5 |
+| `times` | MulData | 6 |
+| `divided_by` | DivData | 6 |
+| `not` | NotData | 7 |
 
 ### Calls
 
@@ -157,11 +174,7 @@ A tag, attribute or text that does not fit raises an `XmlError` with the element
 
 ## Tag reference
 
-<!-- BEGIN GENERATED REFERENCE -->
-
-## Tag reference
-
-Generated from `meme_xml_tags.py`. Each tag lists the types it writes, its attributes and its content.
+Each tag lists the types it writes, its attributes and its content.
 
 ### Node tags
 
@@ -212,9 +225,7 @@ XML tag for `BfAnimationNode`. Content: none.
 
 #### `<BfSlider>`
 
-XML tag for `BfFixedSliderNode`, `BfSliderNode`. Content: nodes.
-
-Base attributes, every type has these:
+XML tag for `BfSliderNode`, `BfFixedSliderNode`. Content: nodes.
 
 | Attribute | Holds | Required |
 |---|---|---|
@@ -222,12 +233,7 @@ Base attributes, every type has these:
 | `minimum-value` | float | yes |
 | `maximum-value` | float | yes |
 | `number-visible` | float | yes |
-
-Group 1, optional, on top of the base attributes:
-
-| Attribute | Holds | Required |
-|---|---|---|
-| `interval` | float | yes |
+| `interval` | float | no |
 
 #### `<Bink>`
 
@@ -344,17 +350,10 @@ XML tag for `CullActionNode`. Content: one action.
 
 XML tag for `CullEventActionNode`, `CullEventTimeoutActionNode`. Content: one action.
 
-Base attributes, every type has these:
-
 | Attribute | Holds | Required |
 |---|---|---|
 | `event` | event text | yes |
-
-Group 1, optional, on top of the base attributes:
-
-| Attribute | Holds | Required |
-|---|---|---|
-| `timeout-time` | float | yes |
+| `timeout-time` | float | no |
 
 #### `<CullVariable>`
 
@@ -861,17 +860,10 @@ XML tag for `ActionListAction`. Content: items. No attributes.
 
 XML tag for `CallFunctionAction`, `CallFunctionVariableAction`. Content: none.
 
-Base attributes, every type has these:
-
 | Attribute | Holds | Required |
 |---|---|---|
 | `function` | function text | yes |
-
-Group 1, optional, on top of the base attributes:
-
-| Attribute | Holds | Required |
-|---|---|---|
-| `result-data` | expression | yes |
+| `result-data` | expression | no |
 
 #### `<LastInputIndex>`
 
@@ -1065,17 +1057,10 @@ XML tag for `SetVariableSinusAction`. Content: none.
 
 XML tag for `SoundAction`, `VolumedSoundAction`. Content: none.
 
-Base attributes, every type has these:
-
 | Attribute | Holds | Required |
 |---|---|---|
 | `sound` | string | yes |
-
-Group 1, optional, on top of the base attributes:
-
-| Attribute | Holds | Required |
-|---|---|---|
-| `volume` | float | yes |
+| `volume` | float | no |
 
 #### `<ToggleVariable>`
 
@@ -1108,21 +1093,14 @@ XML tag for `BlendFuncEffect`. Content: none.
 
 XML tag for `ClipEffect`, `MoveClipEffect`. Content: none.
 
-Base attributes, every type has these:
-
 | Attribute | Holds | Required |
 |---|---|---|
 | `x` | float | yes |
 | `y` | float | yes |
 | `width` | float | yes |
 | `height` | float | yes |
-
-Group 1, optional, on top of the base attributes:
-
-| Attribute | Holds | Required |
-|---|---|---|
-| `move-length` | float | yes |
-| `move-direction` | float | yes |
+| `move-length` | float | no |
+| `move-direction` | float | no |
 
 #### `<Color>`
 
@@ -1178,21 +1156,14 @@ XML tag for `MultiplyVertexColorEffect`. Content: none.
 
 #### `<Rotate>`
 
-XML tag for `RotateAroundCoordinateEffect`, `RotateEffect`. Content: none.
-
-Base attributes, every type has these:
+XML tag for `RotateEffect`, `RotateAroundCoordinateEffect`. Content: none.
 
 | Attribute | Holds | Required |
 |---|---|---|
 | `start-angle` | numerical expression | yes |
 | `angle-multiplier` | numerical expression | yes |
-
-Group 1, optional, on top of the base attributes:
-
-| Attribute | Holds | Required |
-|---|---|---|
-| `x` | numerical expression | yes |
-| `y` | numerical expression | yes |
+| `x` | numerical expression | no |
+| `y` | numerical expression | no |
 
 #### `<SinMove>`
 
@@ -1494,25 +1465,6 @@ Text call for `TypeEvent`. Arguments:
 | 1 | Input index | int, named by PlayerInput |
 | 2 | Event type | int, named by EventType |
 
-### Operators
-
-From loosest to tightest binding. Operators with the same precedence bind equally.
-
-| Written as | Data object | Precedence |
-|---|---|---|
-| `or` | OrData | 1 |
-| `xor` | ExclusiveOrData | 2 |
-| `and` | AndData | 3 |
-| `is` | EqualData | 4 |
-| `is_not` | NotEqualData | 4 |
-| `less_than` | LessData | 4 |
-| `less_than_or_equal` | LessEqualData | 4 |
-| `plus` | AddData | 5 |
-| `minus` | SubData | 5 |
-| `times` | MulData | 6 |
-| `divided_by` | DivData | 6 |
-| `not` | NotData | 7 |
-
 ### Engine names
 
 #### Event types
@@ -1635,7 +1587,6 @@ The input index of every event: the player input that the event comes from. Inde
 | 54 | VoteNo |
 | 55 | None |
 
-<!-- END GENERATED REFERENCE -->
 
 ## Raw form
 

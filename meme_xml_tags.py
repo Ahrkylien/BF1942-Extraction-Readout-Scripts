@@ -486,13 +486,11 @@ COMPACT = [
 ]
 
 
-CATEGORIES = ("Node", "Action", "Data", "Effect", "Style", "Event", "Function", "Pointer")
 ELEMENT_CATEGORIES = ("Node", "Action", "Effect", "Pointer")
 TEXT_CATEGORIES = ("Data", "Style", "Event", "Function")
 # The fields that can be a child element: the object has no text form, or it is an element
 CHILD_ELEMENT_SLOTS = ("Action", "Effect", "Pointer", "Data")
 RESERVED_ATTRIBUTES = ("name", "description", "field")
-PRIMITIVE_SLOTS = ("Boolean", "Byte", "Int", "TypeIndex", "Float", "PictureString", "FontString", "SoundString", "String", "WideString")
 CHILD_SLOTS = ("Node", "Action", "Effect", "Tree", "List", "PathNode")
 ENUM_SLOTS = ("TypeIndex", "Byte")
 
