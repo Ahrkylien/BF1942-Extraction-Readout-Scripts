@@ -1463,7 +1463,7 @@ Arguments:
 | 1 | Input index | int, named by PlayerInput |
 | 2 | Event type | int, named by EventType |
 
-### Engine names
+### Enums
 
 #### Event types
 
