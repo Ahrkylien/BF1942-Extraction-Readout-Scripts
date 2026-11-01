@@ -1213,19 +1213,19 @@ Arguments:
 |---|---|---|
 | 1 | Data list | List |
 
-#### `Data(...)`&nbsp;&nbsp;&nbsp;🔗 [Data](MemeType.md#data)
+#### `Data()`&nbsp;&nbsp;&nbsp;🔗 [Data](MemeType.md#data)
 
 No arguments.
 
-#### `Edit(...)`&nbsp;&nbsp;&nbsp;🔗 [BfEditData](MemeType.md#bfeditdata)
+#### `Edit()`&nbsp;&nbsp;&nbsp;🔗 [BfEditData](MemeType.md#bfeditdata)
 
 No arguments.
 
-#### `FloatRef(...)`&nbsp;&nbsp;&nbsp;🔗 [FloatRefData](MemeType.md#floatrefdata)
+#### `FloatRef()`&nbsp;&nbsp;&nbsp;🔗 [FloatRefData](MemeType.md#floatrefdata)
 
 No arguments.
 
-#### `FocusLocked(...)`&nbsp;&nbsp;&nbsp;🔗 [FocusLockedData](MemeType.md#focuslockeddata)
+#### `FocusLocked()`&nbsp;&nbsp;&nbsp;🔗 [FocusLockedData](MemeType.md#focuslockeddata)
 
 No arguments.
 
@@ -1237,7 +1237,7 @@ Arguments:
 |---|---|---|
 | 1 | Data | expression |
 
-#### `ListBox(...)`&nbsp;&nbsp;&nbsp;🔗 [ListBoxData](MemeType.md#listboxdata)
+#### `ListBox()`&nbsp;&nbsp;&nbsp;🔗 [ListBoxData](MemeType.md#listboxdata)
 
 No arguments.
 
@@ -1276,7 +1276,7 @@ Arguments:
 | 1 | Data 1 | expression |
 | 2 | Data 2 | expression |
 
-#### `OccupiedVehicle(...)`&nbsp;&nbsp;&nbsp;🔗 [BfOccupiedVehicleData](MemeType.md#bfoccupiedvehicledata)
+#### `OccupiedVehicle()`&nbsp;&nbsp;&nbsp;🔗 [BfOccupiedVehicleData](MemeType.md#bfoccupiedvehicledata)
 
 No arguments.
 
@@ -1289,19 +1289,19 @@ Arguments:
 | 1 | Data 1 | expression |
 | 2 | Data 2 | expression |
 
-#### `PlayerInputIndex(...)`&nbsp;&nbsp;&nbsp;🔗 [PlayerInputIndexData](MemeType.md#playerinputindexdata)
+#### `PlayerInputIndex()`&nbsp;&nbsp;&nbsp;🔗 [PlayerInputIndexData](MemeType.md#playerinputindexdata)
 
 No arguments.
 
-#### `PointerX(...)`&nbsp;&nbsp;&nbsp;🔗 [PointerXData](MemeType.md#pointerxdata)
+#### `PointerX()`&nbsp;&nbsp;&nbsp;🔗 [PointerXData](MemeType.md#pointerxdata)
 
 No arguments.
 
-#### `PointerY(...)`&nbsp;&nbsp;&nbsp;🔗 [PointerYData](MemeType.md#pointerydata)
+#### `PointerY()`&nbsp;&nbsp;&nbsp;🔗 [PointerYData](MemeType.md#pointerydata)
 
 No arguments.
 
-#### `StringRef(...)`&nbsp;&nbsp;&nbsp;🔗 [StringRefData](MemeType.md#stringrefdata)
+#### `StringRef()`&nbsp;&nbsp;&nbsp;🔗 [StringRefData](MemeType.md#stringrefdata)
 
 No arguments.
 
