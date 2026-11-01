@@ -1422,8 +1422,8 @@ Arguments:
 
 | Argument | Description | Holds |
 |---|---|---|
-| 1 | Input index | int, named by PlayerInput |
-| 2 | Event type | int, named by EventType |
+| 1 | Input index | int, named by [PlayerInput](#player-inputs) |
+| 2 | Event type | int, named by [EventType](#event-types) |
 
 #### `Button(...)`&nbsp;&nbsp;&nbsp;🔗 [ButtonEvent](MemeType.md#buttonevent), [ExtendedButtonEvent](MemeType.md#extendedbuttonevent)
 
@@ -1433,17 +1433,17 @@ Text call for one of these types, picked by how many arguments it has:
 
 | Argument | Description | Holds |
 |---|---|---|
-| 1 | Input index | int, named by PlayerInput |
-| 2 | Event type | int, named by EventType |
-| 3 | Button type | int, named by ButtonType |
+| 1 | Input index | int, named by [PlayerInput](#player-inputs) |
+| 2 | Event type | int, named by [EventType](#event-types) |
+| 3 | Button type | int, named by [ButtonType](#button-types) |
 
 `ExtendedButtonEvent`, 4 arguments:
 
 | Argument | Description | Holds |
 |---|---|---|
-| 1 | Input index | int, named by PlayerInput |
-| 2 | Event type | int, named by EventType |
-| 3 | Button type | int, named by ButtonType |
+| 1 | Input index | int, named by [PlayerInput](#player-inputs) |
+| 2 | Event type | int, named by [EventType](#event-types) |
+| 3 | Button type | int, named by [ButtonType](#button-types) |
 | 4 | Repeat count | int |
 
 #### `Event(...)`&nbsp;&nbsp;&nbsp;🔗 [Event](MemeType.md#event)
@@ -1452,7 +1452,7 @@ Arguments:
 
 | Argument | Description | Holds |
 |---|---|---|
-| 1 | Input index | int, named by PlayerInput |
+| 1 | Input index | int, named by [PlayerInput](#player-inputs) |
 
 #### `Type(...)`&nbsp;&nbsp;&nbsp;🔗 [TypeEvent](MemeType.md#typeevent)
 
@@ -1460,14 +1460,14 @@ Arguments:
 
 | Argument | Description | Holds |
 |---|---|---|
-| 1 | Input index | int, named by PlayerInput |
-| 2 | Event type | int, named by EventType |
+| 1 | Input index | int, named by [PlayerInput](#player-inputs) |
+| 2 | Event type | int, named by [EventType](#event-types) |
 
 ### Enums
 
 #### Event types
 
-The event type of TypeEvent, ButtonEvent, ExtendedButtonEvent and AnyKeyEvent.
+The event type of [`Type(...)`](#type-typeevent), [`Button(...)`](#button-buttonevent-extendedbuttonevent) and [`AnyKey(...)`](#anykey-anykeyevent).
 
 | Value | Name |
 |---|---|
@@ -1497,7 +1497,7 @@ The event type of TypeEvent, ButtonEvent, ExtendedButtonEvent and AnyKeyEvent.
 
 #### Button types
 
-The button type of ButtonEvent and ExtendedButtonEvent.
+The button type of [`Button(...)`](#button-buttonevent-extendedbuttonevent).
 
 | Value | Name |
 |---|---|
