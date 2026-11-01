@@ -118,7 +118,7 @@ From loosest to tightest binding. Operators with the same precedence bind equall
 
 ### Calls
 
-An object that is not a literal, an operator or a list is a call: its name, then its arguments in order. The names and arguments are in the [text calls](#text-calls) of the tag reference.
+An object that is not a literal, an operator or a list is a call: its name, then its arguments in order. The names and arguments are listed in the tag reference, from [Data calls](#data-calls) on.
 
 ```
 PointerX()
@@ -175,6 +175,8 @@ A tag, attribute or text that does not fit raises an `XmlError` with the element
 ## Tag reference
 
 Each tag lists the types it writes, its attributes and its content.
+
+Calls are written inside an attribute, and their arguments are in the order listed.
 
 ### Node tags
 
@@ -1191,10 +1193,6 @@ Content: none.
 
 Content: none. No attributes.
 
-### Text calls
-
-Calls are written inside an attribute, and their arguments are in the order listed.
-
 ### Data calls
 
 #### `Color(...)`&nbsp;&nbsp;&nbsp;🔗 [BfColorData](MemeType.md#bfcolordata)
@@ -1203,7 +1201,7 @@ Arguments:
 
 | Argument | Description | Holds |
 |---|---|---|
-| 1 | Red | color of numbers |
+| 1 | Color | color of numbers |
 
 #### `ConcatenateList(...)`&nbsp;&nbsp;&nbsp;🔗 [ConcatenateListData](MemeType.md#concatenatelistdata)
 
